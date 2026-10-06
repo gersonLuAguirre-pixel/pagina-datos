@@ -188,6 +188,7 @@ section {
 .btn-login:hover {
     background-color: #15803d;
 }
+
 /* --- CUADRÍCULA DE PRODUCTOS (INDEX) --- */
 #productos {
     display: grid;
@@ -243,73 +244,145 @@ section button:hover {
     background-color: var(--color-ecologico-hover);
 }
 
-/* --- SECCIÓN DE PEDIDOS DESDE FIREBASE --- */
+/* ==========================================================
+   PEDIDOS - DISEÑO MODERNO ECOVIDA
+   ========================================================== */
+
 #listaPedidos {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-    gap: 20px;
-    margin-top: 20px;
+    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+    gap: 24px;
+    margin-top: 30px;
+    width: 100%;
 }
 
-/* Esta clase es la que tu JavaScript inyecta dinámicamente en la línea 170 */
+/* Tarjeta individual del pedido */
 .pedido {
-    background: var(--color-blanco);
-    border: 1px solid var(--borde-suave);
-    border-left: 5px solid var(--color-ecologico);
-    /* Detalle verde al lado */
-    border-radius: 6px;
-    padding: 20px;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+    position: relative;
+    background: #ffffff;
+    border: 1px solid #e5e7eb;
+    border-radius: 14px;
+    padding: 22px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06);
     display: flex;
     flex-direction: column;
     justify-content: space-between;
+    min-height: 220px;
+    overflow: hidden;
+    transition: transform 0.25s ease, box-shadow 0.25s ease;
 }
 
+/* Detalle verde superior */
+.pedido::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 5px;
+    background: var(--color-ecologico);
+}
+
+/* Efecto al pasar el mouse */
+.pedido:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 10px 24px rgba(0, 0, 0, 0.10);
+}
+
+/* Título del pedido */
 .pedido h3 {
-    margin-top: 0;
-    font-size: 1rem;
+    margin: 4px 0 16px;
+    font-size: 1.05rem;
+    color: var(--color-ecologico);
+    font-weight: 700;
+    word-break: break-word;
+}
+
+/* Información general */
+.pedido p {
+    margin: 7px 0;
     color: #555;
-    word-break: break-all;
-    /* Evita que los IDs largos de Firebase rompan la tarjeta */
-}
-
-.pedido ul {
-    padding-left: 20px;
-    margin: 10px 0;
-    background: var(--color-fondo-gris);
-    padding: 10px 10px 10px 25px;
-    border-radius: 5px;
-}
-
-.pedido li {
-    font-size: 0.9rem;
-    margin-bottom: 5px;
+    font-size: 0.95rem;
 }
 
 .pedido p strong {
-    color: #333;
+    color: #222;
 }
 
-/* Botón "Eliminar Pedido" específico inyectado por JS */
+/* Lista de productos */
+.pedido ul {
+    list-style: none;
+    padding: 12px 14px;
+    margin: 15px 0;
+    background: #f6f9f5;
+    border: 1px solid #e5ebe4;
+    border-radius: 10px;
+}
+
+/* Producto individual */
+.pedido li {
+    font-size: 0.9rem;
+    color: #444;
+    padding: 8px 0;
+    border-bottom: 1px solid #e5ebe4;
+}
+
+/* El último producto no lleva línea inferior */
+.pedido li:last-child {
+    border-bottom: none;
+}
+
+/* Botón eliminar */
 .pedido button {
+    width: 100%;
+    margin-top: 15px;
+    padding: 10px 14px;
     background-color: transparent;
     color: var(--color-peligro);
     border: 1px solid var(--color-peligro);
-    width: 100%;
-    margin-top: 15px;
-    padding: 8px;
-    border-radius: 4px;
+    border-radius: 8px;
     font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s ease;
 }
 
+/* Hover botón eliminar */
 .pedido button:hover {
     background-color: var(--color-peligro);
-    color: white;
+    color: #ffffff;
 }
 
-/* Ocultar las líneas <hr> antiguas del JS para usar el diseño limpio de tarjetas separadas */
+/* Ocultar líneas antiguas */
 #listaPedidos hr {
     display: none;
+}
+
+/* Mensaje cuando no hay pedidos */
+#listaPedidos>p {
+    grid-column: 1 / -1;
+    text-align: center;
+    padding: 40px 20px;
+    color: #666;
+    background: #ffffff;
+    border: 1px dashed #cfd8cf;
+    border-radius: 12px;
+}
+
+/* ==========================================================
+   RESPONSIVE - CELULARES
+   ========================================================== */
+
+@media (max-width: 600px) {
+
+    #listaPedidos {
+        grid-template-columns: 1fr;
+        gap: 16px;
+    }
+
+    .pedido {
+        padding: 18px;
+    }
+
 }
 
 /* --- PIE DE PÁGINA --- */
