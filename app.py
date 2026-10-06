@@ -13,7 +13,7 @@ CORS(
     app,
     origins="*",
     allow_headers=["Authorization", "Content-Type"],
-    methods=["GET", "POST", "DELETE", "OPTIONS"]
+    methods=["GET", "POST", "PATCH", "DELETE", "OPTIONS"]
 )
 # RECONEXIÓN CON TUS CREDENCIALES ORIGINALES DE INICIO
 MONGO_URI = os.environ.get("MONGO_URI")
