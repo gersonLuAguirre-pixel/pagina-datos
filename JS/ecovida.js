@@ -285,11 +285,12 @@ function procesarGuardadoFirebase(carrito, subtotal, costoEnvio) {
 
     let pedido = {
         fecha: new Date().toISOString(),
-        correoUsuario: correoActivo, // Campo obligatorio para el filtrado seguro por roles en Python
+        correoUsuario: correoActivo,
         productos: carrito,
         subtotal: subtotal,
         costoEnvioExterno: costoEnvio,
-        total: totalFinal
+        total: totalFinal,
+        estado: "pendiente"
     };
 
     console.log("Enviando pedido consolidado a Firebase con propietario:", pedido);
