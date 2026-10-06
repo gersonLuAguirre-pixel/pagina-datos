@@ -445,17 +445,12 @@ function mostrarPedidos() {
                     : "📦 Mis pedidos";
 
             listaPedidos.innerHTML += `
-            <div class="info-pedidos">
+              <div class="info-pedidos">
 
-                <h3>${tituloRol}</h3>
+                  <h3>${tituloRol}</h3>
 
-                <p>
-                    Usuario:
-                    <strong>${datosUsuario.correo}</strong>
-                </p>
-
-            </div>
-        `;
+             </div>
+`           ;
 
             // ==========================================
             // 7. MOSTRAR CADA PEDIDO
@@ -503,6 +498,34 @@ function mostrarPedidos() {
                 // DATOS DEL PEDIDO
                 // ==========================================
 
+                const estado = pedido.estado || "pendiente";
+
+                let estadoTexto = "";
+                let estadoClase = "";
+
+                switch (estado) {
+
+                    case "procesando":
+                        estadoTexto = "🔵 Procesando";
+                        estadoClase = "estado-procesando";
+                        break;
+
+                    case "completado":
+                        estadoTexto = "🟢 Completado";
+                        estadoClase = "estado-completado";
+                        break;
+
+                    case "cancelado":
+                        estadoTexto = "🔴 Cancelado";
+                        estadoClase = "estado-cancelado";
+                        break;
+
+                    default:
+                        estadoTexto = "🟡 Pendiente";
+                        estadoClase = "estado-pendiente";
+                        break;
+                }
+
                 const envio = Number(
                     pedido.costoEnvioExterno || 0
                 );
@@ -514,13 +537,9 @@ function mostrarPedidos() {
                 const total = Number(
                     pedido.total || 0
                 );
-
                 const fecha = pedido.fecha
-                    ? new Date(
-                        pedido.fecha
-                    ).toLocaleString()
+                    ? new Date(pedido.fecha).toLocaleString()
                     : "No especificada";
-
                 // ==========================================
                 // MOSTRAR PEDIDO
                 // ==========================================
@@ -529,13 +548,12 @@ function mostrarPedidos() {
 
                 <div class="pedido">
 
-                    <h3>
-                        📦 Pedido: ${idPedido}
-                    </h3>
-
+                    <h3>📦 Pedido: ${idPedido}</h3>
+                    <p><strong>Estado:</strong><span class="estado-pedido ${estadoClase}">${estadoTexto}
+                    </span></p>
                     <p>
-                        <strong>Propietario:</strong>
-                        ${pedido.correoUsuario || "No asignado"}
+                    <strong>Propietario:</strong>
+                    ${pedido.correoUsuario || "No asignado"}
                     </p>
 
                     <p>
@@ -566,11 +584,11 @@ function mostrarPedidos() {
                         S/ ${total.toFixed(2)}
                     </p>
 
+                    ${estado === "pendiente" ? `
                     <button
-                        onclick="eliminarPedido('${idPedido}')"
-                    >
-                        🗑️ Eliminar pedido
-                    </button>
+                         onclick="cancelarPedido('${idPedido}')">
+                            🔴 Cancelar pedido
+                        </button>` : ""}
 
                 </div>
 
@@ -618,10 +636,10 @@ function mostrarPedidos() {
         });
 }
 // ==============================================================
-// 🗑️ ELIMINAR PEDIDO
+// 🗑️ CANCELAR PEDIDO
 // ==============================================================
 
-function eliminarPedido(idPedido) {
+function cancelarPedido(idPedido) {
 
     const tokenSesionReal = localStorage.getItem("authToken");
 
@@ -632,8 +650,8 @@ function eliminarPedido(idPedido) {
     }
 
     const confirmar = confirm(
-        "¿Estás seguro de que deseas eliminar este pedido?\n\n" +
-        "Esta acción no se puede deshacer."
+        "¿Estás seguro de que deseas cancelar este pedido?\n\n" +
+        "El pedido permanecerá registrado como cancelado."
     );
 
     if (!confirmar) {
@@ -641,10 +659,18 @@ function eliminarPedido(idPedido) {
     }
 
     fetch(`${BASE_RENDER_URL}/api/pedidos/${idPedido}`, {
-        method: "DELETE",
+
+        method: "PATCH",
+
         headers: {
-            "Authorization": `Bearer ${tokenSesionReal}`
-        }
+            "Authorization": `Bearer ${tokenSesionReal}`,
+            "Content-Type": "application/json"
+        },
+
+        body: JSON.stringify({
+            estado: "cancelado"
+        })
+
     })
         .then(function (response) {
 
@@ -652,7 +678,7 @@ function eliminarPedido(idPedido) {
 
                 if (!response.ok) {
                     throw new Error(
-                        data.error || "No se pudo eliminar el pedido"
+                        data.error || "No se pudo cancelar el pedido"
                     );
                 }
 
@@ -662,21 +688,20 @@ function eliminarPedido(idPedido) {
         })
         .then(function (data) {
 
-            alert("✅ " + data.message);
+            alert("🔴 " + data.message);
 
-            // Actualizar automáticamente la lista
             mostrarPedidos();
 
         })
         .catch(function (error) {
 
             console.error(
-                "[ELIMINAR PEDIDO ERROR]:",
+                "[CANCELAR PEDIDO ERROR]:",
                 error
             );
 
             alert(
-                "❌ No se pudo eliminar el pedido:\n\n" +
+                "❌ No se pudo cancelar el pedido:\n\n" +
                 error.message
             );
 

@@ -289,48 +289,91 @@ def obtener_pedidos():
 # =========================================================
 # ENDPOINT 5: ELIMINAR PEDIDO (RESTRICCIÓN PERIMETRAL)
 # =========================================================
-@app.route("/api/pedidos/<id_pedido>", methods=["DELETE"])
-def eliminar_pedido(id_pedido):
+@app.route("/api/pedidos/<id_pedido>", methods=["PATCH"])
+def actualizar_estado_pedido(id_pedido):
     try:
         usuario, error = obtener_usuario_desde_token()
+
         if error:
             return jsonify({"error": error}), 401
 
+        # =================================================
+        # OBTENER PEDIDO ACTUAL
+        # =================================================
         respuesta = requests.get(
             f"{FIREBASE_DB_URL}/pedidos/{id_pedido}.json",
             timeout=15
         )
 
         if not respuesta.ok:
-            return jsonify({"error": "No se pudo consultar el pedido"}), 500
+            return jsonify({
+                "error": "No se pudo consultar el pedido"
+            }), 500
 
         pedido = respuesta.json()
+
         if not pedido:
-            return jsonify({"error": "El pedido especificado no existe"}), 404
+            return jsonify({
+                "error": "El pedido especificado no existe"
+            }), 404
 
         # =================================================
-        # CONTROL DE ACCESO ROL: USUARIO NORMAL
+        # CONTROL DE ACCESO: USUARIO NORMAL
         # =================================================
         if usuario["rol"] == "usuario":
+
             correo_pedido = pedido.get("correoUsuario")
+
             if correo_pedido != usuario["correo"]:
-                return jsonify({"error": "No tienes permiso para eliminar este pedido"}), 403
+                return jsonify({
+                    "error": "No tienes permiso para modificar este pedido"
+                }), 403
 
         # =================================================
-        # CONTROL DE ACCESO ROL: MASTER (Pasa directo)
+        # OBTENER NUEVO ESTADO
         # =================================================
-        respuesta_delete = requests.delete(
+        datos = request.get_json(silent=True) or {}
+
+        nuevo_estado = datos.get("estado")
+
+        estados_permitidos = [
+            "pendiente",
+            "procesando",
+            "completado",
+            "cancelado"
+        ]
+
+        if nuevo_estado not in estados_permitidos:
+            return jsonify({
+                "error": "Estado de pedido no válido"
+            }), 400
+
+        # =================================================
+        # ACTUALIZAR ESTADO EN FIREBASE
+        # =================================================
+        respuesta_patch = requests.patch(
             f"{FIREBASE_DB_URL}/pedidos/{id_pedido}.json",
+            json={
+                "estado": nuevo_estado
+            },
             timeout=15
         )
 
-        if not respuesta_delete.ok:
-            return jsonify({"error": "No se pudo eliminar el registro de Firebase"}), 500
+        if not respuesta_patch.ok:
+            return jsonify({
+                "error": "No se pudo actualizar el estado del pedido"
+            }), 500
 
-        return jsonify({"message": "Pedido eliminado correctamente"}), 200
+        return jsonify({
+            "message": "Estado del pedido actualizado correctamente",
+            "estado": nuevo_estado
+        }), 200
 
     except Exception as e:
-        return jsonify({"error": f"Error al eliminar pedido: {str(e)}"}), 500
+
+        return jsonify({
+            "error": f"Error al actualizar pedido: {str(e)}"
+        }), 500
 
 # =========================================================
 # ENDPOINT DE PRUEBA / ENRUTAMIENTO BASE
