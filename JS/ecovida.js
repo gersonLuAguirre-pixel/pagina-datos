@@ -486,6 +486,71 @@ function mostrarPedidos() {
         });
 }
 // ==============================================================
+// 🗑️ ELIMINAR PEDIDO
+// ==============================================================
+
+function eliminarPedido(idPedido) {
+
+    const tokenSesionReal = localStorage.getItem("authToken");
+
+    if (!tokenSesionReal) {
+        alert("🔒 Tu sesión ha expirado. Inicia sesión nuevamente.");
+        window.location.href = "login.html";
+        return;
+    }
+
+    const confirmar = confirm(
+        "¿Estás seguro de que deseas eliminar este pedido?\n\n" +
+        "Esta acción no se puede deshacer."
+    );
+
+    if (!confirmar) {
+        return;
+    }
+
+    fetch(`${BASE_RENDER_URL}/api/pedidos/${idPedido}`, {
+        method: "DELETE",
+        headers: {
+            "Authorization": `Bearer ${tokenSesionReal}`
+        }
+    })
+        .then(function (response) {
+
+            return response.json().then(function (data) {
+
+                if (!response.ok) {
+                    throw new Error(
+                        data.error || "No se pudo eliminar el pedido"
+                    );
+                }
+
+                return data;
+            });
+
+        })
+        .then(function (data) {
+
+            alert("✅ " + data.message);
+
+            // Actualizar automáticamente la lista
+            mostrarPedidos();
+
+        })
+        .catch(function (error) {
+
+            console.error(
+                "[ELIMINAR PEDIDO ERROR]:",
+                error
+            );
+
+            alert(
+                "❌ No se pudo eliminar el pedido:\n\n" +
+                error.message
+            );
+
+        });
+}
+// ==============================================================
 // 🔑 MICROSERVICIO DE AUTENTICACIÓN REAL (PYTHON + MONGODB ATLAS)
 // ==============================================================
 
