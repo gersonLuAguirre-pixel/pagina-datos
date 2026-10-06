@@ -49,6 +49,7 @@ const BASE_RENDER_URL = "https://ecovida-api-real.onrender.com";
 (function protegerCarrito() {
 
     const rutaActual = window.location.pathname;
+
     const paginaActual = rutaActual.substring(
         rutaActual.lastIndexOf("/") + 1
     );
@@ -56,6 +57,12 @@ const BASE_RENDER_URL = "https://ecovida-api-real.onrender.com";
     const tokenSesionReal = localStorage.getItem("authToken");
 
     if (paginaActual === "carrito.html" && !tokenSesionReal) {
+
+        // Guardamos la página que el usuario quería visitar
+        sessionStorage.setItem(
+            "paginaDespuesLogin",
+            "carrito.html"
+        );
 
         alert(
             "🔒 Para acceder al carrito debes iniciar sesión."
@@ -712,9 +719,20 @@ function iniciarSesionReal(email, password) {
             localStorage.setItem("usuarioLogueado", JSON.stringify(data.usuario));
 
             // Redirección relativa que limpia la URL tanto en local como en Firebase Hosting
-            const rutaActual = window.location.pathname;
-            const nuevaRuta = rutaActual.replace("login.html", "index.html");
-            window.location.href = nuevaRuta;
+            const paginaDespuesLogin =
+                sessionStorage.getItem("paginaDespuesLogin");
+
+            if (paginaDespuesLogin) {
+
+                sessionStorage.removeItem("paginaDespuesLogin");
+
+                window.location.href = paginaDespuesLogin;
+
+            } else {
+
+                window.location.href = "index.html";
+
+            }
         })
         .catch(function (error) {
             console.error("[AUTH ERROR]:", error.message);
