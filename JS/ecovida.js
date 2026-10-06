@@ -6,49 +6,99 @@ const BASE_RENDER_URL = "https://ecovida-api-real.onrender.com";
 // ==============================================================
 // 🔐 MIDDLEWARE DE SEGURIDAD PERIMETRAL (BLOQUEO ABSOLUTO)
 // ==============================================================
-(function verificarAccesoObligatorio() {
-    // 1. EXTRAER EL ARCHIVO ACTUAL DE LA URL
-    const rutaActual = window.location.pathname;
-    const paginaActual = rutaActual.substring(rutaActual.lastIndexOf("/") + 1);
+// ==============================================================
+// 🔐 CONTROL DE SESIÓN
+// ==============================================================
 
-    // 2. LEER EL TOKEN EMITIDO POR PYTHON Y MONGODB ATLAS
+(function verificarSesion() {
+
     const tokenSesionReal = localStorage.getItem("authToken");
 
-    // 3. LOGICA DE RESTRICCIÓN PERIMETRAL (ZERO TRUST)
-    if (paginaActual !== "login.html" && !tokenSesionReal) {
-
-        console.warn("[SEGURIDAD CRÍTICA] Intento de bypass detectado. Redirección forzosa.");
-        alert("🔒 Acceso Restringido:\n\nDebe autenticarse con sus credenciales institucionales de Python y MongoDB Atlas antes de interactuar con la plataforma EcoVida.");
-
-        if (paginaActual === "" || paginaActual === "index.html" || paginaActual === "nosotros.html" || paginaActual === "carrito.html" || paginaActual === "pedidos.html" || paginaActual === "quiz.html") {
-            window.location.href = "login.html";
-        }
-    }
-
-    // 4. CONTROL DE COMPORTAMIENTO DE BOTONES DINÁMICOS
     document.addEventListener("DOMContentLoaded", function () {
+
         const btnLogin = document.getElementById("btn-login-nav");
         const btnLogout = document.getElementById("btn-logout-nav");
 
         if (tokenSesionReal) {
-            if (btnLogin) btnLogin.style.display = "none";     // Oculta "Iniciar Sesión"
-            if (btnLogout) btnLogout.style.display = "block";    // Muestra "Cerrar Sesión"
-        } else {
-            if (btnLogin) btnLogin.style.display = "block";   // Muestra "Iniciar Sesión"
-            if (btnLogout) btnLogout.style.display = "none";    // Oculta "Cerrar Sesión"
-        }
-    });
-})();
 
+            // Usuario autenticado
+            if (btnLogin) {
+                btnLogin.style.display = "none";
+            }
+
+            if (btnLogout) {
+                btnLogout.style.display = "block";
+            }
+
+        } else {
+
+            // Visitante
+            if (btnLogin) {
+                btnLogin.style.display = "block";
+            }
+
+            if (btnLogout) {
+                btnLogout.style.display = "none";
+            }
+
+        }
+
+    });
+
+})();
+(function protegerCarrito() {
+
+    const rutaActual = window.location.pathname;
+    const paginaActual = rutaActual.substring(
+        rutaActual.lastIndexOf("/") + 1
+    );
+
+    const tokenSesionReal = localStorage.getItem("authToken");
+
+    if (paginaActual === "carrito.html" && !tokenSesionReal) {
+
+        alert(
+            "🔒 Para acceder al carrito debes iniciar sesión."
+        );
+
+        window.location.href = "login.html";
+    }
+
+})();
 
 // ===============================
 // AGREGAR PRODUCTO AL CARRITO
 // ===============================
 function agregarProducto(nombre, precio) {
+
+    // Verificar si existe una sesión activa
+    const tokenSesionReal = localStorage.getItem("authToken");
+
+    if (!tokenSesionReal) {
+
+        alert(
+            "🔒 Para agregar productos al carrito debes iniciar sesión."
+        );
+
+        window.location.href = "login.html";
+        return;
+    }
+
+    // Usuario autenticado: agregar producto normalmente
     let carrito = JSON.parse(localStorage.getItem("carrito")) || [];
-    let producto = { nombre: nombre, precio: precio };
+
+    let producto = {
+        nombre: nombre,
+        precio: precio
+    };
+
     carrito.push(producto);
-    localStorage.setItem("carrito", JSON.stringify(carrito));
+
+    localStorage.setItem(
+        "carrito",
+        JSON.stringify(carrito)
+    );
+
     alert(nombre + " fue agregado al carrito 🛒");
 }
 
@@ -109,36 +159,110 @@ function vaciarCarrito() {
 // GUARDAR PEDIDO INTEGRADO (FIREBASE + MICROSERVICIO EN RENDER)
 // ==============================================================
 function guardarPedido() {
-    let carrito = JSON.parse(localStorage.getItem("carrito")) || [];
 
-    if (carrito.length === 0) {
-        alert("El carrito está vacío");
+    // ==========================================
+    // 🔐 VERIFICAR SESIÓN
+    // ==========================================
+
+    const tokenSesionReal = localStorage.getItem("authToken");
+
+    if (!tokenSesionReal) {
+
+        alert(
+            "🔒 Debes iniciar sesión para realizar una compra."
+        );
+
+        window.location.href = "login.html";
+
         return;
     }
 
+    // ==========================================
+    // 🛒 OBTENER CARRITO
+    // ==========================================
+
+    let carrito = JSON.parse(
+        localStorage.getItem("carrito")
+    ) || [];
+
+    if (carrito.length === 0) {
+
+        alert("El carrito está vacío");
+
+        return;
+    }
+
+    // ==========================================
+    // 💰 CALCULAR SUBTOTAL
+    // ==========================================
+
     let subtotal = 0;
+
     carrito.forEach(function (producto) {
-        subtotal = subtotal + Number(producto.precio);
+
+        subtotal =
+            subtotal +
+            Number(producto.precio);
+
     });
 
-    console.log("[MULTICLOUD] Consultando tarifas logísticas en el servidor remoto de Render...");
+    console.log(
+        "[MULTICLOUD] Consultando tarifas logísticas en el servidor remoto de Render..."
+    );
 
-    // Consulta de costos logísticos a tu servidor externo en la nube de Render
+    // ==========================================
+    // 🚚 CONSULTAR COSTO DE ENVÍO
+    // ==========================================
+
     fetch(`${BASE_RENDER_URL}/api/delivery`)
+
         .then(function (resRender) {
+
             if (!resRender.ok) {
-                throw new Error("El servidor Render reportó un fallo");
+
+                throw new Error(
+                    "El servidor Render reportó un fallo"
+                );
+
             }
+
             return resRender.json();
+
         })
+
         .then(function (datosRender) {
-            let costoEnvio = datosRender.id ? 15.00 : 15.00;
-            console.log("[MULTICLOUD] Conexión exitosa con Render. Costo de envío: S/ " + costoEnvio);
-            procesarGuardadoFirebase(carrito, subtotal, costoEnvio);
+
+            let costoEnvio =
+                datosRender.id
+                    ? 15.00
+                    : 15.00;
+
+            console.log(
+                "[MULTICLOUD] Conexión exitosa con Render. Costo de envío: S/ " +
+                costoEnvio
+            );
+
+            procesarGuardadoFirebase(
+                carrito,
+                subtotal,
+                costoEnvio
+            );
+
         })
+
         .catch(function (errRender) {
-            console.error("[MULTICLOUD ERROR] Render caído. Aplicando tolerancia a fallos:", errRender);
-            procesarGuardadoFirebase(carrito, subtotal, 10.00);
+
+            console.error(
+                "[MULTICLOUD ERROR] Render caído. Aplicando tolerancia a fallos:",
+                errRender
+            );
+
+            procesarGuardadoFirebase(
+                carrito,
+                subtotal,
+                10.00
+            );
+
         });
 }
 
@@ -613,6 +737,8 @@ function manejarFormularioLogin(evento) {
 function cerrarSesionCorporativa() {
     localStorage.removeItem("authToken");
     localStorage.removeItem("usuarioLogueado");
+
     alert("🔒 Sesión finalizada de manera segura.");
-    window.location.href = "login.html";
+
+    window.location.href = "index.html";
 }
