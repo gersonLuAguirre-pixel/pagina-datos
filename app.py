@@ -347,6 +347,29 @@ def actualizar_estado_pedido(id_pedido):
             return jsonify({
                 "error": "Estado de pedido no válido"
             }), 400
+        # =================================================
+        # VALIDAR TRANSICIÓN DE ESTADO
+        # =================================================
+
+        estado_actual = pedido.get("estado", "pendiente")
+
+        transiciones_permitidas = {
+            "pendiente": ["procesando", "cancelado"],
+            "procesando": ["completado", "cancelado"],
+            "completado": [],
+            "cancelado": []
+        }
+
+        if nuevo_estado not in transiciones_permitidas.get(
+            estado_actual,
+            []
+        ):
+            return jsonify({
+                "error": (
+                    f"No se puede cambiar el pedido de "
+                    f"{estado_actual} a {nuevo_estado}"
+                )
+            }), 400
 
         # =================================================
         # ACTUALIZAR ESTADO EN FIREBASE

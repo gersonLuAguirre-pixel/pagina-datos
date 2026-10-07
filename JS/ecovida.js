@@ -584,11 +584,37 @@ function mostrarPedidos() {
                         S/ ${total.toFixed(2)}
                     </p>
 
-                    ${estado === "pendiente" ? `
-                    <button
-                         onclick="cancelarPedido('${idPedido}')">
+                   ${datos.rol === "master" ? `
+                        <div class="acciones-pedido">
+
+                            ${estado === "pendiente" ? `
+                                <button
+                                    onclick="actualizarEstadoPedido('${idPedido}', 'procesando')">
+                                    🔵 Procesar pedido
+                                </button>
+                            ` : ""}
+
+                            ${estado === "procesando" ? `
+                                <button
+                                    onclick="actualizarEstadoPedido('${idPedido}', 'completado')">
+                                    🟢 Marcar como completado
+                                </button>
+                            ` : ""}
+
+                            ${estado !== "cancelado" && estado !== "completado" ? `
+                                <button
+                                    onclick="actualizarEstadoPedido('${idPedido}', 'cancelado')">
+                                    🔴 Cancelar pedido
+                                </button>
+                            ` : ""}
+
+                        </div>
+                    ` : estado === "pendiente" ? `
+                        <button
+                            onclick="cancelarPedido('${idPedido}')">
                             🔴 Cancelar pedido
-                        </button>` : ""}
+                        </button>
+                    ` : ""}
 
                 </div>
 
@@ -702,6 +728,99 @@ function cancelarPedido(idPedido) {
 
             alert(
                 "❌ No se pudo cancelar el pedido:\n\n" +
+                error.message
+            );
+
+        });
+}
+//=============================================================
+//Actualizar estado 
+//===========================================================//
+function actualizarEstadoPedido(idPedido, nuevoEstado) {
+
+    const tokenSesionReal = localStorage.getItem("authToken");
+
+    if (!tokenSesionReal) {
+        alert("🔒 Tu sesión ha expirado. Inicia sesión nuevamente.");
+        window.location.href = "login.html";
+        return;
+    }
+
+    let mensajeConfirmacion = "";
+
+    switch (nuevoEstado) {
+        case "procesando":
+            mensajeConfirmacion =
+                "¿Deseas cambiar este pedido a PROCESANDO?";
+            break;
+
+        case "completado":
+            mensajeConfirmacion =
+                "¿Deseas marcar este pedido como COMPLETADO?";
+            break;
+
+        case "cancelado":
+            mensajeConfirmacion =
+                "¿Deseas cancelar este pedido?";
+            break;
+
+        default:
+            alert("❌ Estado no válido.");
+            return;
+    }
+
+    if (!confirm(mensajeConfirmacion)) {
+        return;
+    }
+
+    fetch(`${BASE_RENDER_URL}/api/pedidos/${idPedido}`, {
+
+        method: "PATCH",
+
+        headers: {
+            "Authorization": `Bearer ${tokenSesionReal}`,
+            "Content-Type": "application/json"
+        },
+
+        body: JSON.stringify({
+            estado: nuevoEstado
+        })
+
+    })
+        .then(function (response) {
+
+            return response.json().then(function (data) {
+
+                if (!response.ok) {
+
+                    throw new Error(
+                        data.error ||
+                        "No se pudo actualizar el estado"
+                    );
+                }
+
+                return data;
+            });
+
+        })
+
+        .then(function (data) {
+
+            alert("✅ " + data.message);
+
+            mostrarPedidos();
+
+        })
+
+        .catch(function (error) {
+
+            console.error(
+                "[ACTUALIZAR ESTADO ERROR]:",
+                error
+            );
+
+            alert(
+                "❌ No se pudo actualizar el estado:\n\n" +
                 error.message
             );
 
