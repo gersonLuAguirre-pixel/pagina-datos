@@ -317,14 +317,18 @@ function procesarGuardadoFirebase(carrito, subtotal, costoEnvio) {
         });
 }
 
+
 // ==============================================================
 // MOSTRAR PEDIDOS
 // Consulta segura mediante Python + JWT + Firebase
 // ==============================================================
+
 console.log("🔥 ECOVIDA.JS NUEVO CARGADO");
+
 function mostrarPedidos() {
 
-    const listaPedidos = document.getElementById("listaPedidos");
+    const listaPedidos =
+        document.getElementById("listaPedidos");
 
     if (!listaPedidos) {
         return;
@@ -334,11 +338,14 @@ function mostrarPedidos() {
     // 1. OBTENER SESIÓN
     // ==========================================
 
-    const tokenSesionReal = localStorage.getItem("authToken");
+    const tokenSesionReal =
+        localStorage.getItem("authToken");
 
-    const datosUsuario = JSON.parse(
-        localStorage.getItem("usuarioLogueado")
-    ) || null;
+    const datosUsuario =
+        JSON.parse(
+            localStorage.getItem("usuarioLogueado")
+        ) || null;
+
 
     // ==========================================
     // 2. VERIFICAR SESIÓN
@@ -347,11 +354,14 @@ function mostrarPedidos() {
     if (!tokenSesionReal || !datosUsuario) {
 
         listaPedidos.innerHTML = `
-            <p>🔒 Debes iniciar sesión para consultar tus pedidos.</p>
+            <p>
+                🔒 Debes iniciar sesión para consultar tus pedidos.
+            </p>
         `;
 
         return;
     }
+
 
     console.log(
         "[PEDIDOS] Consultando pedidos mediante API..."
@@ -367,9 +377,13 @@ function mostrarPedidos() {
         datosUsuario.rol
     );
 
+
     listaPedidos.innerHTML = `
-        <p>⏳ Consultando pedidos...</p>
+        <p>
+            ⏳ Consultando pedidos...
+        </p>
     `;
+
 
     // ==========================================
     // 3. CONSULTAR FLASK / RENDER
@@ -380,11 +394,16 @@ function mostrarPedidos() {
         method: "GET",
 
         headers: {
-            "Authorization": `Bearer ${tokenSesionReal}`,
-            "Content-Type": "application/json"
+
+            "Authorization":
+                `Bearer ${tokenSesionReal}`,
+
+            "Content-Type":
+                "application/json"
         }
 
     })
+
 
         // ==========================================
         // 4. PROCESAR RESPUESTA
@@ -392,20 +411,27 @@ function mostrarPedidos() {
 
         .then(function (response) {
 
-            return response.json().then(function (data) {
+            return response.json()
+                .then(function (data) {
 
-                if (!response.ok) {
+                    if (!response.ok) {
 
-                    throw new Error(
-                        data.error ||
-                        "No se pudieron obtener los pedidos"
-                    );
-                }
+                        throw new Error(
+                            data.error ||
+                            "No se pudieron obtener los pedidos"
+                        );
+                    }
 
-                return data;
-            });
+                    return data;
+
+                });
 
         })
+
+
+        // ==========================================
+        // 5. MOSTRAR PEDIDOS
+        // ==========================================
 
         .then(function (datos) {
 
@@ -414,220 +440,766 @@ function mostrarPedidos() {
                 datos
             );
 
+
             listaPedidos.innerHTML = "";
 
-            const pedidos = datos.pedidos || {};
 
-            const idsPedidos = Object.keys(pedidos);
+            const pedidos =
+                datos.pedidos || {};
+
 
             // ==========================================
-            // 5. NO HAY PEDIDOS
+            // CONTADORES
+            // ==========================================
+
+            let pendientes = 0;
+            let procesando = 0;
+            let completados = 0;
+            let cancelados = 0;
+
+
+            Object.values(pedidos)
+                .forEach(function (pedido) {
+
+                    const estado =
+                        pedido.estado ||
+                        "pendiente";
+
+
+                    switch (estado) {
+
+                        case "pendiente":
+                            pendientes++;
+                            break;
+
+                        case "procesando":
+                            procesando++;
+                            break;
+
+                        case "completado":
+                            completados++;
+                            break;
+
+                        case "cancelado":
+                            cancelados++;
+                            break;
+                    }
+
+                });
+
+
+            const totalPedidos =
+                pendientes +
+                procesando +
+                completados +
+                cancelados;
+
+
+            // ==========================================
+            // ORDENAR PEDIDOS
+            // ==========================================
+
+            const idsPedidos =
+                Object.keys(pedidos)
+                    .sort(function (a, b) {
+
+                        const prioridad = {
+
+                            pendiente: 1,
+                            procesando: 2,
+                            completado: 3,
+                            cancelado: 4
+
+                        };
+
+
+                        const estadoA =
+                            pedidos[a].estado ||
+                            "pendiente";
+
+
+                        const estadoB =
+                            pedidos[b].estado ||
+                            "pendiente";
+
+
+                        return (
+                            (prioridad[estadoA] || 99) -
+                            (prioridad[estadoB] || 99)
+                        );
+
+                    });
+
+
+            // ==========================================
+            // 6. NO HAY PEDIDOS
             // ==========================================
 
             if (idsPedidos.length === 0) {
 
                 listaPedidos.innerHTML = `
-                <div class="pedido">
-                    <p>📦 No tienes pedidos registrados.</p>
-                </div>
-            `;
+
+                    <div class="pedido">
+
+                        <p>
+                            📦 No tienes pedidos registrados.
+                        </p>
+
+                    </div>
+
+                `;
 
                 return;
             }
 
-            // ==========================================
-            // 6. MOSTRAR TÍTULO SEGÚN EL ROL
-            // ==========================================
-
-            const tituloRol =
-                datos.rol === "master"
-                    ? "👑 Pedidos de todos los usuarios"
-                    : "📦 Mis pedidos";
-
-            listaPedidos.innerHTML += `
-              <div class="info-pedidos">
-
-                  <h3>${tituloRol}</h3>
-
-             </div>
-`           ;
 
             // ==========================================
-            // 7. MOSTRAR CADA PEDIDO
+            // 7. CABECERA SEGÚN EL ROL
+            // ==========================================
+
+            if (datos.rol === "master") {
+
+                // ==========================================
+                // PANEL MASTER
+                // ==========================================
+
+                listaPedidos.innerHTML = `
+
+                    <div class="info-pedidos">
+
+                        <div class="panel-master-pedidos">
+
+                            <h2>
+                                👑 PANEL DE PEDIDOS
+                            </h2>
+
+                            <p>
+                                Todos los pedidos
+                            </p>
+
+                            <hr>
+
+
+                            <div class="resumen-pedidos">
+
+                                <p>
+                                    🟡 Pendientes
+                                    <strong>
+                                        ${pendientes}
+                                    </strong>
+                                </p>
+
+
+                                <p>
+                                    🔵 Procesando
+                                    <strong>
+                                        ${procesando}
+                                    </strong>
+                                </p>
+
+
+                                <p>
+                                    🟢 Completados
+                                    <strong>
+                                        ${completados}
+                                    </strong>
+                                </p>
+
+
+                                <p>
+                                    🔴 Cancelados
+                                    <strong>
+                                        ${cancelados}
+                                    </strong>
+                                </p>
+
+                            </div>
+
+                            <hr>
+
+
+                            <p>
+
+                                <strong>
+                                    Total pedidos:
+                                    ${totalPedidos}
+                                </strong>
+
+                            </p>
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="tabla-pedidos-master">
+
+                        <table>
+
+                            <thead>
+
+                                <tr>
+
+                                    <th>
+                                        Pedido
+                                    </th>
+
+                                    <th>
+                                        Usuario
+                                    </th>
+
+                                    <th>
+                                        Total
+                                    </th>
+
+                                    <th>
+                                        Estado
+                                    </th>
+
+                                    <th>
+                                        Acciones
+                                    </th>
+
+                                </tr>
+
+                            </thead>
+
+
+                            <tbody id="tablaPedidosMaster">
+
+                            </tbody>
+
+                        </table>
+
+                    </div>
+
+                `;
+
+
+                // ==========================================
+                // CREAR FILAS DE LA TABLA MASTER
+                // ==========================================
+
+                const tablaMaster =
+                    document.getElementById(
+                        "tablaPedidosMaster"
+                    );
+
+
+                idsPedidos.forEach(function (idPedido) {
+
+                    const pedido =
+                        pedidos[idPedido];
+
+
+                    const estado =
+                        pedido.estado ||
+                        "pendiente";
+
+
+                    let estadoTexto = "";
+                    let estadoClase = "";
+
+
+                    switch (estado) {
+
+                        case "procesando":
+
+                            estadoTexto =
+                                "🔵 Procesando";
+
+                            estadoClase =
+                                "estado-procesando";
+
+                            break;
+
+
+                        case "completado":
+
+                            estadoTexto =
+                                "🟢 Completado";
+
+                            estadoClase =
+                                "estado-completado";
+
+                            break;
+
+
+                        case "cancelado":
+
+                            estadoTexto =
+                                "🔴 Cancelado";
+
+                            estadoClase =
+                                "estado-cancelado";
+
+                            break;
+
+
+                        default:
+
+                            estadoTexto =
+                                "🟡 Pendiente";
+
+                            estadoClase =
+                                "estado-pendiente";
+
+                            break;
+
+                    }
+
+
+                    const total =
+                        Number(
+                            pedido.total || 0
+                        );
+
+
+                    if (tablaMaster) {
+
+                        tablaMaster.innerHTML += `
+
+                            <tr>
+
+                                <td>
+
+                                    <strong>
+                                        #${idPedido}
+                                    </strong>
+
+                                </td>
+
+
+                                <td>
+
+                                    ${pedido.correoUsuario ||
+                            "No asignado"}
+
+                                </td>
+
+
+                                <td>
+
+                                    <strong>
+                                        S/
+                                        ${total.toFixed(2)}
+                                    </strong>
+
+                                </td>
+
+
+                                <td>
+
+                                    <span
+                                        class="estado-pedido ${estadoClase}">
+
+                                        ${estadoTexto}
+
+                                    </span>
+
+                                </td>
+
+
+                                <td class="acciones-tabla">
+
+
+                                    ${estado === "pendiente"
+                                ? `
+
+                                            <button
+                                                class="btn-tabla-procesar"
+                                                onclick="actualizarEstadoPedido('${idPedido}', 'procesando')">
+
+                                                🔵 Procesar
+
+                                            </button>
+
+
+                                            <button
+                                                class="btn-tabla-cancelar"
+                                                onclick="actualizarEstadoPedido('${idPedido}', 'cancelado')">
+
+                                                🔴 Cancelar
+
+                                            </button>
+
+                                        `
+                                : ""
+                            }
+
+
+                                    ${estado === "procesando"
+                                ? `
+
+                                            <button
+                                                class="btn-tabla-completar"
+                                                onclick="actualizarEstadoPedido('${idPedido}', 'completado')">
+
+                                                🟢 Completar
+
+                                            </button>
+
+
+                                            <button
+                                                class="btn-tabla-cancelar"
+                                                onclick="actualizarEstadoPedido('${idPedido}', 'cancelado')">
+
+                                                🔴 Cancelar
+
+                                            </button>
+
+                                        `
+                                : ""
+                            }
+
+
+                                    ${estado === "completado"
+                                ? `
+
+                                            <span class="sin-acciones">
+
+                                                ✓ Finalizado
+
+                                            </span>
+
+                                        `
+                                : ""
+                            }
+
+
+                                    ${estado === "cancelado"
+                                ? `
+
+                                            <span class="sin-acciones">
+
+                                                — Cancelado
+
+                                            </span>
+
+                                        `
+                                : ""
+                            }
+
+                                </td>
+
+                            </tr>
+
+                        `;
+
+                    }
+
+                });
+
+
+                // ==========================================
+                // IMPORTANTE:
+                // EL MASTER TERMINA AQUÍ
+                // NO SE CREAN TARJETAS .pedido
+                // ==========================================
+
+                return;
+
+            }
+
+
+            // ==========================================
+            // 8. VISTA USUARIO NORMAL
+            // ==========================================
+
+            listaPedidos.innerHTML = `
+
+                <div class="info-pedidos">
+
+                    <h2>
+                        📦 Mis pedidos
+                    </h2>
+
+                </div>
+
+            `;
+
+
+            // ==========================================
+            // CREAR TARJETAS DEL USUARIO
             // ==========================================
 
             idsPedidos.forEach(function (idPedido) {
 
-                const pedido = pedidos[idPedido];
+                const pedido =
+                    pedidos[idPedido];
 
-                let productosHTML = "";
 
                 // ==========================================
                 // PRODUCTOS
                 // ==========================================
+
+                let productosHTML = "";
+
 
                 if (
                     pedido.productos &&
                     Array.isArray(pedido.productos)
                 ) {
 
-                    pedido.productos.forEach(function (producto) {
+                    pedido.productos
+                        .forEach(function (producto) {
 
-                        productosHTML += `
-                        <li>
-                            ${producto.nombre || "Producto"}
-                            -
-                            S/
-                            ${Number(
-                            producto.precio || 0
-                        ).toFixed(2)}
-                        </li>
-                    `;
+                            productosHTML += `
 
-                    });
+                                <li>
+
+                                    ${producto.nombre ||
+                                "Producto"}
+
+                                    -
+
+                                    S/
+
+                                    ${Number(
+                                    producto.precio || 0
+                                ).toFixed(2)}
+
+                                </li>
+
+                            `;
+
+                        });
 
                 } else {
 
                     productosHTML = `
-                    <li>Sin productos registrados</li>
-                `;
+
+                        <li>
+                            Sin productos registrados
+                        </li>
+
+                    `;
 
                 }
 
+
                 // ==========================================
-                // DATOS DEL PEDIDO
+                // ESTADO
                 // ==========================================
 
-                const estado = pedido.estado || "pendiente";
+                const estado =
+                    pedido.estado ||
+                    "pendiente";
+
 
                 let estadoTexto = "";
                 let estadoClase = "";
 
+
                 switch (estado) {
 
                     case "procesando":
-                        estadoTexto = "🔵 Procesando";
-                        estadoClase = "estado-procesando";
+
+                        estadoTexto =
+                            "🔵 Procesando";
+
+                        estadoClase =
+                            "estado-procesando";
+
                         break;
+
 
                     case "completado":
-                        estadoTexto = "🟢 Completado";
-                        estadoClase = "estado-completado";
+
+                        estadoTexto =
+                            "🟢 Completado";
+
+                        estadoClase =
+                            "estado-completado";
+
                         break;
+
 
                     case "cancelado":
-                        estadoTexto = "🔴 Cancelado";
-                        estadoClase = "estado-cancelado";
+
+                        estadoTexto =
+                            "🔴 Cancelado";
+
+                        estadoClase =
+                            "estado-cancelado";
+
                         break;
+
 
                     default:
-                        estadoTexto = "🟡 Pendiente";
-                        estadoClase = "estado-pendiente";
+
+                        estadoTexto =
+                            "🟡 Pendiente";
+
+                        estadoClase =
+                            "estado-pendiente";
+
                         break;
+
                 }
 
-                const envio = Number(
-                    pedido.costoEnvioExterno || 0
-                );
 
-                const subtotal = Number(
-                    pedido.subtotal || 0
-                );
-
-                const total = Number(
-                    pedido.total || 0
-                );
-                const fecha = pedido.fecha
-                    ? new Date(pedido.fecha).toLocaleString()
-                    : "No especificada";
                 // ==========================================
-                // MOSTRAR PEDIDO
+                // DATOS ECONÓMICOS
+                // ==========================================
+
+                const envio =
+                    Number(
+                        pedido.costoEnvioExterno || 0
+                    );
+
+
+                const subtotal =
+                    Number(
+                        pedido.subtotal || 0
+                    );
+
+
+                const total =
+                    Number(
+                        pedido.total || 0
+                    );
+
+
+                const fecha =
+                    pedido.fecha
+                        ? new Date(
+                            pedido.fecha
+                        ).toLocaleString()
+                        : "No especificada";
+
+
+                // ==========================================
+                // TARJETA
                 // ==========================================
 
                 listaPedidos.innerHTML += `
 
-                <div class="pedido">
+                    <div class="pedido">
 
-                    <h3>📦 Pedido: ${idPedido}</h3>
-                    <p><strong>Estado:</strong><span class="estado-pedido ${estadoClase}">${estadoTexto}
-                    </span></p>
-                    <p>
-                    <strong>Propietario:</strong>
-                    ${pedido.correoUsuario || "No asignado"}
-                    </p>
+                        <h3>
 
-                    <p>
-                        <strong>Fecha:</strong>
-                        ${fecha}
-                    </p>
+                            📦 Pedido:
+                            ${idPedido}
 
-                    <p>
-                        <strong>Subtotal:</strong>
-                        S/ ${subtotal.toFixed(2)}
-                    </p>
+                        </h3>
 
-                    <h4>
-                        Productos:
-                    </h4>
 
-                    <ul>
-                        ${productosHTML}
-                    </ul>
+                        <p>
 
-                    <p>
-                        <strong>Costo de envío:</strong>
-                        S/ ${envio.toFixed(2)}
-                    </p>
+                            <strong>
+                                Estado:
+                            </strong>
 
-                    <p>
-                        <strong>Total:</strong>
-                        S/ ${total.toFixed(2)}
-                    </p>
+                            <span
+                                class="estado-pedido ${estadoClase}">
 
-                   ${datos.rol === "master" ? `
-                        <div class="acciones-pedido">
+                                ${estadoTexto}
 
-                            ${estado === "pendiente" ? `
+                            </span>
+
+                        </p>
+
+
+                        <p>
+
+                            <strong>
+                                Propietario:
+                            </strong>
+
+                            ${pedido.correoUsuario ||
+                    "No asignado"}
+
+                        </p>
+
+
+                        <p>
+
+                            <strong>
+                                Fecha:
+                            </strong>
+
+                            ${fecha}
+
+                        </p>
+
+
+                        <p>
+
+                            <strong>
+                                Subtotal:
+                            </strong>
+
+                            S/
+                            ${subtotal.toFixed(2)}
+
+                        </p>
+
+
+                        <h4>
+                            Productos:
+                        </h4>
+
+
+                        <ul>
+
+                            ${productosHTML}
+
+                        </ul>
+
+
+                        <p>
+
+                            <strong>
+                                Costo de envío:
+                            </strong>
+
+                            S/
+                            ${envio.toFixed(2)}
+
+                        </p>
+
+
+                        <p>
+
+                            <strong>
+                                Total:
+                            </strong>
+
+                            S/
+                            ${total.toFixed(2)}
+
+                        </p>
+
+
+                        ${estado === "pendiente"
+                        ? `
+
                                 <button
-                                    onclick="actualizarEstadoPedido('${idPedido}', 'procesando')">
-                                    🔵 Procesar pedido
-                                </button>
-                            ` : ""}
+                                    onclick="cancelarPedido('${idPedido}')">
 
-                            ${estado === "procesando" ? `
-                                <button
-                                    onclick="actualizarEstadoPedido('${idPedido}', 'completado')">
-                                    🟢 Marcar como completado
-                                </button>
-                            ` : ""}
-
-                            ${estado !== "cancelado" && estado !== "completado" ? `
-                                <button
-                                    onclick="actualizarEstadoPedido('${idPedido}', 'cancelado')">
                                     🔴 Cancelar pedido
+
                                 </button>
-                            ` : ""}
 
-                        </div>
-                    ` : estado === "pendiente" ? `
-                        <button
-                            onclick="cancelarPedido('${idPedido}')">
-                            🔴 Cancelar pedido
-                        </button>
-                    ` : ""}
+                            `
+                        : ""
+                    }
 
-                </div>
+                    </div>
 
-                <hr>
 
-            `;
+                    <hr>
+
+                `;
 
             });
 
         })
 
+
         // ==========================================
-        // 8. ERROR
+        // 9. ERROR
         // ==========================================
 
         .catch(function (error) {
@@ -637,30 +1209,36 @@ function mostrarPedidos() {
                 error
             );
 
+
             listaPedidos.innerHTML = `
 
-            <div class="pedido">
+                <div class="pedido">
 
-                <h3>
-                    ❌ Error de conexión
-                </h3>
+                    <h3>
+                        ❌ Error de conexión
+                    </h3>
 
-                <p>
-                    ${error.message}
-                </p>
 
-                <button
-                    onclick="mostrarPedidos()"
-                >
-                    🔄 Reintentar
-                </button>
+                    <p>
+                        ${error.message}
+                    </p>
 
-            </div>
 
-        `;
+                    <button
+                        onclick="mostrarPedidos()">
+
+                        🔄 Reintentar
+
+                    </button>
+
+                </div>
+
+            `;
 
         });
+
 }
+
 // ==============================================================
 // 🗑️ CANCELAR PEDIDO
 // ==============================================================

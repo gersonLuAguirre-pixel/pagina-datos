@@ -1,0 +1,1228 @@
+/* =========================================================
+   🌱 ECOVIDA - VISTA ADMINISTRATIVA DE PEDIDOS
+   ========================================================= */
+
+/* =========================================================
+   VARIABLES
+   ========================================================= */
+
+:root {
+    --admin-verde: #187a36;
+    --admin-verde-oscuro: #145c2a;
+    --admin-verde-claro: #eaf7ee;
+
+    --admin-azul: #2563eb;
+    --admin-azul-oscuro: #1d4ed8;
+
+    --admin-verde-ok: #16a34a;
+    --admin-verde-ok-oscuro: #15803d;
+
+    --admin-rojo: #dc2626;
+    --admin-rojo-oscuro: #b91c1c;
+
+    --admin-amarillo: #f0b429;
+
+    --admin-texto: #374151;
+    --admin-texto-oscuro: #111827;
+    --admin-texto-suave: #6b7280;
+
+    --admin-borde: #e5e7eb;
+    --admin-fondo: #ffffff;
+    --admin-fondo-suave: #f8faf9;
+
+    --admin-sombra:
+        0 8px 25px rgba(0, 0, 0, 0.06);
+
+    --admin-sombra-hover:
+        0 12px 30px rgba(0, 0, 0, 0.10);
+}
+
+
+/* =========================================================
+   CONTENEDOR PRINCIPAL
+   ========================================================= */
+
+#listaPedidos {
+    display: block !important;
+    width: 100% !important;
+    max-width: 1200px;
+
+    margin: 0 auto;
+
+    box-sizing: border-box;
+}
+
+#listaPedidos>* {
+    box-sizing: border-box;
+}
+
+
+/* =========================================================
+   CABECERA DEL PANEL MASTER
+   ========================================================= */
+
+#listaPedidos>.info-pedidos {
+    width: 100%;
+    margin: 0 0 24px 0;
+
+    animation: aparecerPanel 0.5s ease both;
+}
+
+.panel-master-pedidos {
+    width: 100%;
+
+    background: var(--admin-fondo);
+
+    border: 1px solid var(--admin-borde);
+    border-radius: 18px;
+
+    padding: 28px 30px;
+
+    box-sizing: border-box;
+
+    box-shadow: var(--admin-sombra);
+
+    position: relative;
+    overflow: hidden;
+
+    transition:
+        transform 0.25s ease,
+        box-shadow 0.25s ease;
+}
+
+/* Línea decorativa superior */
+
+.panel-master-pedidos::before {
+    content: "";
+
+    position: absolute;
+
+    top: 0;
+    left: 0;
+
+    width: 100%;
+    height: 4px;
+
+    background: linear-gradient(90deg,
+            var(--admin-verde),
+            #35a853,
+            var(--admin-verde));
+
+    background-size: 200% 100%;
+
+    animation: moverLinea 4s linear infinite;
+}
+
+.panel-master-pedidos:hover {
+    box-shadow: var(--admin-sombra-hover);
+}
+
+
+/* =========================================================
+   TÍTULO
+   ========================================================= */
+
+.panel-master-pedidos h2 {
+    margin: 0;
+
+    color: var(--admin-verde);
+
+    font-size: 1.8rem;
+    font-weight: 800;
+
+    letter-spacing: -0.5px;
+
+    animation: aparecerTitulo 0.6s ease both;
+}
+
+.panel-master-pedidos>p {
+    margin: 7px 0 0;
+
+    color: var(--admin-texto-suave);
+
+    font-size: 0.95rem;
+}
+
+
+/* =========================================================
+   SEPARADORES
+   ========================================================= */
+
+.panel-master-pedidos hr {
+    border: 0;
+
+    border-top: 1px solid var(--admin-borde);
+
+    margin: 24px 0;
+}
+
+
+/* =========================================================
+   RESUMEN DE ESTADOS
+   ========================================================= */
+
+.resumen-pedidos {
+    display: grid;
+
+    grid-template-columns: repeat(4, 1fr);
+
+    gap: 16px;
+
+    width: 100%;
+
+    margin-top: 22px;
+}
+
+.resumen-pedidos p {
+    position: relative;
+
+    min-height: 95px;
+
+    margin: 0;
+
+    padding: 18px;
+
+    border: 1px solid var(--admin-borde);
+
+    border-radius: 14px;
+
+    background: var(--admin-fondo-suave);
+
+    display: flex;
+
+    flex-direction: column;
+
+    justify-content: center;
+
+    align-items: flex-start;
+
+    color: var(--admin-texto);
+
+    font-size: 0.9rem;
+    font-weight: 600;
+
+    box-sizing: border-box;
+
+    overflow: hidden;
+
+    cursor: default;
+
+    transition:
+        transform 0.25s ease,
+        box-shadow 0.25s ease,
+        background 0.25s ease;
+}
+
+/* Efecto de brillo */
+
+.resumen-pedidos p::after {
+    content: "";
+
+    position: absolute;
+
+    top: -50%;
+    right: -35px;
+
+    width: 90px;
+    height: 180%;
+
+    background: rgba(255, 255, 255, 0.45);
+
+    transform: rotate(20deg) translateX(100px);
+
+    transition: transform 0.5s ease;
+}
+
+.resumen-pedidos p:hover::after {
+    transform: rotate(20deg) translateX(-170px);
+}
+
+.resumen-pedidos p:hover {
+    transform: translateY(-5px);
+
+    background: #ffffff;
+
+    box-shadow:
+        0 10px 22px rgba(0, 0, 0, 0.10);
+}
+
+.resumen-pedidos p strong {
+    display: block;
+
+    margin-top: 8px;
+
+    color: var(--admin-texto-oscuro);
+
+    font-size: 1.8rem;
+    font-weight: 800;
+
+    transition:
+        transform 0.25s ease;
+}
+
+.resumen-pedidos p:hover strong {
+    transform: scale(1.08);
+}
+
+
+/* =========================================================
+   INDICADORES DE COLOR
+   ========================================================= */
+
+.resumen-pedidos p:nth-child(1) {
+    border-left: 5px solid var(--admin-amarillo);
+}
+
+.resumen-pedidos p:nth-child(2) {
+    border-left: 5px solid var(--admin-azul);
+}
+
+.resumen-pedidos p:nth-child(3) {
+    border-left: 5px solid var(--admin-verde-ok);
+}
+
+.resumen-pedidos p:nth-child(4) {
+    border-left: 5px solid var(--admin-rojo);
+}
+
+
+/* =========================================================
+   TOTAL DE PEDIDOS
+   ========================================================= */
+
+.panel-master-pedidos>p:last-child {
+    margin: 0;
+
+    color: var(--admin-texto);
+
+    font-size: 1rem;
+    font-weight: 700;
+
+    text-align: right;
+}
+
+
+/* =========================================================
+   TABLA DE PEDIDOS
+   ========================================================= */
+
+.tabla-pedidos-master {
+    width: 100%;
+
+    margin: 0 0 30px 0;
+
+    background: var(--admin-fondo);
+
+    border: 1px solid var(--admin-borde);
+
+    border-radius: 18px;
+
+    /*
+       IMPORTANTE:
+       La tabla ya no hará crecer toda la página
+       indefinidamente.
+    */
+
+    max-height: 540px;
+
+    overflow-x: auto;
+    overflow-y: auto;
+
+    box-shadow: var(--admin-sombra);
+
+    position: relative;
+
+    scrollbar-width: thin;
+    scrollbar-color: #a7b5ab #f1f5f2;
+
+    animation: aparecerTabla 0.6s ease both;
+}
+
+
+/* =========================================================
+   SCROLLBAR
+   ========================================================= */
+
+.tabla-pedidos-master::-webkit-scrollbar {
+    width: 9px;
+    height: 9px;
+}
+
+.tabla-pedidos-master::-webkit-scrollbar-track {
+    background: #f1f5f2;
+    border-radius: 10px;
+}
+
+.tabla-pedidos-master::-webkit-scrollbar-thumb {
+    background: #a7b5ab;
+    border-radius: 10px;
+
+    transition: background 0.2s ease;
+}
+
+.tabla-pedidos-master::-webkit-scrollbar-thumb:hover {
+    background: var(--admin-verde);
+}
+
+
+/* =========================================================
+   TABLA
+   ========================================================= */
+
+.tabla-pedidos-master table {
+    width: 100%;
+
+    min-width: 900px;
+
+    border-collapse: separate;
+
+    border-spacing: 0;
+
+    table-layout: fixed;
+}
+
+
+/* =========================================================
+   ENCABEZADOS DE LA TABLA MASTER
+   ========================================================= */
+
+.tabla-pedidos-master thead {
+    display: table-header-group !important;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+}
+
+.tabla-pedidos-master thead tr {
+    display: table-row !important;
+}
+
+.tabla-pedidos-master th {
+    position: sticky !important;
+    top: 0 !important;
+
+    background: #187a36 !important;
+    color: #ffffff !important;
+
+    padding: 17px 18px !important;
+
+    font-family: Arial, sans-serif;
+    font-size: 14px !important;
+    font-weight: 700 !important;
+
+    text-align: left !important;
+    vertical-align: middle;
+
+    border: none !important;
+    border-bottom: 3px solid #145c2a !important;
+
+    white-space: nowrap;
+
+    height: 55px;
+    box-sizing: border-box;
+
+    z-index: 100;
+}
+
+/* Texto del encabezado */
+.tabla-pedidos-master th {
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.15);
+}
+
+/* Efecto al pasar el mouse */
+.tabla-pedidos-master th:hover {
+    background: #145c2a !important;
+}
+
+/* Primer encabezado */
+.tabla-pedidos-master th:first-child {
+    border-top-left-radius: 17px;
+}
+
+/* Último encabezado */
+.tabla-pedidos-master th:last-child {
+    border-top-right-radius: 17px;
+}
+
+/* =========================================================
+   ASEGURAR VISIBILIDAD DEL TEXTO
+   ========================================================= */
+
+.tabla-pedidos-master th,
+.tabla-pedidos-master th *,
+.tabla-pedidos-master thead,
+.tabla-pedidos-master thead * {
+    color: #ffffff !important;
+    opacity: 1 !important;
+    visibility: visible !important;
+}
+
+
+
+
+/* =========================================================
+   ANCHO DE COLUMNAS
+   ========================================================= */
+
+.tabla-pedidos-master th:nth-child(1),
+.tabla-pedidos-master td:nth-child(1) {
+    width: 18%;
+}
+
+.tabla-pedidos-master th:nth-child(2),
+.tabla-pedidos-master td:nth-child(2) {
+    width: 27%;
+}
+
+.tabla-pedidos-master th:nth-child(3),
+.tabla-pedidos-master td:nth-child(3) {
+    width: 13%;
+}
+
+.tabla-pedidos-master th:nth-child(4),
+.tabla-pedidos-master td:nth-child(4) {
+    width: 17%;
+}
+
+.tabla-pedidos-master th:nth-child(5),
+.tabla-pedidos-master td:nth-child(5) {
+    width: 25%;
+}
+
+
+/* =========================================================
+   CELDAS
+   ========================================================= */
+
+.tabla-pedidos-master td {
+    padding: 15px 18px;
+
+    color: var(--admin-texto);
+
+    font-size: 0.9rem;
+
+    border-bottom: 1px solid #eef0f2;
+
+    vertical-align: middle;
+
+    word-break: break-word;
+
+    transition:
+        background 0.2s ease,
+        padding-left 0.2s ease;
+}
+
+
+/* =========================================================
+   FILAS
+   ========================================================= */
+
+.tabla-pedidos-master tbody tr {
+    background: #ffffff;
+
+    transition:
+        background 0.2s ease,
+        transform 0.2s ease,
+        box-shadow 0.2s ease;
+
+    animation: aparecerFila 0.35s ease both;
+}
+
+/*
+   Pequeño efecto escalonado
+*/
+
+.tabla-pedidos-master tbody tr:nth-child(1) {
+    animation-delay: 0.05s;
+}
+
+.tabla-pedidos-master tbody tr:nth-child(2) {
+    animation-delay: 0.10s;
+}
+
+.tabla-pedidos-master tbody tr:nth-child(3) {
+    animation-delay: 0.15s;
+}
+
+.tabla-pedidos-master tbody tr:nth-child(4) {
+    animation-delay: 0.20s;
+}
+
+.tabla-pedidos-master tbody tr:nth-child(5) {
+    animation-delay: 0.25s;
+}
+
+
+/* =========================================================
+   HOVER DE FILA
+   ========================================================= */
+
+.tabla-pedidos-master tbody tr:hover {
+    background: #f4faf6;
+
+    box-shadow:
+        inset 4px 0 0 var(--admin-verde);
+}
+
+.tabla-pedidos-master tbody tr:hover td {
+    color: #1f2937;
+}
+
+.tabla-pedidos-master tbody tr:hover td:first-child {
+    padding-left: 22px;
+}
+
+
+/* =========================================================
+   ÚLTIMA FILA
+   ========================================================= */
+
+.tabla-pedidos-master tbody tr:last-child td {
+    border-bottom: none;
+}
+
+
+/* =========================================================
+   ID DEL PEDIDO
+   ========================================================= */
+
+.tabla-pedidos-master td:first-child {
+    color: #166534;
+
+    font-weight: 700;
+
+    font-family:
+        "Courier New",
+        monospace;
+
+    font-size: 0.82rem;
+
+    transition:
+        color 0.2s ease,
+        padding-left 0.2s ease;
+}
+
+.tabla-pedidos-master tbody tr:hover td:first-child {
+    color: var(--admin-verde);
+}
+
+
+/* =========================================================
+   USUARIO
+   ========================================================= */
+
+.tabla-pedidos-master td:nth-child(2) {
+    color: #4b5563;
+}
+
+
+/* =========================================================
+   PRECIO
+   ========================================================= */
+
+.tabla-pedidos-master td:nth-child(3) {
+    color: var(--admin-texto-oscuro);
+
+    font-weight: 700;
+
+    white-space: nowrap;
+
+    text-align: right;
+}
+
+
+/* =========================================================
+   ESTADOS
+   ========================================================= */
+
+.tabla-pedidos-master .estado-pedido {
+    display: inline-flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    min-width: 110px;
+
+    padding: 8px 13px;
+
+    margin: 0;
+
+    border-radius: 999px;
+
+    font-size: 0.78rem;
+
+    font-weight: 700;
+
+    white-space: nowrap;
+
+    box-sizing: border-box;
+
+    transition:
+        transform 0.2s ease,
+        box-shadow 0.2s ease;
+}
+
+.tabla-pedidos-master .estado-pedido:hover {
+    transform: scale(1.05);
+}
+
+
+/* =========================================================
+   ESTADO PENDIENTE
+   ========================================================= */
+
+.tabla-pedidos-master .estado-pendiente {
+    background: #fff4cc;
+
+    color: #946200;
+
+    box-shadow:
+        0 0 0 0 rgba(240, 180, 41, 0.3);
+
+    animation: pulsoPendiente 2s infinite;
+}
+
+
+/* =========================================================
+   ESTADO PROCESANDO
+   ========================================================= */
+
+.tabla-pedidos-master .estado-procesando {
+    background: #dbeafe;
+
+    color: #1d4ed8;
+}
+
+
+/* =========================================================
+   ESTADO COMPLETADO
+   ========================================================= */
+
+.tabla-pedidos-master .estado-completado {
+    background: #dcfce7;
+
+    color: #166534;
+}
+
+
+/* =========================================================
+   ESTADO CANCELADO
+   ========================================================= */
+
+.tabla-pedidos-master .estado-cancelado {
+    background: #fee2e2;
+
+    color: #b91c1c;
+}
+
+
+/* =========================================================
+   CELDA DE ACCIONES
+   ========================================================= */
+
+.acciones-tabla {
+    padding: 12px;
+
+    text-align: center;
+
+    vertical-align: middle;
+}
+
+
+/* =========================================================
+   BOTONES DE ACCIONES
+   ========================================================= */
+
+.acciones-tabla button {
+    border: none;
+
+    border-radius: 8px;
+
+    padding: 9px 13px;
+
+    margin: 3px;
+
+    font-size: 13px;
+
+    font-weight: 700;
+
+    cursor: pointer;
+
+    white-space: nowrap;
+
+    color: #ffffff;
+
+    position: relative;
+
+    overflow: hidden;
+
+    transition:
+        transform 0.2s ease,
+        box-shadow 0.2s ease,
+        background 0.2s ease;
+}
+
+
+/* Efecto de brillo */
+
+.acciones-tabla button::after {
+    content: "";
+
+    position: absolute;
+
+    top: 0;
+    left: -100%;
+
+    width: 60%;
+    height: 100%;
+
+    background: rgba(255, 255, 255, 0.18);
+
+    transform: skewX(-20deg);
+
+    transition: left 0.4s ease;
+}
+
+.acciones-tabla button:hover::after {
+    left: 130%;
+}
+
+.acciones-tabla button:hover {
+    transform: translateY(-2px);
+
+    box-shadow:
+        0 6px 12px rgba(0, 0, 0, 0.15);
+}
+
+.acciones-tabla button:active {
+    transform: translateY(1px) scale(0.97);
+
+    box-shadow:
+        0 2px 5px rgba(0, 0, 0, 0.12);
+}
+
+
+/* =========================================================
+   BOTÓN PROCESAR
+   ========================================================= */
+
+.btn-tabla-procesar {
+    background: var(--admin-azul);
+}
+
+.btn-tabla-procesar:hover {
+    background: var(--admin-azul-oscuro);
+}
+
+
+/* =========================================================
+   BOTÓN COMPLETAR
+   ========================================================= */
+
+.btn-tabla-completar {
+    background: var(--admin-verde-ok);
+}
+
+.btn-tabla-completar:hover {
+    background: var(--admin-verde-ok-oscuro);
+}
+
+
+/* =========================================================
+   BOTÓN CANCELAR
+   ========================================================= */
+
+.btn-tabla-cancelar {
+    background: var(--admin-rojo);
+}
+
+.btn-tabla-cancelar:hover {
+    background: var(--admin-rojo-oscuro);
+}
+
+
+/* =========================================================
+   PEDIDO FINALIZADO / CANCELADO
+   ========================================================= */
+
+.sin-acciones {
+    display: inline-block;
+
+    padding: 7px 10px;
+
+    border-radius: 6px;
+
+    background: #f1f5f9;
+
+    color: #64748b;
+
+    font-size: 13px;
+
+    font-weight: 600;
+
+    transition:
+        transform 0.2s ease,
+        background 0.2s ease;
+}
+
+.sin-acciones:hover {
+    transform: scale(1.04);
+
+    background: #e2e8f0;
+}
+
+
+/* =========================================================
+   TARJETAS INDIVIDUALES
+   ========================================================= */
+
+#listaPedidos>.pedido {
+    width: 100%;
+
+    margin: 0 0 20px 0;
+
+    padding: 24px;
+
+    background: #ffffff;
+
+    border: 1px solid var(--admin-borde);
+
+    border-radius: 16px;
+
+    box-sizing: border-box;
+
+    box-shadow:
+        0 5px 18px rgba(0, 0, 0, 0.05);
+
+    transition:
+        transform 0.25s ease,
+        box-shadow 0.25s ease;
+}
+
+#listaPedidos>.pedido:hover {
+    transform: translateY(-3px);
+
+    box-shadow:
+        0 10px 26px rgba(0, 0, 0, 0.09);
+}
+
+
+/* =========================================================
+   TÍTULO DEL PEDIDO
+   ========================================================= */
+
+#listaPedidos>.pedido h3 {
+    margin-top: 0;
+
+    color: var(--admin-verde);
+
+    font-size: 1.05rem;
+}
+
+
+/* =========================================================
+   ESTADO EN TARJETA
+   ========================================================= */
+
+#listaPedidos>.pedido .estado-pedido {
+    display: inline-flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    padding: 6px 12px;
+
+    border-radius: 999px;
+
+    font-size: 0.82rem;
+
+    font-weight: 700;
+}
+
+
+/* =========================================================
+   BOTONES DE TARJETAS
+   ========================================================= */
+
+.acciones-pedido {
+    display: flex;
+
+    flex-wrap: wrap;
+
+    gap: 10px;
+
+    margin-top: 20px;
+}
+
+.acciones-pedido button,
+#listaPedidos>.pedido>button {
+    border: none;
+
+    border-radius: 9px;
+
+    padding: 10px 16px;
+
+    font-size: 0.85rem;
+
+    font-weight: 700;
+
+    cursor: pointer;
+
+    color: #ffffff;
+
+    transition:
+        transform 0.2s ease,
+        opacity 0.2s ease,
+        box-shadow 0.2s ease;
+}
+
+.acciones-pedido button:hover,
+#listaPedidos>.pedido>button:hover {
+    transform: translateY(-2px);
+
+    opacity: 0.95;
+
+    box-shadow:
+        0 5px 12px rgba(0, 0, 0, 0.13);
+}
+
+.acciones-pedido button:active,
+#listaPedidos>.pedido>button:active {
+    transform: scale(0.97);
+}
+
+
+/* =========================================================
+   BOTONES DE TARJETAS
+   ========================================================= */
+
+.acciones-pedido button:first-child {
+    background: var(--admin-azul);
+}
+
+.acciones-pedido button:nth-child(2) {
+    background: var(--admin-verde-ok);
+}
+
+.acciones-pedido button:nth-child(3),
+#listaPedidos>.pedido>button {
+    background: var(--admin-rojo);
+}
+
+
+/* =========================================================
+   SEPARADORES
+   ========================================================= */
+
+#listaPedidos>hr {
+    border: none;
+
+    border-top: 1px solid #eeeeee;
+
+    margin: 0 0 20px;
+}
+
+
+/* =========================================================
+   ANIMACIONES
+   ========================================================= */
+
+@keyframes aparecerPanel {
+
+    from {
+        opacity: 0;
+        transform: translateY(15px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+
+@keyframes aparecerTitulo {
+
+    from {
+        opacity: 0;
+        transform: translateX(-15px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+
+@keyframes aparecerTabla {
+
+    from {
+        opacity: 0;
+        transform: translateY(18px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+
+@keyframes aparecerFila {
+
+    from {
+        opacity: 0;
+        transform: translateX(-8px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+
+@keyframes moverLinea {
+
+    0% {
+        background-position: 0% 50%;
+    }
+
+    100% {
+        background-position: 200% 50%;
+    }
+}
+
+
+@keyframes pulsoPendiente {
+
+    0%,
+    100% {
+        box-shadow:
+            0 0 0 0 rgba(240, 180, 41, 0);
+    }
+
+    50% {
+        box-shadow:
+            0 0 0 4px rgba(240, 180, 41, 0.12);
+    }
+}
+
+
+/* =========================================================
+   RESPONSIVE - TABLET
+   ========================================================= */
+
+@media (max-width: 900px) {
+
+    .resumen-pedidos {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .panel-master-pedidos {
+        padding: 22px;
+    }
+
+    .tabla-pedidos-master {
+        max-height: 500px;
+    }
+}
+
+
+/* =========================================================
+   RESPONSIVE - CELULAR
+   ========================================================= */
+
+@media (max-width: 600px) {
+
+    #listaPedidos {
+        padding: 0 10px;
+    }
+
+    .panel-master-pedidos {
+        padding: 20px 16px;
+
+        border-radius: 14px;
+    }
+
+    .panel-master-pedidos h2 {
+        font-size: 1.4rem;
+    }
+
+    .resumen-pedidos {
+        grid-template-columns: 1fr 1fr;
+
+        gap: 10px;
+    }
+
+    .resumen-pedidos p {
+        min-height: 85px;
+
+        padding: 12px;
+    }
+
+    .resumen-pedidos p strong {
+        font-size: 1.4rem;
+    }
+
+    .tabla-pedidos-master {
+        border-radius: 12px;
+
+        max-height: 450px;
+    }
+
+    .tabla-pedidos-master table {
+        min-width: 900px;
+    }
+
+    .tabla-pedidos-master th,
+    .tabla-pedidos-master td {
+        padding: 12px;
+    }
+
+    .acciones-tabla button {
+        padding: 8px 10px;
+
+        font-size: 12px;
+    }
+
+    #listaPedidos>.pedido {
+        padding: 18px;
+    }
+}
+
+
+/* =========================================================
+   CELULAR MUY PEQUEÑO
+   ========================================================= */
+
+@media (max-width: 400px) {
+
+    .resumen-pedidos {
+        grid-template-columns: 1fr;
+    }
+
+    .panel-master-pedidos h2 {
+        font-size: 1.25rem;
+    }
+}
+
+
+/* =========================================================
+   REDUCIR ANIMACIONES SI EL USUARIO LO PREFIERE
+   ========================================================= */
+
+@media (prefers-reduced-motion: reduce) {
+
+    *,
+    *::before,
+    *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+
+        transition-duration: 0.01ms !important;
+    }
+}
