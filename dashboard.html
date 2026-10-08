@@ -1,0 +1,399 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Dashboard Master | EcoVida</title>
+
+    <link rel="stylesheet" href="CSS/dashboard.css">
+</head>
+
+<body>
+
+    <!-- =====================================================
+         🔐 CONTROL DE ACCESO
+    ====================================================== -->
+    <div id="mensajeAcceso" class="mensaje-acceso">
+        Verificando acceso...
+    </div>
+
+
+    <!-- =====================================================
+         📊 DASHBOARD MASTER
+    ====================================================== -->
+    <main id="dashboardMaster" class="dashboard-container">
+
+        <!-- ENCABEZADO -->
+        <header class="dashboard-header">
+
+            <div>
+                <span class="dashboard-etiqueta">PANEL MASTER</span>
+
+                <h1>
+                    Dashboard
+                </h1>
+
+                <p>
+                    Resumen general de operaciones de EcoVida
+                </p>
+            </div>
+
+            <div class="dashboard-acciones">
+
+                <button type="button" id="btnActualizarDashboard" class="btn-actualizar">
+                    ↻ Actualizar
+                </button>
+
+            </div>
+
+        </header>
+
+
+        <!-- =================================================
+             📌 TARJETAS PRINCIPALES
+        ================================================== -->
+        <section class="dashboard-resumen">
+
+            <!-- PEDIDOS -->
+            <article class="card-estadistica">
+
+                <div class="card-icono">
+                    🛒
+                </div>
+
+                <div class="card-contenido">
+
+                    <span>
+                        Total de pedidos
+                    </span>
+
+                    <strong id="totalPedidos">
+                        0
+                    </strong>
+
+                </div>
+
+            </article>
+
+
+            <!-- VENTAS -->
+            <article class="card-estadistica">
+
+                <div class="card-icono">
+                    💰
+                </div>
+
+                <div class="card-contenido">
+
+                    <span>
+                        Ventas totales
+                    </span>
+
+                    <strong id="ventasTotales">
+                        S/ 0.00
+                    </strong>
+
+                </div>
+
+            </article>
+
+
+            <!-- PENDIENTES -->
+            <article class="card-estadistica">
+
+                <div class="card-icono">
+                    ⏳
+                </div>
+
+                <div class="card-contenido">
+
+                    <span>
+                        Pendientes
+                    </span>
+
+                    <strong id="pedidosPendientes">
+                        0
+                    </strong>
+
+                </div>
+
+            </article>
+
+
+            <!-- COMPLETADOS -->
+            <article class="card-estadistica">
+
+                <div class="card-icono">
+                    ✅
+                </div>
+
+                <div class="card-contenido">
+
+                    <span>
+                        Completados
+                    </span>
+
+                    <strong id="pedidosCompletados">
+                        0
+                    </strong>
+
+                </div>
+
+            </article>
+
+
+            <!-- CANCELADOS -->
+            <article class="card-estadistica">
+
+                <div class="card-icono">
+                    ❌
+                </div>
+
+                <div class="card-contenido">
+
+                    <span>
+                        Cancelados
+                    </span>
+
+                    <strong id="pedidosCancelados">
+                        0
+                    </strong>
+
+                </div>
+
+            </article>
+
+        </section>
+
+
+        <!-- =================================================
+             📈 SECCIÓN DE VENTAS
+        ================================================== -->
+        <section class="dashboard-panel">
+
+            <div class="panel-header">
+
+                <div>
+                    <span class="panel-etiqueta">
+                        RENDIMIENTO
+                    </span>
+
+                    <h2>
+                        Ventas
+                    </h2>
+                </div>
+                <div id="periodoSeleccionado" class="periodo-seleccionado">
+                    📅 Mostrando todos los pedidos
+                </div>
+
+                <div class="filtros-fecha">
+
+                    <div class="campo-fecha">
+                        <label for="fechaDesde">Desde</label>
+                        <input type="date" id="fechaDesde">
+                    </div>
+
+                    <div class="campo-fecha">
+                        <label for="fechaHasta">Hasta</label>
+                        <input type="date" id="fechaHasta">
+                    </div>
+
+                    <button type="button" id="btnAplicarFiltro" class="btn-filtro">
+                        Aplicar
+                    </button>
+
+                    <button type="button" id="btnLimpiarFiltro" class="btn-filtro btn-limpiar">
+                        Limpiar
+                    </button>
+
+                </div>
+
+            </div>
+
+
+            <div class="grafico-container">
+
+                <canvas id="graficoVentas"></canvas>
+
+                <div id="mensajeGrafico" class="mensaje-grafico">
+                    Cargando información...
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- =================================================
+             📊 DOS COLUMNAS
+        ================================================== -->
+        <section class="dashboard-grid">
+
+
+            <!-- PRODUCTOS MÁS VENDIDOS -->
+            <article class="dashboard-panel">
+
+                <div class="panel-header">
+
+                    <div>
+
+                        <span class="panel-etiqueta">
+                            PRODUCTOS
+                        </span>
+
+                        <h2>
+                            Más vendidos
+                        </h2>
+
+                    </div>
+
+                </div>
+
+
+                <div id="productosMasVendidos" class="lista-productos">
+
+                    <div class="estado-vacio">
+                        Cargando productos...
+                    </div>
+
+                </div>
+
+            </article>
+
+
+            <!-- PEDIDOS POR ESTADO -->
+            <article class="dashboard-panel">
+
+                <div class="panel-header">
+
+                    <div>
+
+                        <span class="panel-etiqueta">
+                            PEDIDOS
+                        </span>
+
+                        <h2>
+                            Estado de pedidos
+                        </h2>
+
+                    </div>
+
+                </div>
+
+
+                <div id="resumenEstados" class="lista-estados">
+
+                    <div class="estado-vacio">
+                        Cargando estados...
+                    </div>
+
+                </div>
+
+            </article>
+
+        </section>
+
+
+        <!-- =================================================
+             📦 RESUMEN DE PRODUCTOS
+        ================================================== -->
+        <section class="dashboard-panel">
+
+            <div class="panel-header">
+
+                <div>
+
+                    <span class="panel-etiqueta">
+                        INVENTARIO
+                    </span>
+
+                    <h2>
+                        Resumen de productos
+                    </h2>
+
+                </div>
+
+            </div>
+
+
+            <div class="inventario-resumen">
+
+                <div class="inventario-item">
+
+                    <span>
+                        📦 Productos vendidos
+                    </span>
+
+                    <strong id="totalProductosVendidos">
+                        0
+                    </strong>
+
+                </div>
+
+
+                <div class="inventario-item">
+
+                    <span>
+                        🏆 Producto líder
+                    </span>
+
+                    <strong id="productoMasVendido">
+                        -
+                    </strong>
+
+                </div>
+
+
+                <div class="inventario-item">
+
+                    <span>
+                        💵 Promedio por pedido
+                    </span>
+
+                    <strong id="promedioPedido">
+                        S/ 0.00
+                    </strong>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- =================================================
+             🔄 ESTADO DEL SISTEMA
+        ================================================== -->
+        <footer class="dashboard-footer">
+
+            <span id="estadoDashboard">
+                Preparando dashboard...
+            </span>
+
+            <span id="ultimaActualizacion">
+                -
+            </span>
+
+        </footer>
+
+    </main>
+
+
+    <!-- =====================================================
+         📊 CHART.JS
+    ====================================================== -->
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+
+    <!-- =====================================================
+         ⚙️ DASHBOARD JS
+    ====================================================== -->
+
+    <script src="JS/dashboard.js"></script>
+
+</body>
+
+</html>

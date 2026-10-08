@@ -10,40 +10,147 @@ const BASE_RENDER_URL = "https://ecovida-api-real.onrender.com";
 // 🔐 CONTROL DE SESIÓN
 // ==============================================================
 
+// ==============================================================
+// 🔐 CONTROL DE SESIÓN + ACCESO AL DASHBOARD MASTER
+// ==============================================================
+
 (function verificarSesion() {
 
-    const tokenSesionReal = localStorage.getItem("authToken");
+    const tokenSesionReal =
+        localStorage.getItem("authToken");
 
-    document.addEventListener("DOMContentLoaded", function () {
+    const datosUsuario =
+        JSON.parse(
+            localStorage.getItem("usuarioLogueado")
+        ) || null;
 
-        const btnLogin = document.getElementById("btn-login-nav");
-        const btnLogout = document.getElementById("btn-logout-nav");
+    document.addEventListener(
+        "DOMContentLoaded",
+        function () {
 
-        if (tokenSesionReal) {
+            const btnLogin =
+                document.getElementById(
+                    "btn-login-nav"
+                );
 
-            // Usuario autenticado
-            if (btnLogin) {
-                btnLogin.style.display = "none";
+            const btnLogout =
+                document.getElementById(
+                    "btn-logout-nav"
+                );
+
+            const btnDashboard =
+                document.getElementById(
+                    "btn-dashboard-nav"
+                );
+
+
+            // ==================================================
+            // 👤 USUARIO AUTENTICADO
+            // ==================================================
+
+            if (tokenSesionReal && datosUsuario) {
+
+                // Ocultar iniciar sesión
+                if (btnLogin) {
+
+                    btnLogin.style.display =
+                        "none";
+
+                }
+
+
+                // Mostrar cerrar sesión
+                if (btnLogout) {
+
+                    btnLogout.style.display =
+                        "block";
+
+                }
+
+
+                // ==================================================
+                // 👑 VERIFICAR ROL MASTER
+                // ==================================================
+
+                const rolUsuario =
+                    String(
+                        datosUsuario.rol ||
+                        datosUsuario.role ||
+                        ""
+                    )
+                        .toLowerCase()
+                        .trim();
+
+
+                if (
+                    rolUsuario === "master"
+                ) {
+
+                    // Mostrar Dashboard
+                    if (btnDashboard) {
+
+                        btnDashboard.style.display =
+                            "block";
+
+                    }
+
+                    console.log(
+                        "[SESION] Usuario Master detectado. Dashboard habilitado."
+                    );
+
+                } else {
+
+                    // Usuario normal
+                    if (btnDashboard) {
+
+                        btnDashboard.style.display =
+                            "none";
+
+                    }
+
+                    console.log(
+                        "[SESION] Usuario normal. Dashboard oculto."
+                    );
+
+                }
+
             }
 
-            if (btnLogout) {
-                btnLogout.style.display = "block";
-            }
+            // ==================================================
+            // 🚪 VISITANTE
+            // ==================================================
 
-        } else {
+            else {
 
-            // Visitante
-            if (btnLogin) {
-                btnLogin.style.display = "block";
-            }
+                if (btnLogin) {
 
-            if (btnLogout) {
-                btnLogout.style.display = "none";
+                    btnLogin.style.display =
+                        "block";
+
+                }
+
+                if (btnLogout) {
+
+                    btnLogout.style.display =
+                        "none";
+
+                }
+
+                if (btnDashboard) {
+
+                    btnDashboard.style.display =
+                        "none";
+
+                }
+
+                console.log(
+                    "[SESION] No hay sesión activa."
+                );
+
             }
 
         }
-
-    });
+    );
 
 })();
 (function protegerCarrito() {
@@ -188,6 +295,56 @@ function vaciarCarrito() {
     localStorage.removeItem("carrito");
     mostrarCarrito();
 }
+// ==============================================================
+// 🛒 CONSOLIDAR PRODUCTOS REPETIDOS
+// ==============================================================
+
+function consolidarProductos(carrito) {
+
+    const productosAgrupados = {};
+
+    carrito.forEach(function (producto) {
+
+        const nombre =
+            producto.nombre || "Producto";
+
+        // Ignoramos mayúsculas/minúsculas y espacios
+        // para detectar correctamente productos iguales
+        const clave =
+            nombre.trim().toLowerCase();
+
+        const cantidad =
+            Number(producto.cantidad) || 1;
+
+        const precio =
+            Number(producto.precio) || 0;
+
+
+        if (productosAgrupados[clave]) {
+
+            // Producto repetido → sumar cantidad
+            productosAgrupados[clave].cantidad += cantidad;
+
+        } else {
+
+            // Producto nuevo
+            productosAgrupados[clave] = {
+
+                nombre: nombre,
+
+                precio: precio,
+
+                cantidad: cantidad
+
+            };
+
+        }
+
+    });
+
+
+    return Object.values(productosAgrupados);
+}
 
 // ==============================================================
 // GUARDAR PEDIDO INTEGRADO (FIREBASE + MICROSERVICIO EN RENDER)
@@ -225,6 +382,23 @@ function guardarPedido() {
 
         return;
     }
+    // ==========================================
+    // 🛒 CONSOLIDAR PRODUCTOS REPETIDOS
+    // ==========================================
+
+    carrito = consolidarProductos(carrito);
+
+    // Guardamos nuevamente el carrito consolidado
+    localStorage.setItem(
+        "carrito",
+        JSON.stringify(carrito)
+    );
+
+    console.log(
+        "[PEDIDO] Carrito consolidado:",
+        carrito
+    );
+
 
     // ==========================================
     // 💰 CALCULAR SUBTOTAL
@@ -268,10 +442,7 @@ function guardarPedido() {
 
         .then(function (datosRender) {
 
-            let costoEnvio =
-                datosRender.id
-                    ? 15.00
-                    : 15.00;
+            let costoEnvio = Number(datosRender.costoEnvio) || 0;
 
             console.log(
                 "[MULTICLOUD] Conexión exitosa con Render. Costo de envío: S/ " +
@@ -1963,63 +2134,117 @@ function verDetallesPedido(idPedido) {
 
                 <div class="lista-detalles-productos">
 
-                    ${pedido.productos &&
+${pedido.productos &&
             Array.isArray(pedido.productos)
 
-            ? pedido.productos.map(function (producto) {
+            ? (() => {
 
-                return `
+                // ==========================================
+                // AGRUPAR PRODUCTOS REPETIDOS
+                // ==========================================
 
-                                    <div class="detalle-producto">
+                const productosAgrupados = {};
 
-                                        <div class="detalle-producto-info">
+                pedido.productos.forEach(function (producto) {
 
-                                            <strong>
+                    const nombreProducto =
+                        producto.nombre || "Producto";
 
-                                                ${producto.nombre ||
-                    "Producto"
+                    const clave =
+                        nombreProducto.trim().toLowerCase();
+
+                    const cantidad =
+                        Number(
+                            producto.cantidad ||
+                            producto.cantidadProducto ||
+                            1
+                        );
+
+                    const precio =
+                        Number(producto.precio || 0);
+
+                    if (productosAgrupados[clave]) {
+
+                        // Sumar cantidad
+                        productosAgrupados[clave].cantidad += cantidad;
+
+                    } else {
+
+                        // Crear producto agrupado
+                        productosAgrupados[clave] = {
+
+                            nombre: nombreProducto,
+
+                            precio: precio,
+
+                            cantidad: cantidad
+
+                        };
+
                     }
 
-                                            </strong>
+                });
 
-                                            <span>
 
-                                                Cantidad:
-                                                ${producto.cantidad ||
-                    producto.cantidadProducto ||
-                    1
-                    }
+                // ==========================================
+                // MOSTRAR PRODUCTOS AGRUPADOS
+                // ==========================================
 
-                                            </span>
+                return Object.values(productosAgrupados)
+                    .map(function (producto) {
 
-                                        </div>
+                        const subtotalProducto =
+                            producto.precio *
+                            producto.cantidad;
 
-                                        <strong>
+                        return `
 
-                                            S/
-                                            ${Number(
-                        producto.precio || 0
-                    ).toFixed(2)
-                    }
+                    <div class="detalle-producto">
 
-                                        </strong>
+                        <div class="detalle-producto-info">
 
-                                    </div>
+                            <strong>
 
-                                `;
+                                ${producto.nombre}
 
-            }).join("")
+                            </strong>
+
+                            <span>
+
+                                Cantidad:
+                                ${producto.cantidad}
+
+                            </span>
+
+                        </div>
+
+                        <strong>
+
+                            S/
+                            ${subtotalProducto.toFixed(2)}
+
+                        </strong>
+
+                    </div>
+
+                `;
+
+                    })
+                    .join("");
+
+            })()
 
             : `
 
-                                <div class="detalle-sin-productos">
+        <div class="detalle-sin-productos">
 
-                                    📦 No hay productos registrados.
+            📦 No hay productos registrados.
 
-                                </div>
+        </div>
 
-                            `
+    `
         }
+
 
                 </div>
 
@@ -2082,7 +2307,77 @@ function verDetallesPedido(idPedido) {
                 </div>
 
             </div>
-                
+                           <div class="acciones-estado-pedido">
+
+                <h3>
+                    ⚙️ Gestionar pedido
+                </h3>
+
+                ${pedido.estado === "pendiente"
+            ? `
+                        <button
+                            type="button"
+                            class="btn-estado-modal btn-procesando"
+                            onclick="actualizarEstadoDesdeModal('${idPedido}', 'procesando')">
+
+                            🔵 Pasar a procesando
+
+                        </button>
+
+                        <button
+                            type="button"
+                            class="btn-estado-modal btn-cancelar"
+                            onclick="actualizarEstadoDesdeModal('${idPedido}', 'cancelado')">
+
+                            🔴 Cancelar pedido
+
+                        </button>
+                    `
+            : ""
+        }
+
+                ${pedido.estado === "procesando"
+            ? `
+                        <button
+                            type="button"
+                            class="btn-estado-modal btn-completado"
+                            onclick="actualizarEstadoDesdeModal('${idPedido}', 'completado')">
+
+                            🟢 Marcar como completado
+
+                        </button>
+
+                        <button
+                            type="button"
+                            class="btn-estado-modal btn-cancelar"
+                            onclick="actualizarEstadoDesdeModal('${idPedido}', 'cancelado')">
+
+                            🔴 Cancelar pedido
+
+                        </button>
+                    `
+            : ""
+        }
+
+                ${pedido.estado === "completado"
+            ? `
+                        <p class="estado-final-pedido">
+                            🟢 Este pedido ya fue completado.
+                        </p>
+                    `
+            : ""
+        }
+
+                ${pedido.estado === "cancelado"
+            ? `
+                        <p class="estado-final-pedido">
+                            🔴 Este pedido fue cancelado.
+                        </p>
+                    `
+            : ""
+        }
+
+            </div> 
         </div>
 
     `;

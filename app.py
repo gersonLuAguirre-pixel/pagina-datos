@@ -318,16 +318,13 @@ def actualizar_estado_pedido(id_pedido):
             }), 404
 
         # =================================================
-        # CONTROL DE ACCESO: USUARIO NORMAL
+        # CONTROL DE ACCESO: SOLO MASTER
         # =================================================
-        if usuario["rol"] == "usuario":
+        if usuario["rol"] != "master":
 
-            correo_pedido = pedido.get("correoUsuario")
-
-            if correo_pedido != usuario["correo"]:
-                return jsonify({
-                    "error": "No tienes permiso para modificar este pedido"
-                }), 403
+            return jsonify({
+                "error": "Solo el usuario Master puede modificar el estado de los pedidos"
+            }), 403
 
         # =================================================
         # OBTENER NUEVO ESTADO
