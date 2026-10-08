@@ -446,6 +446,7 @@ function mostrarPedidos() {
 
             const pedidos =
                 datos.pedidos || {};
+            window.pedidosMaster = pedidos;
 
 
             // ==========================================
@@ -568,6 +569,88 @@ function mostrarPedidos() {
                     <div class="info-pedidos">
 
                         <div class="panel-master-pedidos">
+                        <div class="busqueda-pedidos-master">
+
+                            <div class="busqueda-pedidos-input">
+
+                                <span>🔎</span>
+
+                                <input
+                                    type="text"
+                                    id="buscarPedidosMaster"
+                                    placeholder="Buscar por pedido, usuario o producto..."
+                                    autocomplete="off"
+                                >
+
+                                <button
+                                    type="button"
+                                    id="limpiarBusquedaPedidos"
+                                    title="Limpiar búsqueda"
+                                    aria-label="Limpiar búsqueda">
+
+                                    ✕
+
+                                </button>
+
+                            </div>
+
+
+                            <div class="filtros-pedidos-master">
+
+                                <button
+                                    type="button"
+                                    class="filtro-estado-pedido activo"
+                                    data-estado="todos">
+
+                                    Todos
+
+                                </button>
+
+                                <button
+                                    type="button"
+                                    class="filtro-estado-pedido"
+                                    data-estado="pendiente">
+
+                                    🟡 Pendientes
+
+                                </button>
+
+                                <button
+                                    type="button"
+                                    class="filtro-estado-pedido"
+                                    data-estado="procesando">
+
+                                    🔵 Procesando
+
+                                </button>
+
+                                <button
+                                    type="button"
+                                    class="filtro-estado-pedido"
+                                    data-estado="completado">
+
+                                    🟢 Completados
+
+                                </button>
+
+                                <button
+                                    type="button"
+                                    class="filtro-estado-pedido"
+                                    data-estado="cancelado">
+
+                                    🔴 Cancelados
+
+                                </button>
+
+                            </div>
+
+
+                            <span
+                                id="resultadoBusquedaPedidos"
+                                class="resultado-busqueda-pedidos">
+                            </span>
+
+                        </div>
 
                             <h2>
                                 👑 PANEL DE PEDIDOS
@@ -798,87 +881,17 @@ function mostrarPedidos() {
                                     </span>
 
                                 </td>
-
-
+   
                                 <td class="acciones-tabla">
 
+                                    <button
+                                        type="button"
+                                        class="btn-tabla-detalles"
+                                        data-pedido="${idPedido}">
 
-                                    ${estado === "pendiente"
-                                ? `
+                                        👁 Ver pedido
 
-                                            <button
-                                                class="btn-tabla-procesar"
-                                                onclick="actualizarEstadoPedido('${idPedido}', 'procesando')">
-
-                                                🔵 Procesar
-
-                                            </button>
-
-
-                                            <button
-                                                class="btn-tabla-cancelar"
-                                                onclick="actualizarEstadoPedido('${idPedido}', 'cancelado')">
-
-                                                🔴 Cancelar
-
-                                            </button>
-
-                                        `
-                                : ""
-                            }
-
-
-                                    ${estado === "procesando"
-                                ? `
-
-                                            <button
-                                                class="btn-tabla-completar"
-                                                onclick="actualizarEstadoPedido('${idPedido}', 'completado')">
-
-                                                🟢 Completar
-
-                                            </button>
-
-
-                                            <button
-                                                class="btn-tabla-cancelar"
-                                                onclick="actualizarEstadoPedido('${idPedido}', 'cancelado')">
-
-                                                🔴 Cancelar
-
-                                            </button>
-
-                                        `
-                                : ""
-                            }
-
-
-                                    ${estado === "completado"
-                                ? `
-
-                                            <span class="sin-acciones">
-
-                                                ✓ Finalizado
-
-                                            </span>
-
-                                        `
-                                : ""
-                            }
-
-
-                                    ${estado === "cancelado"
-                                ? `
-
-                                            <span class="sin-acciones">
-
-                                                — Cancelado
-
-                                            </span>
-
-                                        `
-                                : ""
-                            }
+                                    </button>
 
                                 </td>
 
@@ -908,15 +921,138 @@ function mostrarPedidos() {
 
             listaPedidos.innerHTML = `
 
-                <div class="info-pedidos">
+                    <div class="info-pedidos">
 
-                    <h2>
-                        📦 Mis pedidos
-                    </h2>
+                        <div class="panel-master-pedidos">
 
-                </div>
+                            <h2>
+                                👑 PANEL DE PEDIDOS
+                            </h2>
 
-            `;
+                            <p>
+                                Todos los pedidos
+                            </p>
+
+                            <hr>
+
+                            <div class="busqueda-pedidos-master">
+
+                                <div class="busqueda-pedidos-input">
+
+                                    <span>🔎</span>
+
+                                    <input
+                                        type="text"
+                                        id="buscarPedidosMaster"
+                                        placeholder="Buscar por pedido, usuario o producto..."
+                                        autocomplete="off"
+                                    >
+
+                                    <button
+                                        type="button"
+                                        id="limpiarBusquedaPedidos"
+                                        title="Limpiar búsqueda"
+                                        aria-label="Limpiar búsqueda">
+
+                                        ✕
+
+                                    </button>
+
+                                </div>
+
+                                <span
+                                    id="resultadoBusquedaPedidos"
+                                    class="resultado-busqueda-pedidos">
+                                </span>
+
+                            </div>
+
+                            <div class="resumen-pedidos">
+
+                                <p>
+                                    🟡 Pendientes
+                                    <strong>
+                                        ${pendientes}
+                                    </strong>
+                                </p>
+
+                                <p>
+                                    🔵 Procesando
+                                    <strong>
+                                        ${procesando}
+                                    </strong>
+                                </p>
+
+                                <p>
+                                    🟢 Completados
+                                    <strong>
+                                        ${completados}
+                                    </strong>
+                                </p>
+
+                                <p>
+                                    🔴 Cancelados
+                                    <strong>
+                                        ${cancelados}
+                                    </strong>
+                                </p>
+
+                            </div>
+
+                            <hr>
+
+                            <p>
+                                <strong>
+                                    Total pedidos:
+                                    ${totalPedidos}
+                                </strong>
+                            </p>
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="tabla-pedidos-master">
+
+                        <table>
+
+                            <thead>
+
+                                <tr>
+
+                                    <th>
+                                        Pedido
+                                    </th>
+
+                                    <th>
+                                        Usuario
+                                    </th>
+
+                                    <th>
+                                        Total
+                                    </th>
+
+                                    <th>
+                                        Estado
+                                    </th>
+
+                                    <th>
+                                        Acciones
+                                    </th>
+
+                                </tr>
+
+                            </thead>
+
+                            <tbody id="tablaPedidosMaster">
+                            </tbody>
+
+                        </table>
+
+                    </div>
+
+                `;
 
 
             // ==========================================
@@ -1238,7 +1374,909 @@ function mostrarPedidos() {
         });
 
 }
+// =============================================================
+// FILTRAR PEDIDOS MASTER
+// BÚSQUEDA + FILTRO POR ESTADO
+// =============================================================
 
+function filtrarPedidosMaster() {
+
+    const input =
+        document.getElementById(
+            "buscarPedidosMaster"
+        );
+
+    const tabla =
+        document.getElementById(
+            "tablaPedidosMaster"
+        );
+
+    const contador =
+        document.getElementById(
+            "resultadoBusquedaPedidos"
+        );
+
+    if (!input || !tabla) {
+        return;
+    }
+
+
+    // ==========================================
+    // TEXTO DE BÚSQUEDA
+    // ==========================================
+
+    const texto =
+        input.value
+            .trim()
+            .toLowerCase();
+
+
+    // ==========================================
+    // ESTADO SELECCIONADO
+    // ==========================================
+
+    const filtroActivo =
+        document.querySelector(
+            ".filtro-estado-pedido.activo"
+        );
+
+
+    const estadoSeleccionado =
+        filtroActivo
+            ? filtroActivo.dataset.estado
+            : "todos";
+
+
+    // ==========================================
+    // PEDIDOS
+    // ==========================================
+
+    const pedidos =
+        window.pedidosMaster || {};
+
+
+    const idsPedidos =
+        Object.keys(pedidos);
+
+
+    // ==========================================
+    // FILTRAR
+    // ==========================================
+
+    const resultados =
+        idsPedidos.filter(function (idPedido) {
+
+            const pedido =
+                pedidos[idPedido];
+
+
+            const estado =
+                pedido.estado ||
+                "pendiente";
+
+
+            // ----------------------------------
+            // FILTRO DE ESTADO
+            // ----------------------------------
+
+            if (
+                estadoSeleccionado !== "todos" &&
+                estado !== estadoSeleccionado
+            ) {
+
+                return false;
+
+            }
+
+
+            // ----------------------------------
+            // PRODUCTOS
+            // ----------------------------------
+
+            const productos =
+                Array.isArray(
+                    pedido.productos
+                )
+                    ? pedido.productos
+                    : [];
+
+
+            const nombresProductos =
+                productos
+                    .map(function (producto) {
+
+                        return producto.nombre || "";
+
+                    })
+                    .join(" ");
+
+
+            // ----------------------------------
+            // CONTENIDO BUSCABLE
+            // ----------------------------------
+
+            const contenido =
+                [
+
+                    idPedido,
+
+                    pedido.correoUsuario || "",
+
+                    pedido.estado || "",
+
+                    nombresProductos
+
+                ]
+                    .join(" ")
+                    .toLowerCase();
+
+
+            // ----------------------------------
+            // BÚSQUEDA
+            // ----------------------------------
+
+            return contenido.includes(texto);
+
+        });
+
+
+    // ==========================================
+    // LIMPIAR TABLA
+    // ==========================================
+
+    tabla.innerHTML = "";
+
+
+    // ==========================================
+    // SIN RESULTADOS
+    // ==========================================
+
+    if (
+        resultados.length === 0
+    ) {
+
+        tabla.innerHTML = `
+
+            <tr class="fila-sin-resultados">
+
+                <td colspan="5">
+
+                    <span class="icono-sin-resultados">
+                        🔎
+                    </span>
+
+                    No se encontraron pedidos.
+
+                </td>
+
+            </tr>
+
+        `;
+
+    }
+
+
+    // ==========================================
+    // MOSTRAR RESULTADOS
+    // ==========================================
+
+    else {
+
+        resultados.forEach(
+            function (idPedido) {
+
+                const pedido =
+                    pedidos[idPedido];
+
+
+                const estado =
+                    pedido.estado ||
+                    "pendiente";
+
+
+                let estadoTexto =
+                    "🟡 Pendiente";
+
+
+                let estadoClase =
+                    "estado-pendiente";
+
+
+                switch (estado) {
+
+                    case "procesando":
+
+                        estadoTexto =
+                            "🔵 Procesando";
+
+                        estadoClase =
+                            "estado-procesando";
+
+                        break;
+
+
+                    case "completado":
+
+                        estadoTexto =
+                            "🟢 Completado";
+
+                        estadoClase =
+                            "estado-completado";
+
+                        break;
+
+
+                    case "cancelado":
+
+                        estadoTexto =
+                            "🔴 Cancelado";
+
+                        estadoClase =
+                            "estado-cancelado";
+
+                        break;
+
+                }
+
+
+                const total =
+                    Number(
+                        pedido.total || 0
+                    );
+
+
+                tabla.innerHTML += `
+
+                    <tr>
+
+                        <td>
+
+                            <strong>
+                                #${idPedido}
+                            </strong>
+
+                        </td>
+
+
+                        <td>
+
+                            ${pedido.correoUsuario ||
+                    "No asignado"
+                    }
+
+                        </td>
+
+
+                        <td>
+
+                            <strong>
+                                S/
+                                ${total.toFixed(2)}
+                            </strong>
+
+                        </td>
+
+
+                        <td>
+
+                            <span
+                                class="estado-pedido ${estadoClase}">
+
+                                ${estadoTexto}
+
+                            </span>
+
+                        </td>
+
+
+                        <td class="acciones-tabla">
+
+                            <button
+                                type="button"
+                                class="btn-tabla-detalles"
+                                data-pedido="${idPedido}">
+
+                                👁 Ver pedido
+
+                            </button>
+
+                        </td>
+
+                    </tr>
+
+                `;
+
+            }
+        );
+
+    }
+
+
+    // ==========================================
+    // CONTADOR
+    // ==========================================
+
+    if (contador) {
+
+        if (texto || estadoSeleccionado !== "todos") {
+
+            contador.textContent =
+                `${resultados.length} pedido${resultados.length === 1
+                    ? ""
+                    : "s"
+                } encontrado${resultados.length === 1
+                    ? ""
+                    : "s"
+                }`;
+
+        } else {
+
+            contador.textContent =
+                `${resultados.length} pedidos`;
+
+        }
+
+    }
+
+}
+// =============================================================
+// EVENTO BUSCADOR DE PEDIDOS
+// =============================================================
+
+document.addEventListener("input", function (event) {
+
+    if (
+        event.target &&
+        event.target.id === "buscarPedidosMaster"
+    ) {
+
+        filtrarPedidosMaster();
+
+
+        const botonLimpiar =
+            document.getElementById(
+                "limpiarBusquedaPedidos"
+            );
+
+
+        if (botonLimpiar) {
+
+            botonLimpiar.classList.toggle(
+                "visible",
+                event.target.value.length > 0
+            );
+
+        }
+
+    }
+
+});
+// =============================================================
+// LIMPIAR BUSCADOR
+// =============================================================
+
+document.addEventListener("click", function (event) {
+
+    const boton =
+        event.target.closest(
+            "#limpiarBusquedaPedidos"
+        );
+
+    if (!boton) {
+        return;
+    }
+
+
+    const input =
+        document.getElementById(
+            "buscarPedidosMaster"
+        );
+
+
+    if (!input) {
+        return;
+    }
+
+
+    input.value = "";
+
+
+    filtrarPedidosMaster();
+
+
+    boton.classList.remove("visible");
+
+
+    input.focus();
+
+});
+//=========================================================
+// Detalles pedidos
+//========================================================
+function verDetallesPedido(idPedido) {
+
+    console.log("[PEDIDOS] Ejecutando verDetallesPedido:", idPedido);
+
+    const pedidos = window.pedidosMaster || {};
+
+    console.log("[PEDIDOS] Pedidos disponibles:", pedidos);
+
+    const pedido = pedidos[idPedido];
+
+    console.log("[PEDIDOS] Pedido seleccionado:", pedido);
+
+    if (!pedido) {
+
+        console.error(
+            "[PEDIDOS] No se encontró el pedido:",
+            idPedido
+        );
+
+        alert("No se encontró la información del pedido.");
+
+        return;
+    }
+
+    const modal = document.createElement("div");
+
+    modal.id = "modalDetallesPedido";
+
+    modal.className = "modal-detalles-pedido";
+
+    modal.innerHTML = `
+
+        <div class="modal-detalles-contenido">
+
+            <div class="modal-detalles-header">
+
+                <div>
+
+                    <span class="modal-detalles-etiqueta">
+
+                        DETALLE DEL PEDIDO
+
+                    </span>
+
+                    <h2>
+
+                        📦 #${idPedido}
+
+                    </h2>
+
+                </div>
+
+                <button
+                    type="button"
+                    class="btn-cerrar-modal"
+                    id="btnCerrarModalPedido">
+
+                    ✕
+
+                </button>
+
+            </div>
+
+
+            <div class="modal-detalles-datos">
+
+                <div class="dato-pedido">
+
+                    <span>
+                        👤 Usuario
+                    </span>
+
+                    <strong>
+
+                        ${pedido.correoUsuario || "No asignado"}
+
+                    </strong>
+
+                </div>
+
+
+                <div class="dato-pedido">
+
+                    <span>
+                        📅 Fecha
+                    </span>
+
+                    <strong>
+
+                        ${pedido.fecha
+            ? new Date(
+                pedido.fecha
+            ).toLocaleString()
+            : "No especificada"
+        }
+
+                    </strong>
+
+                </div>
+
+
+                <div class="dato-pedido">
+
+                    <span>
+                        📋 Estado
+                    </span>
+
+                    <strong>
+
+                        ${pedido.estado || "pendiente"}
+
+                    </strong>
+
+                </div>
+
+            </div>
+
+
+            <div class="modal-seccion">
+
+                <div class="modal-seccion-titulo">
+
+                    <h3>
+                        🛍️ Productos
+                    </h3>
+
+                </div>
+
+
+                <div class="lista-detalles-productos">
+
+                    ${pedido.productos &&
+            Array.isArray(pedido.productos)
+
+            ? pedido.productos.map(function (producto) {
+
+                return `
+
+                                    <div class="detalle-producto">
+
+                                        <div class="detalle-producto-info">
+
+                                            <strong>
+
+                                                ${producto.nombre ||
+                    "Producto"
+                    }
+
+                                            </strong>
+
+                                            <span>
+
+                                                Cantidad:
+                                                ${producto.cantidad ||
+                    producto.cantidadProducto ||
+                    1
+                    }
+
+                                            </span>
+
+                                        </div>
+
+                                        <strong>
+
+                                            S/
+                                            ${Number(
+                        producto.precio || 0
+                    ).toFixed(2)
+                    }
+
+                                        </strong>
+
+                                    </div>
+
+                                `;
+
+            }).join("")
+
+            : `
+
+                                <div class="detalle-sin-productos">
+
+                                    📦 No hay productos registrados.
+
+                                </div>
+
+                            `
+        }
+
+                </div>
+
+            </div>
+
+
+            <div class="resumen-detalle-pedido">
+
+                <div>
+
+                    <span>
+                        Subtotal
+                    </span>
+
+                    <strong>
+
+                        S/
+                        ${Number(
+            pedido.subtotal || 0
+        ).toFixed(2)}
+
+                    </strong>
+
+                </div>
+
+
+                <div>
+
+                    <span>
+                        🚚 Envío
+                    </span>
+
+                    <strong>
+
+                        S/
+                        ${Number(
+            pedido.costoEnvioExterno || 0
+        ).toFixed(2)}
+
+                    </strong>
+
+                </div>
+
+
+                <div class="total-detalle-pedido">
+
+                    <span>
+                        Total
+                    </span>
+
+                    <strong>
+
+                        S/
+                        ${Number(
+            pedido.total || 0
+        ).toFixed(2)}
+
+                    </strong>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    `;
+
+
+    document.body.appendChild(modal);
+
+
+    console.log(
+        "[PEDIDOS] Modal agregado al documento."
+    );
+
+
+    document.body.style.overflow = "hidden";
+
+
+    setTimeout(function () {
+
+        modal.classList.add("modal-visible");
+
+    }, 10);
+
+
+    const btnCerrar =
+        document.getElementById(
+            "btnCerrarModalPedido"
+        );
+
+
+    if (btnCerrar) {
+
+        btnCerrar.addEventListener(
+            "click",
+            cerrarDetallesPedido
+        );
+
+    }
+
+
+
+    modal.addEventListener(
+        "click",
+        function (event) {
+
+            if (
+                event.target === modal
+            ) {
+
+                cerrarDetallesPedido();
+
+            }
+
+        }
+    );
+
+}
+
+
+function cerrarDetallesPedido() {
+
+    const modal =
+        document.getElementById(
+            "modalDetallesPedido"
+        );
+
+    if (!modal) {
+
+        return;
+    }
+
+    modal.classList.remove(
+        "modal-visible"
+    );
+
+    setTimeout(function () {
+
+        modal.remove();
+
+        document.body.style.overflow = "";
+
+    }, 200);
+
+}
+
+
+function actualizarEstadoDesdeModal(
+    idPedido,
+    nuevoEstado
+) {
+
+    cerrarDetallesPedido();
+
+    actualizarEstadoPedido(
+        idPedido,
+        nuevoEstado
+    );
+
+}
+//agregue click
+
+document.addEventListener("click", function (event) {
+
+    const boton =
+        event.target.closest(".btn-tabla-detalles");
+
+    if (!boton) {
+        return;
+    }
+
+    const idPedido =
+        boton.getAttribute("data-pedido");
+
+    console.log(
+        "[PEDIDOS] Abriendo pedido:",
+        idPedido
+    );
+
+    if (!idPedido) {
+
+        console.error(
+            "[PEDIDOS] No se encontró el ID del pedido."
+        );
+
+        return;
+    }
+
+    verDetallesPedido(idPedido);
+
+});
+
+document.addEventListener("input", function (event) {
+
+    if (
+        event.target &&
+        event.target.id === "buscarPedidosMaster"
+    ) {
+
+        filtrarPedidosMaster();
+
+        const botonLimpiar =
+            document.getElementById(
+                "limpiarBusquedaPedidos"
+            );
+
+        if (botonLimpiar) {
+
+            botonLimpiar.classList.toggle(
+                "visible",
+                event.target.value.length > 0
+            );
+
+        }
+
+    }
+
+});
+
+document.addEventListener("click", function (event) {
+
+    const boton =
+        event.target.closest(
+            "#limpiarBusquedaPedidos"
+        );
+
+    if (!boton) {
+        return;
+    }
+
+    const input =
+        document.getElementById(
+            "buscarPedidosMaster"
+        );
+
+    if (!input) {
+        return;
+    }
+
+    input.value = "";
+
+    filtrarPedidosMaster();
+
+    boton.classList.remove("visible");
+
+    input.focus();
+
+});
+// =============================================================
+// FILTROS POR ESTADO
+// =============================================================
+
+document.addEventListener(
+    "click",
+    function (event) {
+
+        const boton =
+            event.target.closest(
+                ".filtro-estado-pedido"
+            );
+
+
+        if (!boton) {
+            return;
+        }
+
+
+        // Quitar activo de todos
+
+        document
+            .querySelectorAll(
+                ".filtro-estado-pedido"
+            )
+            .forEach(function (botonFiltro) {
+
+                botonFiltro.classList.remove(
+                    "activo"
+                );
+
+            });
+
+
+        // Activar seleccionado
+
+        boton.classList.add(
+            "activo"
+        );
+
+
+        // Aplicar filtro
+
+        filtrarPedidosMaster();
+
+    }
+);
 // ==============================================================
 // 🗑️ CANCELAR PEDIDO
 // ==============================================================
@@ -1404,6 +2442,9 @@ function actualizarEstadoPedido(idPedido, nuevoEstado) {
 
         });
 }
+
+
+
 // ==============================================================
 // 🔑 MICROSERVICIO DE AUTENTICACIÓN REAL (PYTHON + MONGODB ATLAS)
 // ==============================================================
