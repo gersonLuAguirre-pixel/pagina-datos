@@ -809,3 +809,21 @@ body {
     font-size: 13px;
     font-weight: 500;
 }
+
+.btn-volver {
+    display: inline-block;
+    margin: 20px;
+    padding: 10px 18px;
+    background-color: #111827;
+    color: white;
+    text-decoration: none;
+    border-radius: 8px;
+    font-weight: 600;
+    font-family: sans-serif;
+    transition: 0.2s ease;
+}
+
+.btn-volver:hover {
+    background-color: #374151;
+    transform: translateX(-2px);
+}
