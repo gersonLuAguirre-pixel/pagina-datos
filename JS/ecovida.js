@@ -77,34 +77,39 @@ const BASE_RENDER_URL = "https://ecovida-api-real.onrender.com";
 // AGREGAR PRODUCTO AL CARRITO
 // ===============================
 function agregarProducto(nombre, precio) {
-
-    // Verificar si existe una sesión activa
     const tokenSesionReal = localStorage.getItem("authToken");
 
     if (!tokenSesionReal) {
-
-        alert(
-            "🔒 Para agregar productos al carrito debes iniciar sesión."
-        );
-
+        alert("🔒 Para agregar productos al carrito debes iniciar sesión.");
         window.location.href = "login.html";
         return;
     }
 
-    // Usuario autenticado: agregar producto normalmente
     let carrito = JSON.parse(localStorage.getItem("carrito")) || [];
 
-    let producto = {
-        nombre: nombre,
-        precio: precio
-    };
+    // Buscar si el producto ya existe en el carrito
+    let productoExistente = carrito.find(function (producto) {
+        return producto.nombre === nombre;
+    });
 
-    carrito.push(producto);
+    if (productoExistente) {
 
-    localStorage.setItem(
-        "carrito",
-        JSON.stringify(carrito)
-    );
+        // Si ya existe, aumentamos su cantidad
+        productoExistente.cantidad = (Number(productoExistente.cantidad) || 1) + 1;
+
+    } else {
+
+        // Si no existe, lo agregamos con cantidad 1
+        let producto = {
+            nombre: nombre,
+            precio: precio,
+            cantidad: 1
+        };
+
+        carrito.push(producto);
+    }
+
+    localStorage.setItem("carrito", JSON.stringify(carrito));
 
     alert(nombre + " fue agregado al carrito 🛒");
 }
@@ -114,14 +119,14 @@ function agregarProducto(nombre, precio) {
 // ===============================
 function mostrarCarrito() {
     let carrito = JSON.parse(localStorage.getItem("carrito")) || [];
+
     let lista = document.getElementById("listaCarrito");
     let totalElemento = document.getElementById("total");
 
-    if (!lista || !totalElemento) {
-        return;
-    }
+    if (!lista || !totalElemento) return;
 
     lista.innerHTML = "";
+
     let total = 0;
 
     if (carrito.length === 0) {
@@ -131,19 +136,41 @@ function mostrarCarrito() {
     }
 
     carrito.forEach(function (producto, posicion) {
+
+        // Si un producto antiguo no tiene cantidad,
+        // asumimos que es 1
+        let cantidad = Number(producto.cantidad) || 1;
+        let precio = Number(producto.precio) || 0;
+
+        let subtotalProducto = precio * cantidad;
+
         lista.innerHTML += `
             <div class="producto-carrito">
                 <h3>${producto.nombre}</h3>
-                <p>Precio: S/ ${Number(producto.precio).toFixed(2)}</p>
-                <button onclick="eliminarProducto(${posicion})">Eliminar</button>
+
+                <p>
+                    Precio: S/ ${precio.toFixed(2)}
+                </p>
+
+                <p>
+                    Cantidad: ${cantidad}
+                </p>
+
+                <p>
+                    Subtotal: S/ ${subtotalProducto.toFixed(2)}
+                </p>
+
+                <button onclick="eliminarProducto(${posicion})">
+                    Eliminar
+                </button>
             </div>
         `;
-        total = total + Number(producto.precio);
+
+        total += subtotalProducto;
     });
 
     totalElemento.textContent = total.toFixed(2);
 }
-
 // ===============================
 // ELIMINAR PRODUCTO
 // ===============================
@@ -207,9 +234,11 @@ function guardarPedido() {
 
     carrito.forEach(function (producto) {
 
-        subtotal =
-            subtotal +
-            Number(producto.precio);
+        let precio = Number(producto.precio) || 0;
+
+        let cantidad = Number(producto.cantidad) || 1;
+
+        subtotal += precio * cantidad;
 
     });
 
@@ -260,14 +289,13 @@ function guardarPedido() {
         .catch(function (errRender) {
 
             console.error(
-                "[MULTICLOUD ERROR] Render caído. Aplicando tolerancia a fallos:",
+                "[MULTICLOUD ERROR] No se pudo obtener el costo de envío desde Render:",
                 errRender
             );
 
-            procesarGuardadoFirebase(
-                carrito,
-                subtotal,
-                10.00
+            alert(
+                "⚠️ No se pudo consultar el costo de envío.\n\n" +
+                "El pedido NO será guardado para evitar registrar un costo incorrecto."
             );
 
         });
@@ -500,36 +528,28 @@ function mostrarPedidos() {
             // ORDENAR PEDIDOS
             // ==========================================
 
+            const prioridad = {
+                pendiente: 1,
+                procesando: 2,
+                completado: 3,
+                cancelado: 4
+            };
+
             const idsPedidos =
-                Object.keys(pedidos)
-                    .sort(function (a, b) {
+                Object.keys(pedidos).sort(function (a, b) {
 
-                        const prioridad = {
+                    const estadoA =
+                        pedidos[a].estado || "pendiente";
 
-                            pendiente: 1,
-                            procesando: 2,
-                            completado: 3,
-                            cancelado: 4
+                    const estadoB =
+                        pedidos[b].estado || "pendiente";
 
-                        };
+                    return (
+                        (prioridad[estadoA] || 99) -
+                        (prioridad[estadoB] || 99)
+                    );
 
-
-                        const estadoA =
-                            pedidos[a].estado ||
-                            "pendiente";
-
-
-                        const estadoB =
-                            pedidos[b].estado ||
-                            "pendiente";
-
-
-                        return (
-                            (prioridad[estadoA] || 99) -
-                            (prioridad[estadoB] || 99)
-                        );
-
-                    });
+                });
 
 
             // ==========================================
@@ -1435,9 +1455,28 @@ function filtrarPedidosMaster() {
         window.pedidosMaster || {};
 
 
-    const idsPedidos =
-        Object.keys(pedidos);
+    const prioridad = {
+        pendiente: 1,
+        procesando: 2,
+        completado: 3,
+        cancelado: 4
+    };
 
+    const idsPedidos =
+        Object.keys(pedidos).sort(function (a, b) {
+
+            const estadoA =
+                pedidos[a].estado || "pendiente";
+
+            const estadoB =
+                pedidos[b].estado || "pendiente";
+
+            return (
+                (prioridad[estadoA] || 99) -
+                (prioridad[estadoB] || 99)
+            );
+
+        });
 
     // ==========================================
     // FILTRAR
@@ -2043,7 +2082,7 @@ function verDetallesPedido(idPedido) {
                 </div>
 
             </div>
-
+                
         </div>
 
     `;
@@ -2142,7 +2181,11 @@ function actualizarEstadoDesdeModal(
     );
 
 }
-//agregue click
+
+
+// =============================================================
+// 👁 BOTÓN VER PEDIDO
+// =============================================================
 
 document.addEventListener("click", function (event) {
 
@@ -2157,14 +2200,14 @@ document.addEventListener("click", function (event) {
         boton.getAttribute("data-pedido");
 
     console.log(
-        "[PEDIDOS] Abriendo pedido:",
+        "👁 Ver pedido:",
         idPedido
     );
 
     if (!idPedido) {
 
         console.error(
-            "[PEDIDOS] No se encontró el ID del pedido."
+            "❌ El botón no tiene un ID de pedido."
         );
 
         return;
@@ -2174,33 +2217,8 @@ document.addEventListener("click", function (event) {
 
 });
 
-document.addEventListener("input", function (event) {
 
-    if (
-        event.target &&
-        event.target.id === "buscarPedidosMaster"
-    ) {
-
-        filtrarPedidosMaster();
-
-        const botonLimpiar =
-            document.getElementById(
-                "limpiarBusquedaPedidos"
-            );
-
-        if (botonLimpiar) {
-
-            botonLimpiar.classList.toggle(
-                "visible",
-                event.target.value.length > 0
-            );
-
-        }
-
-    }
-
-});
-
+//agregue click
 document.addEventListener("click", function (event) {
 
     const boton =

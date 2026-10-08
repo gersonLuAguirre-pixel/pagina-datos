@@ -397,7 +397,15 @@ def actualizar_estado_pedido(id_pedido):
         return jsonify({
             "error": f"Error al actualizar pedido: {str(e)}"
         }), 500
+# =========================================================
+# ENDPOINT 6: COSTO DE ENVÍO
+# =========================================================
+@app.route("/api/delivery", methods=["GET"])
+def obtener_costo_envio():
 
+    return jsonify({
+        "costoEnvio": 15.00
+    }), 200
 # =========================================================
 # ENDPOINT DE PRUEBA / ENRUTAMIENTO BASE
 # =========================================================
