@@ -4,125 +4,165 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>EcoVida - Autenticación Corporativa</title>
-    <!-- Carga de Fuente Profesional Inter -->
-    <link rel="preconnect" href="https://googleapis.com">
-    <link rel="preconnect" href="https://gstatic.com" crossorigin>
-    <link href="https://googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+    <meta name="theme-color" content="#246b35">
+    <meta name="description" content="Inicia sesión o crea tu cuenta EcoVida.">
 
-    <!-- Enlace de Hojas de Estilo Desacopladas -->
+    <title>Acceso a tu cuenta | EcoVida</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
     <link rel="stylesheet" href="CSS/estilos.css">
     <link rel="stylesheet" href="CSS/login.css">
 </head>
 
-<body>
+<body class="auth-page">
 
-    <main class="auth-container">
-        <header class="auth-header">
-            <h2>🌱 EcoVida</h2>
-            <p>Ecosistema de Distribución Multicloud</p>
-        </header>
+    <div class="auth-fondo-decorativo" aria-hidden="true">
+        <span class="auth-orbe auth-orbe-uno"></span>
+        <span class="auth-orbe auth-orbe-dos"></span>
+    </div>
 
-        <!-- Pestañas de control de módulo de identidad -->
-        <nav class="auth-tabs" aria-label="Opciones de acceso">
-            <button id="btnTabLogin" class="tab-btn active" onclick="cambiarPestaña('login')">Ingresar</button>
-            <button id="btnTabRegistro" class="tab-btn" onclick="cambiarPestaña('registro')">Registrarse</button>
-        </nav>
+    <main class="auth-layout">
 
-        <!-- PROCESO 1: AUTENTICACIÓN LOGÍSTICA (PYTHON BACKEND) -->
-        <form id="formularioLogin" class="auth-form active" onsubmit="manejarFormularioLogin(event)">
-            <div class="form-group">
-                <label for="loginEmail">Identificador / Correo Electrónico</label>
-                <input type="email" id="loginEmail" placeholder="nombre@empresa.com" required autocomplete="username">
-            </div>
-            <div class="form-group">
-                <label for="loginPassword">Contraseña de Acceso</label>
-                <input type="password" id="loginPassword" placeholder="••••••••" required
-                    autocomplete="current-password">
-            </div>
-            <button type="submit" class="auth-btn">Iniciar Sesión</button>
-        </form>
+        <section class="auth-presentacion" aria-label="Bienvenido a EcoVida">
+            <a href="index.html" class="auth-marca">
+                <span class="auth-logo-icono">🌱</span>
+                <span>EcoVida</span>
+            </a>
 
-        <!-- PROCESO 2: ALTA DE IDENTIDAD REAL (MONGODB ATLAS) -->
-        <form id="formularioRegistro" class="auth-form" onsubmit="manejarFormularioRegistro(event)">
-            <div class="form-group">
-                <label for="regNombre">Nombre Completo Institucional</label>
-                <input type="text" id="regNombre" placeholder="Ingresa tu nombre" required autocomplete="name">
+            <div class="auth-presentacion-texto">
+                <span class="auth-sobrelinea">VIVE MÁS SOSTENIBLE</span>
+
+                <h1>Pequeñas decisiones.<br>
+                    <span>Grandes cambios.</span>
+                </h1>
+
+                <p>
+                    Accede a tu espacio EcoVida, gestiona tus compras
+                    y descubre una forma más responsable de consumir.
+                </p>
+
+                <div class="auth-beneficios">
+                    <div class="auth-beneficio">
+                        <span class="auth-beneficio-icono">🌿</span>
+                        <span>
+                            <strong>Consumo consciente</strong>
+                            <small>Elige un futuro más sostenible.</small>
+                        </span>
+                    </div>
+
+                    <div class="auth-beneficio">
+                        <span class="auth-beneficio-icono">📦</span>
+                        <span>
+                            <strong>Tus pedidos en un solo lugar</strong>
+                            <small>Consulta tus compras cuando quieras.</small>
+                        </span>
+                    </div>
+                </div>
             </div>
-            <div class="form-group">
-                <label for="regEmail">Correo Electrónico de Registro</label>
-                <input type="email" id="regEmail" placeholder="nombre@empresa.com" required autocomplete="email">
-            </div>
-            <div class="form-group">
-                <label for="regPassword">Establecer Contraseña Segura</label>
-                <input type="password" id="regPassword" placeholder="Mínimo 8 caracteres" required
-                    autocomplete="new-password">
-            </div>
-            <button type="submit" class="auth-btn">Crear Cuenta Principal</button>
-        </form>
+
+            <p class="auth-pie-presentacion">
+                Pequeñas acciones, un planeta mejor.
+            </p>
+        </section>
+
+        <section class="auth-panel" aria-label="Acceso a tu cuenta">
+
+            <header class="auth-header">
+                <a href="index.html" class="auth-marca-movil">
+                    🌱 EcoVida
+                </a>
+
+                <span class="auth-etiqueta">
+                    <span class="auth-indicador"></span>
+                    TU ESPACIO PERSONAL
+                </span>
+
+                <h2 id="tituloAutenticacion">¡Qué bueno verte!</h2>
+                <p id="subtituloAutenticacion">
+                    Ingresa tus datos para continuar.
+                </p>
+            </header>
+
+            <nav class="auth-tabs" aria-label="Opciones de acceso">
+                <button type="button" id="btnTabLogin" class="tab-btn active" aria-selected="true"
+                    aria-controls="formularioLogin" onclick="cambiarPestaña('login')">
+                    Ingresar
+                </button>
+
+                <button type="button" id="btnTabRegistro" class="tab-btn" aria-selected="false"
+                    aria-controls="formularioRegistro" onclick="cambiarPestaña('registro')">
+                    Crear cuenta
+                </button>
+            </nav>
+
+            <form id="formularioLogin" class="auth-form active" onsubmit="manejarFormularioLogin(event)">
+
+                <div class="form-group">
+                    <label for="loginEmail">Correo electrónico</label>
+                    <input type="email" id="loginEmail" placeholder="tu@correo.com" required autocomplete="username">
+                </div>
+
+                <div class="form-group">
+                    <label for="loginPassword">Contraseña</label>
+                    <input type="password" id="loginPassword" placeholder="Ingresa tu contraseña" required
+                        autocomplete="current-password">
+                </div>
+
+                <button type="submit" class="auth-btn">
+                    <span>Iniciar sesión</span>
+                    <span class="auth-btn-flecha" aria-hidden="true">→</span>
+                </button>
+
+                <p class="auth-cambio-formulario">
+                    ¿Aún no tienes una cuenta?
+                    <button type="button" onclick="cambiarPestaña('registro')">
+                        Regístrate aquí
+                    </button>
+                </p>
+            </form>
+
+            <form id="formularioRegistro" class="auth-form" onsubmit="manejarFormularioRegistro(event)">
+
+                <div class="form-group">
+                    <label for="regNombre">Nombre completo</label>
+                    <input type="text" id="regNombre" placeholder="Tu nombre y apellido" required autocomplete="name">
+                </div>
+
+                <div class="form-group">
+                    <label for="regEmail">Correo electrónico</label>
+                    <input type="email" id="regEmail" placeholder="tu@correo.com" required autocomplete="email">
+                </div>
+
+                <div class="form-group">
+                    <label for="regPassword">Crear contraseña</label>
+                    <input type="password" id="regPassword" placeholder="Mínimo 8 caracteres" required minlength="8"
+                        autocomplete="new-password">
+                </div>
+
+                <button type="submit" class="auth-btn">
+                    <span>Crear mi cuenta</span>
+                    <span class="auth-btn-flecha" aria-hidden="true">→</span>
+                </button>
+
+                <p class="auth-cambio-formulario">
+                    ¿Ya tienes una cuenta?
+                    <button type="button" onclick="cambiarPestaña('login')">
+                        Inicia sesión
+                    </button>
+                </p>
+            </form>
+
+            <footer class="auth-footer">
+                <span>🌱</span>
+                <span>Conectados por un futuro más sostenible</span>
+            </footer>
+
+        </section>
     </main>
 
-    <!-- Inyección de la lógica y controladores operacionales -->
-    <script src="JS/ecovida.js"></script>
-    <script>
-        /**
-         * Controlador visual dinámico de pestañas basado en clases activas
-         */
-        function cambiarPestaña(tipo) {
-            const loginForm = document.getElementById('formularioLogin');
-            const registroForm = document.getElementById('formularioRegistro');
-            const tabLogin = document.getElementById('btnTabLogin');
-            const tabRegistro = document.getElementById('btnTabRegistro');
-
-            if (tipo === 'login') {
-                loginForm.classList.add('active');
-                registroForm.classList.remove('active');
-                tabLogin.classList.add('active');
-                tabRegistro.classList.remove('active');
-            } else {
-                registroForm.classList.add('active');
-                loginForm.classList.remove('active');
-                tabRegistro.classList.add('active');
-                tabLogin.classList.remove('active');
-            }
-        }
-
-        /**
-         * Despachador de eventos de Registro para persistir datos reales en MongoDB Atlas
-         */
-        function manejarFormularioRegistro(evento) {
-            evento.preventDefault();
-
-            const nombre = document.getElementById("regNombre").value;
-            const correo = document.getElementById("regEmail").value;
-            const contrasena = document.getElementById("regPassword").value;
-
-            console.log("[MULTICLOUD] Transmitiendo paquete de registro hacia producción en Render...");
-
-            // Consumimos el endpoint correspondiente concatenando la URL global
-            fetch(`${BASE_RENDER_URL}/api/register`, {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ nombre: nombre, correo: correo, contrasena: contrasena })
-            })
-                .then(function (response) {
-                    return response.json().then(function (data) {
-                        if (!response.ok) throw new Error(data.error || "Error estructural en el alta");
-                        return data;
-                    });
-                })
-                .then(function (data) {
-                    alert("✅ ¡Registro exitoso en MongoDB Atlas! Su módulo de identidad ha sido inicializado.");
-                    cambiarPestaña('login');
-                })
-                .catch(function (error) {
-                    alert("❌ Fallo en la operación: " + error.message);
-                });
-        }
-
-
-    </script>
-    <!-- Inyección de la lógica operacional y controladores visuales de diseño -->
     <script src="JS/ecovida.js"></script>
     <script src="JS/login-diseno.js"></script>
 </body>

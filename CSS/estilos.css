@@ -2775,3 +2775,97 @@ main.carrito-contenedor {
         transition: none;
     }
 }
+
+/* ==========================================================
+   ECOVIDA | BASE VISUAL UNIFICADA
+   Primera fase: identidad visual y controles generales
+   ========================================================== */
+
+:root {
+    --color-ecologico: #2e7d32;
+    --color-ecologico-hover: #1b5e20;
+    --color-verde-claro: #e8f5e9;
+
+    --color-peligro: #d32f2f;
+    --color-peligro-hover: #b71c1c;
+
+    --color-fondo: #f5f8f5;
+    --color-blanco: #ffffff;
+    --color-borde: #e0e7e0;
+
+    --color-texto: #263228;
+    --color-texto-secundario: #657168;
+
+    --sombra-suave: 0 4px 16px rgba(28, 56, 32, 0.07);
+    --sombra-elevada: 0 12px 30px rgba(28, 56, 32, 0.10);
+
+    --radio: 12px;
+    --radio-grande: 18px;
+
+    --transicion-ecovida: 0.2s ease;
+}
+
+/* Base general */
+html {
+    scroll-behavior: smooth;
+    -webkit-text-size-adjust: 100%;
+}
+
+body {
+    color: var(--color-texto);
+    font-family: Inter, "Segoe UI", Arial, sans-serif;
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+}
+
+img {
+    max-width: 100%;
+}
+
+/* Enlaces */
+a {
+    transition:
+        color var(--transicion-ecovida),
+        background-color var(--transicion-ecovida);
+}
+
+/* Tipografía de títulos */
+h1,
+h2,
+h3,
+h4 {
+    color: var(--color-texto);
+    line-height: 1.25;
+}
+
+/* Controles con tipografía uniforme */
+button,
+input,
+textarea,
+select {
+    font: inherit;
+}
+
+/* Accesibilidad: foco visible al navegar con teclado */
+a:focus-visible,
+button:focus-visible,
+input:focus-visible,
+textarea:focus-visible,
+select:focus-visible {
+    outline: 3px solid rgba(46, 125, 50, 0.35);
+    outline-offset: 3px;
+}
+
+/* Selección de texto */
+::selection {
+    color: #ffffff;
+    background: var(--color-ecologico);
+}
+
+/* Movimiento reducido para quien lo prefiera */
+@media (prefers-reduced-motion: reduce) {
+    html {
+        scroll-behavior: auto;
+    }
+}

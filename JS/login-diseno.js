@@ -1,137 +1,283 @@
-/* ==========================================================================
-   INTERACTIVIDAD DE DISEÑO PREMIUM - ECOVIDA AUTH
-   ========================================================================== */
+
+/* ============================================
+   ECOVIDA — CONTROL VISUAL DE AUTENTICACIÓN
+   ============================================ */
+
+// Dirección del backend de EcoVida en Render.
+// Se usa como alternativa si BASE_RENDER_URL no está disponible.
+const URL_SERVIDOR_REGISTRO =
+    (typeof BASE_RENDER_URL !== "undefined" && BASE_RENDER_URL)
+        ? BASE_RENDER_URL
+        : "https://ecovida-api-real.onrender.com";
 
 document.addEventListener("DOMContentLoaded", function () {
-    // 1. INICIALIZACIÓN DEL FONDO ANIMADO DE PARTÍCULAS (CANVAS)
-    crearFondoParticulas();
-
-    // 2. ANIMACIÓN DE TRANSICIÓN ULTRA FLUIDA PARA LAS PESTAÑAS (TABS)
-    configurarTransicionesTabs();
+    inicializarParticulas();
+    configurarPestanasAutenticacion();
 });
 
-/**
- * Genera un fondo animado de partículas matemáticas flotantes
- * imitando un ecosistema digital orgánico y sutil.
- */
-function crearFondoParticulas() {
-    // Creamos el lienzo dinámicamente para no ensuciar el HTML
-    const canvas = document.createElement("canvas");
-    canvas.id = "auth-bg-canvas";
-    document.body.prepend(canvas);
+/* --------------------------------------------
+   CAMBIO ENTRE INGRESO Y REGISTRO
+   -------------------------------------------- */
 
-    // Estilos inline obligatorios para fijar el lienzo al fondo total
-    canvas.style.position = "fixed";
-    canvas.style.top = "0";
-    canvas.style.left = "0";
-    canvas.style.width = "100vw";
-    canvas.style.height = "100vh";
-    canvas.style.zIndex = "-1";
-    canvas.style.pointerEvents = "none";
-    canvas.style.backgroundColor = "#f8fafc"; // Color base de fondo
+function cambiarPestaña(tipo) {
+    const loginForm = document.getElementById("formularioLogin");
+    const registroForm = document.getElementById("formularioRegistro");
+    const tabLogin = document.getElementById("btnTabLogin");
+    const tabRegistro = document.getElementById("btnTabRegistro");
+    const titulo = document.getElementById("tituloAutenticacion");
+    const subtitulo = document.getElementById("subtituloAutenticacion");
 
-    const ctx = canvas.getContext("2d");
-    let particulas = [];
-    const numeroParticulas = 40;
-
-    function ajustarDimensiones() {
-        canvas.width = window.innerWidth;
-        canvas.height = window.innerHeight;
-    }
-    ajustarDimensiones();
-    window.addEventListener("resize", ajustarDimensiones);
-
-    // Molde para cada partícula
-    class Particula {
-        constructor() {
-            this.x = Math.random() * canvas.width;
-            this.y = Math.random() * canvas.height;
-            this.radio = Math.random() * 3 + 1;
-            this.velocidadX = Math.random() * 0.4 - 0.2;
-            this.velocidadY = Math.random() * 0.4 - 0.2;
-            // Tonos verdes ecológicos translúcidos
-            this.color = `rgba(16, 185, 129, ${Math.random() * 0.15 + 0.05})`;
-        }
-        dibujar() {
-            ctx.beginPath();
-            ctx.arc(this.x, this.y, this.radio, 0, Math.PI * 2);
-            ctx.fillStyle = this.color;
-            ctx.fill();
-        }
-        actualizar() {
-            this.x += this.velocidadX;
-            this.y += this.velocidadY;
-
-            // Rebotar en los bordes de la pantalla
-            if (this.x < 0 || this.x > canvas.width) this.velocidadX *= -1;
-            if (this.y < 0 || this.y > canvas.height) this.velocidadY *= -1;
-        }
+    if (!loginForm || !registroForm || !tabLogin || !tabRegistro) {
+        return;
     }
 
-    // Llenar el arreglo
-    for (let i = 0; i < numeroParticulas; i++) {
-        particulas.push(new Particula());
+    const mostrarLogin = tipo === "login";
+
+    loginForm.classList.toggle("active", mostrarLogin);
+    registroForm.classList.toggle("active", !mostrarLogin);
+
+    tabLogin.classList.toggle("active", mostrarLogin);
+    tabRegistro.classList.toggle("active", !mostrarLogin);
+
+    tabLogin.setAttribute("aria-selected", String(mostrarLogin));
+    tabRegistro.setAttribute("aria-selected", String(!mostrarLogin));
+
+    if (titulo) {
+        titulo.textContent = mostrarLogin
+            ? "¡Qué bueno verte!"
+            : "Únete a EcoVida";
     }
 
-    // Bucle de animación a 60fps nativos del navegador
-    function animar() {
-        ctx.clearRect(0, 0, canvas.width, canvas.height);
-        particulas.forEach(p => {
-            p.actualizar();
-            p.dibujar();
-        });
-        requestAnimationFrame(animar);
+    if (subtitulo) {
+        subtitulo.textContent = mostrarLogin
+            ? "Ingresa tus datos para continuar."
+            : "Crea tu cuenta y comienza tu experiencia sostenible.";
     }
-    animar();
 }
 
-/**
- * Reemplaza la función básica para añadir una animación de deslizamiento
- * y desvanecimiento (Slide & Fade) al cambiar de formulario.
- */
-function configurarTransicionesTabs() {
-    window.cambiarPestaña = function (tipo) {
-        const loginForm = document.getElementById('formularioLogin');
-        const registroForm = document.getElementById('formularioRegistro');
-        const tabLogin = document.getElementById('btnTabLogin');
-        const tabRegistro = document.getElementById('btnTabRegistro');
+function configurarPestanasAutenticacion() {
+    cambiarPestaña("login");
+}
 
-        if (tipo === 'login') {
-            // Actualizar botones
-            tabLogin.classList.add('active');
-            tabRegistro.classList.remove('active');
+/* --------------------------------------------
+   REGISTRO DE CUENTA EN EL BACKEND
+   -------------------------------------------- */
 
-            // Animación: ocultar registro con suavidad y mostrar login
-            registroForm.style.opacity = "0";
-            registroForm.style.transform = "translateX(20px)";
+async function manejarFormularioRegistro(evento) {
+    evento.preventDefault();
 
-            setTimeout(() => {
-                registroForm.classList.remove('active');
-                loginForm.classList.add('active');
-                // Pequeño delay para que el navegador procese el bloque visible antes de animar
-                setTimeout(() => {
-                    loginForm.style.opacity = "1";
-                    loginForm.style.transform = "translateX(0)";
-                }, 50);
-            }, 200);
+    const formulario = document.getElementById("formularioRegistro");
 
-        } else {
-            // Actualizar botones
-            tabRegistro.classList.add('active');
-            tabLogin.classList.remove('active');
+    if (!formulario) {
+        alert("No se encontró el formulario de registro.");
+        return;
+    }
 
-            // Animación: ocultar login con suavidad y mostrar registro
-            loginForm.style.opacity = "0";
-            loginForm.style.transform = "translateX(-20px)";
+    const boton = formulario.querySelector('button[type="submit"]');
 
-            setTimeout(() => {
-                loginForm.classList.remove('active');
-                registroForm.classList.add('active');
-                setTimeout(() => {
-                    registroForm.style.opacity = "1";
-                    registroForm.style.transform = "translateX(0)";
-                }, 50);
-            }, 200);
+    const nombre = document.getElementById("regNombre").value.trim();
+    const correo = document.getElementById("regEmail").value.trim();
+    const contrasena = document.getElementById("regPassword").value;
+
+    if (!formulario.reportValidity()) {
+        return;
+    }
+
+    if (contrasena.length < 8) {
+        alert("La contraseña debe tener al menos 8 caracteres.");
+        return;
+    }
+
+    const textoOriginal = boton ? boton.innerHTML : "";
+
+    if (boton) {
+        boton.disabled = true;
+        boton.innerHTML = "<span>Creando tu cuenta...</span>";
+    }
+
+    try {
+        const respuesta = await fetch(
+            `${URL_SERVIDOR_REGISTRO.replace(/\/+$/, "")}/api/register`,
+            {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({
+                    nombre: nombre,
+                    correo: correo,
+                    contrasena: contrasena
+                })
+            }
+        );
+
+        let datos = {};
+
+        try {
+            datos = await respuesta.json();
+        } catch {
+            throw new Error(
+                "El servidor devolvió una respuesta no válida. Inténtalo nuevamente."
+            );
         }
-    };
+
+        if (!respuesta.ok) {
+            throw new Error(
+                datos.error ||
+                datos.mensaje ||
+                `No se pudo crear la cuenta. Código HTTP: ${respuesta.status}`
+            );
+        }
+
+        formulario.reset();
+
+        alert("¡Registro exitoso! Ya puedes iniciar sesión.");
+
+        cambiarPestaña("login");
+
+        const campoCorreo = document.getElementById("loginEmail");
+        const campoContrasena = document.getElementById("loginPassword");
+
+        if (campoCorreo) {
+            campoCorreo.value = correo;
+        }
+
+        if (campoContrasena) {
+            campoContrasena.focus();
+        }
+
+    } catch (error) {
+        console.error("Error de registro:", error);
+
+        if (error instanceof TypeError) {
+            alert(
+                "No se pudo conectar con el servidor de EcoVida. " +
+                "Verifica que Render esté disponible y que la API permita " +
+                "solicitudes desde esta página."
+            );
+        } else {
+            alert("No se pudo completar el registro: " + error.message);
+        }
+
+    } finally {
+        if (boton) {
+            boton.disabled = false;
+            boton.innerHTML = textoOriginal;
+        }
+    }
+}
+
+/* --------------------------------------------
+   FONDO ANIMADO DE PARTÍCULAS
+   -------------------------------------------- */
+
+function inicializarParticulas() {
+    const fondo = document.querySelector(".auth-fondo-decorativo");
+
+    if (!fondo) {
+        return;
+    }
+
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+        return;
+    }
+
+    const canvas = document.createElement("canvas");
+    canvas.className = "auth-particulas-canvas";
+    canvas.setAttribute("aria-hidden", "true");
+
+    Object.assign(canvas.style, {
+        position: "absolute",
+        inset: "0",
+        width: "100%",
+        height: "100%",
+        pointerEvents: "none"
+    });
+
+    fondo.appendChild(canvas);
+
+    const contexto = canvas.getContext("2d");
+
+    if (!contexto) {
+        canvas.remove();
+        return;
+    }
+
+    let ancho = 0;
+    let alto = 0;
+    let particulas = [];
+    let animacionId = null;
+
+    const cantidad = window.innerWidth < 600 ? 20 : 38;
+
+    function ajustarLienzo() {
+        const escala = Math.min(window.devicePixelRatio || 1, 2);
+        const rectangulo = fondo.getBoundingClientRect();
+
+        ancho = rectangulo.width;
+        alto = rectangulo.height;
+
+        canvas.width = Math.round(ancho * escala);
+        canvas.height = Math.round(alto * escala);
+
+        contexto.setTransform(escala, 0, 0, escala, 0, 0);
+
+        particulas = Array.from({ length: cantidad }, () => ({
+            x: Math.random() * ancho,
+            y: Math.random() * alto,
+            radio: Math.random() * 1.8 + 0.6,
+            vx: (Math.random() - 0.5) * 0.25,
+            vy: (Math.random() - 0.5) * 0.25,
+            opacidad: Math.random() * 0.18 + 0.06
+        }));
+    }
+
+    function dibujar() {
+        contexto.clearRect(0, 0, ancho, alto);
+
+        for (const particula of particulas) {
+            particula.x += particula.vx;
+            particula.y += particula.vy;
+
+            if (particula.x < 0 || particula.x > ancho) {
+                particula.vx *= -1;
+            }
+
+            if (particula.y < 0 || particula.y > alto) {
+                particula.vy *= -1;
+            }
+
+            contexto.beginPath();
+            contexto.arc(
+                particula.x,
+                particula.y,
+                particula.radio,
+                0,
+                Math.PI * 2
+            );
+
+            contexto.fillStyle =
+                `rgba(163, 230, 53, ${particula.opacidad})`;
+
+            contexto.fill();
+        }
+
+        animacionId = requestAnimationFrame(dibujar);
+    }
+
+    ajustarLienzo();
+    dibujar();
+
+    window.addEventListener("resize", ajustarLienzo);
+
+    document.addEventListener("visibilitychange", function () {
+        if (document.hidden) {
+            if (animacionId !== null) {
+                cancelAnimationFrame(animacionId);
+                animacionId = null;
+            }
+        } else if (animacionId === null) {
+            dibujar();
+        }
+    });
 }

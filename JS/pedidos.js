@@ -194,18 +194,49 @@
             return coincideEstado && texto.includes(busqueda);
         });
 
-        // Resumen de pedidos por estado
-        const resumen = ESTADOS.map(estado => {
+
+        // Resumen visual de pedidos por estado
+        const resumen = [
+            {
+                estado: "pendiente",
+                titulo: "Pendientes",
+                icono: "⏳",
+                descripcion: "Esperando atención"
+            },
+            {
+                estado: "procesando",
+                titulo: "En proceso",
+                icono: "📦",
+                descripcion: "Pedidos en preparación"
+            },
+            {
+                estado: "completado",
+                titulo: "Completados",
+                icono: "✓",
+                descripcion: "Pedidos finalizados"
+            },
+            {
+                estado: "cancelado",
+                titulo: "Cancelados",
+                icono: "↗",
+                descripcion: "Pedidos cancelados"
+            }
+        ].map(item => {
             const cantidad = pedidosActuales.filter(
-                pedido => pedido.estado === estado
+                pedido => pedido.estado === item.estado
             ).length;
 
             return `
-            <p>
-                ${estado.charAt(0).toUpperCase() + estado.slice(1)}
-                <strong>${cantidad}</strong>
-            </p>
-        `;
+                <article class="tarjeta-resumen-pedido resumen-${item.estado}">
+                    <div class="resumen-pedido-superior">
+                        <span class="resumen-pedido-icono">${item.icono}</span>
+                        <span class="resumen-pedido-etiqueta">${item.titulo}</span>
+                    </div>
+                    <strong class="resumen-pedido-cantidad">${cantidad}</strong>
+                    <span class="resumen-pedido-descripcion">${item.descripcion}</span>
+                    <span class="resumen-pedido-decoracion" aria-hidden="true"></span>
+                </article>
+            `;
         }).join("");
 
         // Filtros para consultar los pedidos
@@ -306,15 +337,25 @@
                 </table>
             </div>
 
-            <div id="modalDetallesPedido" class="modal-pedido">
+        </section>
+    `;
+        // El modal se mantiene fuera de la tabla para evitar
+        // problemas de posición cuando hay muchos pedidos.
+        let modal = document.getElementById("modalDetallesPedido");
+
+        if (!modal) {
+            modal = document.createElement("div");
+            modal.id = "modalDetallesPedido";
+            modal.className = "modal-pedido";
+
+            modal.innerHTML = `
                 <div class="modal-detalles-contenido">
                     <div id="contenidoDetallesPedido"></div>
                 </div>
-            </div>
+            `;
 
-        </section>
-    `;
-
+            document.body.appendChild(modal);
+        }
         // Mantener el buscador activo mientras se escribe
         const campoBusqueda = document.getElementById("buscarPedidosMaster");
 

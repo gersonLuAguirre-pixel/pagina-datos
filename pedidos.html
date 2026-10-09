@@ -1,75 +1,158 @@
 <!DOCTYPE html>
 <html lang="es">
 
-<head>
 
+<head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Pedidos - EcoVida</title>
+
+    <title>Mis pedidos | EcoVida</title>
+
+    <meta name="description" content="Consulta tus pedidos registrados en EcoVida.">
+
     <link rel="stylesheet" href="CSS/estilos.css">
+    <link rel="stylesheet" href="CSS/pedidos.css">
     <link rel="stylesheet" href="CSS/vistaadmin.css">
 </head>
 
-<body>
+<body class="pagina-pedidos">
 
-    <!-- ENCABEZADO -->
-
-    <header>
-        <h1>🌱 EcoVida</h1>
-        <p>Pedidos registrados</p>
+    <!-- ENCABEZADO PRINCIPAL -->
+    <header class="encabezado-pedidos">
+        <div class="encabezado-contenido">
+            <a href="index.html" class="marca-ecovida">
+                <span class="marca-icono">🌱</span>
+                <span>
+                    <strong>EcoVida</strong>
+                    <small>Consumo responsable, futuro sostenible</small>
+                </span>
+            </a>
+        </div>
     </header>
 
+    <!-- NAVEGACIÓN -->
+    <nav class="navegacion-pedidos" aria-label="Navegación principal">
+        <div class="navegacion-contenido">
+            <a href="index.html">Inicio</a>
+            <a href="index.html#productos">Productos</a>
+            <a href="index.html#nosotros">Nosotros</a>
+            <a href="index.html#contacto">Contacto</a>
+            <a href="carrito.html">🛒 Carrito</a>
+            <a href="pedidos.html" class="enlace-activo" aria-current="page">
+                📦 Pedidos
+            </a>
+            <a href="quiz.html">✨ Quiz</a>
+            <a href="dashboard.html" id="btn-dashboard-nav" class="btn-dashboard-nav" style="display: none;">
+                👑 Dashboard Master
+            </a>
 
-    <!-- MENÚ -->
-
-    <nav>
-        <a href="index.html">Inicio</a>
-        <a href="index.html#productos">Productos</a>
-        <a href="index.html#nosotros">Nosotros</a>
-        <a href="index.html#contacto">Contacto</a>
-        <a href="carrito.html">🛒 Carrito</a>
-        <a href="pedidos.html">📦 Pedidos</a>
-        <a href="quiz.html">✨ Quiz</a>
-        <!-- Componente de Cierre de Sesión Corporativo -->
-        <button onclick="cerrarSesionCorporativa()" id="btn-logout-nav" style="
-        background-color: #ef4444; 
-        color: white; 
-        border: none; 
-        padding: 8px 16px; 
-        border-radius: 6px; 
-        cursor: pointer; 
-        font-weight: 600;
-        font-family: sans-serif;
-        transition: background 0.2s;
-        display: none; /* Se oculta por defecto hasta que el JS verifique la sesión */
-    " onmouseover="this.style.backgroundColor='#dc2626'" onmouseout="this.style.backgroundColor='#ef4444'">
-            🚪 Cerrar Sesión
-        </button>
+            <button type="button" id="btn-logout-nav" class="boton-cerrar-sesion" onclick="cerrarSesionCorporativa()"
+                style="display: none;">
+                🚪 Cerrar sesión
+            </button>
+        </div>
     </nav>
+    <!-- PRESENTACIÓN DE MIS PEDIDOS -->
+    <section class="hero-pedidos">
+        <div class="hero-pedidos-fondo"></div>
 
+        <div class="hero-pedidos-contenido">
+            <span class="hero-pedidos-etiqueta">
+                <span class="hero-pedidos-punto"></span>
+                MI CUENTA
+            </span>
 
-    <!-- PEDIDOS -->
+            <h1>Mis pedidos<span class="hero-pedidos-punto-titulo">.</span></h1>
 
-    <section>
-        <h2>📦 Pedidos registrados</h2>
-        <div id="listaPedidos">
-            <p>Cargando pedidos...</p>
+            <p>
+                Consulta tus compras y revisa el estado de tus pedidos.
+                Todo tu historial, organizado en un solo lugar.
+            </p>
+
+            <div class="hero-pedidos-detalle">
+                <span>📦</span>
+                <span>Tu historial de compras</span>
+                <span class="hero-pedidos-separador"></span>
+                <span>🌿</span>
+                <span>Compra responsable</span>
+            </div>
         </div>
 
+        <div class="hero-pedidos-decoracion hero-pedidos-decoracion-uno">🌿</div>
+        <div class="hero-pedidos-decoracion hero-pedidos-decoracion-dos">✳</div>
     </section>
 
+    <!-- CONTENIDO PRINCIPAL -->
+    <main class="contenido-pedidos">
+
+        <section class="bienvenida-pedidos">
+            <div class="bienvenida-icono">📦</div>
+
+            <div>
+                <h2>Historial de pedidos</h2>
+                <p>
+                    Aquí puedes consultar tus pedidos y verificar su estado.
+                    Gracias por elegir productos más sostenibles.
+                </p>
+            </div>
+        </section>
+
+        <!-- CONTENEDOR DINÁMICO: LO UTILIZA TU JAVASCRIPT -->
+        <section class="panel-pedidos" aria-label="Listado de pedidos">
+            <div class="panel-pedidos-cabecera">
+                <div>
+                    <h2>Mis compras</h2>
+                    <p>Información de tus pedidos registrados</p>
+                </div>
+
+                <a href="index.html#productos" class="boton-seguir-comprando">
+                    + Seguir comprando
+                </a>
+            </div>
+
+            <div id="listaPedidos" aria-live="polite">
+                <div class="estado-cargando">
+                    <span class="cargando-icono">🌿</span>
+                    <p>Cargando tus pedidos...</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- AYUDA -->
+        <aside class="ayuda-pedidos">
+            <span class="ayuda-icono">💡</span>
+            <div>
+                <h3>¿Necesitas ayuda con tu pedido?</h3>
+                <p>
+                    Si tienes alguna consulta sobre tus compras,
+                    visita nuestra sección de contacto.
+                </p>
+                <a href="contacto.html">Ir a contacto →</a>
+            </div>
+        </aside>
+
+    </main>
 
     <!-- PIE DE PÁGINA -->
+    <footer class="pie-pedidos">
+        <div>
+            <strong>🌱 EcoVida</strong>
+            <p>Pequeñas decisiones, grandes cambios para el planeta.</p>
+        </div>
 
-    <footer>
-        <p>© 2026 EcoVida - Productos sostenibles</p>
+        <p>© 2026 EcoVida. Todos los derechos reservados.</p>
     </footer>
 
-
-    <!-- JAVASCRIPT -->
-
-    <!-- 1. Primero cargamos de forma obligatoria el archivo de JavaScript externo -->
+    <!-- JAVASCRIPT EXISTENTE -->
     <script src="JS/ecovida.js"></script>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            if (typeof mostrarPedidos === "function") {
+                mostrarPedidos();
+            }
+        });
+    </script>
 
 </body>
 

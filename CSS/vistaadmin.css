@@ -490,36 +490,50 @@
    10. MODAL DE DETALLES
 ------------------------- */
 
+
 .modal-pedido {
     display: none;
     position: fixed;
     inset: 0;
-    z-index: 9999;
+    z-index: 99999;
+    width: 100%;
+    height: 100%;
+    height: 100dvh;
+    box-sizing: border-box;
+    padding: 20px;
     align-items: center;
     justify-content: center;
-    padding: 24px;
     overflow-y: auto;
-    background: rgba(15, 23, 42, 0.62);
-    backdrop-filter: blur(3px);
+    background: rgba(15, 30, 20, 0.60);
+    backdrop-filter: blur(5px);
 }
 
 .modal-pedido.modal-visible {
     display: flex;
 }
 
-.modal-detalles-contenido {
+.modal-pedido .modal-detalles-contenido {
     position: relative;
+    flex: 0 1 760px;
     width: 100%;
     max-width: 760px;
-    max-height: calc(100vh - 48px);
+    max-height: calc(100vh - 40px);
+    max-height: calc(100dvh - 40px);
     margin: auto;
-    padding: 28px;
     overflow-y: auto;
-    border: 1px solid rgba(255, 255, 255, 0.6);
-    border-radius: 18px;
-    background: #ffffff;
-    box-shadow: 0 24px 70px rgba(0, 0, 0, 0.25);
-    animation: modalEntrada 0.2s ease-out;
+    overscroll-behavior: contain;
+    box-sizing: border-box;
+}
+
+@media (max-width: 600px) {
+    .modal-pedido {
+        padding: 10px;
+    }
+
+    .modal-pedido .modal-detalles-contenido {
+        max-height: calc(100vh - 20px);
+        max-height: calc(100dvh - 20px);
+    }
 }
 
 @keyframes modalEntrada {
@@ -1066,4 +1080,548 @@ header h1 {
 
 #listaPedidos .tabla-pedidos-master table {
     min-width: 1000px;
+}
+
+/* ==========================================
+ECOVIDA - MODAL DE PEDIDOS PROFESIONAL
+========================================== */
+
+.modal-pedido {
+    display: none;
+    position: fixed;
+    inset: 0;
+    z-index: 99999;
+    padding: 24px;
+    box-sizing: border-box;
+    align-items: center;
+    justify-content: center;
+    background: rgba(15, 30, 20, 0.60);
+    backdrop-filter: blur(5px);
+    overflow-y: auto;
+}
+
+.modal-pedido.modal-visible {
+    display: flex;
+}
+
+.modal-detalles-contenido {
+    position: relative;
+    width: 100%;
+    max-width: 760px;
+    max-height: calc(100vh - 48px);
+    margin: auto;
+    padding: 0;
+    overflow-y: auto;
+    overscroll-behavior: contain;
+    box-sizing: border-box;
+    background: #ffffff;
+    border: 1px solid #e2ebe2;
+    border-radius: 20px;
+    box-shadow: 0 24px 70px rgba(0, 0, 0, 0.25);
+    animation: ecovidaModalEntrada 0.22s ease-out;
+}
+
+.modal-detalles-header {
+    position: sticky;
+    top: 0;
+    z-index: 5;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    padding: 22px 26px;
+    background: #ffffff;
+    border-bottom: 1px solid #e8eee8;
+}
+
+.modal-detalles-header h2,
+.modal-detalles-header h3 {
+    margin: 0;
+    color: #245b32;
+    font-size: 1.35rem;
+    font-weight: 750;
+}
+
+.btn-cerrar-modal {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    width: 40px;
+    height: 40px;
+    border: 0;
+    border-radius: 12px;
+    background: #f0f5f0;
+    color: #344638;
+    font-size: 24px;
+    cursor: pointer;
+    transition: background 0.2s ease, color 0.2s ease, transform 0.2s ease;
+}
+
+.btn-cerrar-modal:hover {
+    background: #e0eee1;
+    color: #1b5e20;
+    transform: rotate(5deg);
+}
+
+.modal-detalles-datos,
+.modal-seccion,
+.resumen-detalle-pedido,
+.modal-acciones {
+    margin: 0;
+    padding: 22px 26px;
+}
+
+.modal-detalles-datos {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 14px;
+}
+
+.dato-pedido {
+    min-width: 0;
+    padding: 14px 16px;
+    background: #f7faf7;
+    border: 1px solid #e6eee6;
+    border-radius: 12px;
+    overflow-wrap: anywhere;
+}
+
+.modal-seccion {
+    border-top: 1px solid #edf1ed;
+}
+
+.modal-seccion h3,
+.modal-seccion h4 {
+    margin: 0 0 16px;
+    color: #294d31;
+    font-size: 1.05rem;
+}
+
+.lista-detalles-productos {
+    display: grid;
+    gap: 12px;
+}
+
+.detalle-producto {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    padding: 15px 16px;
+    background: #ffffff;
+    border: 1px solid #e4ebe4;
+    border-radius: 12px;
+    overflow-wrap: anywhere;
+}
+
+.resumen-detalle-pedido {
+    background: #f4f8f4;
+    border-top: 1px solid #e2ebe2;
+}
+
+.resumen-detalle-pedido>* {
+    margin-top: 8px;
+    margin-bottom: 8px;
+}
+
+.modal-acciones {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: flex-end;
+    gap: 12px;
+    border-top: 1px solid #e8eee8;
+}
+
+.modal-acciones button {
+    min-height: 42px;
+    padding: 10px 18px;
+    border: 0;
+    border-radius: 10px;
+    font-weight: 650;
+    cursor: pointer;
+    transition: background 0.2s ease, transform 0.2s ease;
+}
+
+.modal-acciones button:hover {
+    transform: translateY(-1px);
+}
+
+@keyframes ecovidaModalEntrada {
+    from {
+        opacity: 0;
+        transform: translateY(10px) scale(0.985);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
+}
+
+@media (max-width: 600px) {
+    .modal-pedido {
+        padding: 10px;
+        align-items: center;
+    }
+
+    .modal-detalles-contenido {
+        max-height: calc(100vh - 20px);
+        border-radius: 15px;
+    }
+
+    .modal-detalles-header,
+    .modal-detalles-datos,
+    .modal-seccion,
+    .resumen-detalle-pedido,
+    .modal-acciones {
+        padding: 17px;
+    }
+
+    .modal-detalles-datos {
+        grid-template-columns: 1fr;
+    }
+
+    .detalle-producto {
+        align-items: flex-start;
+        flex-direction: column;
+        gap: 6px;
+    }
+}
+
+/* ==========================================
+   ECOVIDA - TARJETAS DE RESUMEN DE PEDIDOS
+   ========================================== */
+
+.resumen-pedidos {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 16px;
+    margin: 24px 0;
+}
+
+.resumen-pedidos>* {
+    min-width: 0;
+    padding: 20px;
+    background: #ffffff;
+    border: 1px solid #e4ebe4;
+    border-radius: 16px;
+    box-shadow: 0 4px 14px rgba(25, 60, 32, 0.06);
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.resumen-pedidos>*:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 9px 24px rgba(25, 60, 32, 0.10);
+}
+
+/* ==========================================
+   ECOVIDA - FILTROS INTERACTIVOS
+   ========================================== */
+
+.filtros-pedidos-master {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 10px;
+    margin: 18px 0 24px;
+    padding: 12px;
+    background: #f5f8f5;
+    border: 1px solid #e5ece5;
+    border-radius: 15px;
+}
+
+.filtro-estado-pedido {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 7px;
+    min-height: 42px;
+    padding: 10px 16px;
+    color: #526255;
+    background: #ffffff;
+    border: 1px solid #dfe7df;
+    border-radius: 10px;
+    font-weight: 600;
+    font-size: 0.9rem;
+    cursor: pointer;
+    transition: color 0.2s ease, background 0.2s ease,
+        border-color 0.2s ease, transform 0.2s ease;
+}
+
+.filtro-estado-pedido:hover {
+    color: #1b5e20;
+    background: #edf7ed;
+    border-color: #a8cbaa;
+}
+
+.filtro-estado-pedido:active {
+    transform: scale(0.98);
+}
+
+.filtro-estado-pedido.activo,
+.filtro-estado-pedido[aria-pressed="true"] {
+    color: #ffffff;
+    background: #2e7d32;
+    border-color: #2e7d32;
+    box-shadow: 0 3px 9px rgba(46, 125, 50, 0.20);
+}
+
+@media (max-width: 800px) {
+    .resumen-pedidos {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+}
+
+@media (max-width: 480px) {
+    .resumen-pedidos {
+        gap: 10px;
+    }
+
+    .resumen-pedidos>* {
+        padding: 14px;
+    }
+
+    .filtros-pedidos-master {
+        gap: 8px;
+        padding: 10px;
+    }
+
+    .filtro-estado-pedido {
+        flex: 1 1 calc(50% - 8px);
+        padding: 9px;
+        font-size: 0.82rem;
+    }
+}
+
+/* ECOVIDA — MODAL FIJO SOBRE TODA LA PANTALLA */
+
+#modalDetallesPedido.modal-pedido {
+    display: none;
+    position: fixed;
+    inset: 0;
+    z-index: 999999;
+    width: 100%;
+    height: 100%;
+    height: 100dvh;
+    padding: 20px;
+    box-sizing: border-box;
+    align-items: center;
+    justify-content: center;
+    overflow-y: auto;
+    background: rgba(12, 29, 18, 0.70);
+    backdrop-filter: blur(7px);
+}
+
+#modalDetallesPedido.modal-visible {
+    display: flex;
+    animation: ecoFondoEntrada 0.2s ease-out;
+}
+
+#modalDetallesPedido .modal-detalles-contenido {
+    position: relative;
+    flex: 0 1 780px;
+    width: 100%;
+    max-width: 780px;
+    max-height: calc(100vh - 40px);
+    max-height: calc(100dvh - 40px);
+    margin: auto;
+    overflow-y: auto;
+    overscroll-behavior: contain;
+    border-radius: 20px;
+    background: #fff;
+    box-shadow: 0 25px 80px rgba(0, 0, 0, 0.30);
+    animation: ecoModalEntrada 0.25s ease-out;
+}
+
+@keyframes ecoFondoEntrada {
+    from {
+        opacity: 0;
+    }
+
+    to {
+        opacity: 1;
+    }
+}
+
+@keyframes ecoModalEntrada {
+    from {
+        opacity: 0;
+        transform: translateY(12px) scale(0.98);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
+}
+
+@media (max-width: 600px) {
+    #modalDetallesPedido.modal-pedido {
+        padding: 10px;
+    }
+
+    #modalDetallesPedido .modal-detalles-contenido {
+        max-height: calc(100vh - 20px);
+        max-height: calc(100dvh - 20px);
+        border-radius: 15px;
+    }
+}
+
+/* ECOVIDA — TARJETAS DE RESUMEN */
+
+.resumen-pedidos {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 18px;
+    margin: 24px 0;
+}
+
+.tarjeta-resumen-pedido {
+    position: relative;
+    isolation: isolate;
+    display: flex;
+    flex-direction: column;
+    gap: 9px;
+    min-width: 0;
+    padding: 21px;
+    overflow: hidden;
+    border: 1px solid transparent;
+    border-radius: 19px;
+    box-shadow: 0 7px 22px rgba(30, 55, 35, 0.07);
+    transition: transform 0.25s ease, box-shadow 0.25s ease;
+    animation: ecoTarjetaEntrada 0.4s ease both;
+}
+
+.tarjeta-resumen-pedido:nth-child(2) {
+    animation-delay: 0.06s;
+}
+
+.tarjeta-resumen-pedido:nth-child(3) {
+    animation-delay: 0.12s;
+}
+
+.tarjeta-resumen-pedido:nth-child(4) {
+    animation-delay: 0.18s;
+}
+
+.tarjeta-resumen-pedido:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 14px 30px rgba(30, 55, 35, 0.13);
+}
+
+.resumen-pendiente {
+    color: #854d0e;
+    background: linear-gradient(135deg, #fff8e7, #ffedbd);
+    border-color: #f5dfa0;
+}
+
+.resumen-procesando {
+    color: #1d4ed8;
+    background: linear-gradient(135deg, #eff6ff, #dbeafe);
+    border-color: #c4dcff;
+}
+
+.resumen-completado {
+    color: #166534;
+    background: linear-gradient(135deg, #f0fdf4, #d1fae5);
+    border-color: #b8ebcc;
+}
+
+.resumen-cancelado {
+    color: #b91c1c;
+    background: linear-gradient(135deg, #fff1f2, #ffe0e4);
+    border-color: #fecdd3;
+}
+
+.resumen-pedido-superior {
+    position: relative;
+    z-index: 1;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.resumen-pedido-icono {
+    display: grid;
+    place-items: center;
+    width: 43px;
+    height: 43px;
+    flex-shrink: 0;
+    border-radius: 14px;
+    background: rgba(255, 255, 255, 0.78);
+    font-size: 23px;
+    font-weight: 800;
+    box-shadow: 0 3px 10px rgba(30, 55, 35, 0.06);
+}
+
+.resumen-pedido-etiqueta {
+    font-size: 0.92rem;
+    font-weight: 750;
+}
+
+.resumen-pedido-cantidad {
+    position: relative;
+    z-index: 1;
+    font-size: clamp(2rem, 3vw, 2.65rem);
+    line-height: 1.1;
+    letter-spacing: -1.5px;
+}
+
+.resumen-pedido-descripcion {
+    position: relative;
+    z-index: 1;
+    font-size: 0.8rem;
+    opacity: 0.85;
+}
+
+.resumen-pedido-decoracion {
+    position: absolute;
+    z-index: -1;
+    right: -22px;
+    bottom: -35px;
+    width: 115px;
+    height: 115px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.35);
+}
+
+@keyframes ecoTarjetaEntrada {
+    from {
+        opacity: 0;
+        transform: translateY(12px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@media (max-width: 800px) {
+    .resumen-pedidos {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 12px;
+    }
+}
+
+@media (max-width: 480px) {
+    .tarjeta-resumen-pedido {
+        padding: 15px;
+    }
+
+    .resumen-pedido-icono {
+        width: 36px;
+        height: 36px;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+
+    .tarjeta-resumen-pedido,
+    #modalDetallesPedido.modal-visible,
+    #modalDetallesPedido .modal-detalles-contenido {
+        animation: none;
+        transition: none;
+    }
 }

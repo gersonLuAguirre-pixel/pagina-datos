@@ -1,0 +1,907 @@
+/* =====================================================
+   ECOVIDA - PEDIDOS
+   Compatible con CSS/estilos.css
+   ===================================================== */
+
+.pagina-pedidos {
+    background: var(--color-fondo, #f4f7f4);
+    color: var(--color-texto, #263228);
+}
+
+/* ENCABEZADO: mismo estilo visual que las demás pestañas */
+
+.pagina-pedidos .encabezado-pedidos {
+    box-sizing: border-box;
+    width: 100%;
+    padding: 30px 20px;
+    background: #2e7d32;
+    color: #ffffff;
+    text-align: center;
+}
+
+.pagina-pedidos .encabezado-contenido {
+    width: 100%;
+    max-width: 1160px;
+    margin: 0 auto;
+}
+
+.pagina-pedidos .marca-ecovida {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    max-width: 100%;
+    color: #ffffff;
+    text-decoration: none;
+    text-align: left;
+    vertical-align: middle;
+}
+
+.pagina-pedidos .marca-icono {
+    display: grid;
+    place-items: center;
+    flex: 0 0 46px;
+    width: 46px;
+    height: 46px;
+    box-sizing: border-box;
+    border-radius: 12px;
+    background: rgba(255, 255, 255, 0.16);
+    font-size: 25px;
+}
+
+.pagina-pedidos .marca-ecovida strong {
+    display: block;
+    margin: 0;
+    color: #ffffff;
+    font-size: 23px;
+    line-height: 1.3;
+}
+
+.pagina-pedidos .marca-ecovida small {
+    display: block;
+    margin-top: 3px;
+    color: #e5f4e6;
+    font-size: 12px;
+    line-height: 1.5;
+}
+
+.pagina-pedidos .encabezado-titulo {
+    margin-top: 22px;
+    text-align: center;
+}
+
+.pagina-pedidos .etiqueta-seccion {
+    display: inline-block;
+    padding: 5px 10px;
+    border: 1px solid rgba(255, 255, 255, 0.45);
+    border-radius: 20px;
+    color: #ffffff;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 1px;
+}
+
+.pagina-pedidos .encabezado-titulo h1 {
+    margin: 10px 0 7px;
+    color: #ffffff;
+    font-size: clamp(28px, 4vw, 36px);
+    line-height: 1.25;
+    text-align: center;
+}
+
+.pagina-pedidos .encabezado-titulo p {
+    max-width: 650px;
+    margin: 0 auto;
+    color: #edf7ee;
+    font-size: 15px;
+    line-height: 1.7;
+    text-align: center;
+}
+
+@media (max-width: 420px) {
+    .pagina-pedidos .encabezado-pedidos {
+        padding: 24px 16px;
+    }
+
+
+    .pagina-pedidos .marca-ecovida {
+        gap: 10px;
+    }
+
+    .pagina-pedidos .marca-ecovida small {
+        max-width: 220px;
+    }
+
+}
+
+
+.pagina-pedidos .etiqueta-seccion {
+    display: inline-block;
+    padding: 5px 10px;
+    border: 1px solid rgba(255, 255, 255, 0.35);
+    border-radius: 20px;
+    color: #fff;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 1px;
+}
+
+.pagina-pedidos .encabezado-titulo h1 {
+    margin: 10px 0 7px;
+    color: #fff;
+    font-size: clamp(28px, 4vw, 36px);
+}
+
+.pagina-pedidos .encabezado-titulo p {
+    max-width: 650px;
+    margin: 0;
+    color: #edf7ee;
+    font-size: 15px;
+    line-height: 1.7;
+}
+
+/* NAVEGACIÓN */
+.pagina-pedidos .navegacion-pedidos {
+    padding: 0;
+    background: #203b28;
+}
+
+.pagina-pedidos .navegacion-contenido {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 5px;
+    width: 100%;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 10px 20px;
+}
+
+.pagina-pedidos .navegacion-contenido>a {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 10px 12px;
+    border: 1px solid transparent;
+    border-radius: 8px;
+    color: #fff;
+    text-decoration: none;
+    font-size: 13px;
+    font-weight: 600;
+    transition: background 0.2s ease;
+}
+
+.pagina-pedidos .navegacion-contenido>a:hover,
+.pagina-pedidos .navegacion-contenido>a.enlace-activo {
+    background: rgba(255, 255, 255, 0.14);
+    border-color: rgba(255, 255, 255, 0.12);
+}
+
+.pagina-pedidos .navegacion-contenido .boton-cerrar-sesion {
+    margin-left: 8px;
+    padding: 10px 13px;
+    border: none;
+    border-radius: 8px;
+    background: #d32f2f;
+    color: #fff;
+    font-size: 13px;
+    font-weight: 700;
+}
+
+/* CONTENIDO PRINCIPAL */
+.pagina-pedidos .contenido-pedidos {
+    display: block;
+    width: calc(100% - 40px);
+    max-width: 1160px;
+    margin: 32px auto 44px;
+}
+
+.pagina-pedidos .bienvenida-pedidos {
+    display: flex;
+    align-items: flex-start;
+    gap: 15px;
+    margin: 0 0 24px;
+    padding: 0;
+}
+
+.pagina-pedidos .bienvenida-icono {
+    display: grid;
+    place-items: center;
+    flex: 0 0 48px;
+    width: 48px;
+    height: 48px;
+    border-radius: 12px;
+    background: var(--color-verde-claro, #e8f5e9);
+    font-size: 24px;
+}
+
+.pagina-pedidos .bienvenida-pedidos h2 {
+    margin: 0 0 6px;
+    color: var(--color-texto, #263228);
+    font-size: 22px;
+}
+
+.pagina-pedidos .bienvenida-pedidos p {
+    max-width: 700px;
+    margin: 0;
+    color: var(--color-texto-secundario, #657168);
+    font-size: 14px;
+    line-height: 1.7;
+}
+
+/* PANEL PRINCIPAL */
+.pagina-pedidos .panel-pedidos {
+    min-width: 0;
+    padding: 0;
+    overflow: hidden;
+    border: 1px solid var(--color-borde, #e0e7e0);
+    border-radius: 14px;
+    background: #fff;
+    box-shadow: var(--sombra-suave, 0 4px 16px rgba(28, 56, 32, 0.07));
+}
+
+.pagina-pedidos .panel-pedidos-cabecera {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 18px;
+    padding: 22px 24px;
+    border-bottom: 1px solid var(--color-borde, #e0e7e0);
+    background: #fff;
+}
+
+.pagina-pedidos .panel-pedidos-cabecera h2 {
+    margin: 0 0 4px;
+    color: var(--color-texto, #263228);
+    font-size: 19px;
+}
+
+.pagina-pedidos .panel-pedidos-cabecera p {
+    margin: 0;
+    color: var(--color-texto-secundario, #657168);
+    font-size: 13px;
+}
+
+.pagina-pedidos .boton-seguir-comprando {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 10px 15px;
+    border: 1px solid var(--color-ecologico, #2e7d32);
+    border-radius: 8px;
+    background: var(--color-ecologico, #2e7d32);
+    color: #fff;
+    text-decoration: none;
+    font-size: 13px;
+    font-weight: 700;
+    white-space: nowrap;
+}
+
+.pagina-pedidos .boton-seguir-comprando:hover {
+    background: var(--color-ecologico-hover, #1b5e20);
+}
+
+/* CONTENEDOR DINÁMICO
+   Conserva la cuadrícula de tarjetas definida en estilos.css */
+.pagina-pedidos #listaPedidos {
+    width: 100%;
+    min-width: 0;
+    margin-top: 0;
+    padding: 22px;
+    gap: 18px;
+}
+
+/* TARJETAS DE PEDIDOS DEL CLIENTE */
+.pagina-pedidos #listaPedidos .pedido {
+    min-width: 0;
+    padding: 20px;
+    border: 1px solid var(--color-borde, #e0e7e0);
+    border-radius: 12px;
+    background: #fff;
+    box-shadow: 0 3px 12px rgba(28, 56, 32, 0.05);
+}
+
+.pagina-pedidos #listaPedidos .pedido h3 {
+    color: var(--color-ecologico, #2e7d32);
+}
+
+.pagina-pedidos #listaPedidos .pedido ul {
+    padding: 12px 14px;
+    border: 1px solid var(--color-borde, #e0e7e0);
+    border-radius: 9px;
+    background: #f8faf8;
+}
+
+/* TABLAS: cuando el JavaScript genere una tabla */
+.pagina-pedidos #listaPedidos table {
+    grid-column: 1 / -1;
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0;
+    background: #fff;
+    font-size: 13px;
+}
+
+.pagina-pedidos #listaPedidos th {
+    padding: 13px 14px;
+    background: #f0f6f0;
+    color: #334638;
+    text-align: left;
+    font-weight: 700;
+    white-space: nowrap;
+}
+
+.pagina-pedidos #listaPedidos td {
+    padding: 13px 14px;
+    border-bottom: 1px solid #e8eee8;
+    color: #465349;
+    text-align: left;
+    vertical-align: middle;
+}
+
+.pagina-pedidos #listaPedidos tbody tr:hover {
+    background: #f8fbf8;
+}
+
+/* CAMPOS Y BOTONES DENTRO DEL CONTENEDOR */
+.pagina-pedidos #listaPedidos input,
+.pagina-pedidos #listaPedidos select {
+    max-width: 100%;
+    padding: 9px 11px;
+    border: 1px solid #d7e1d7;
+    border-radius: 8px;
+    background: #fff;
+    color: var(--color-texto, #263228);
+}
+
+.pagina-pedidos #listaPedidos button {
+    max-width: 100%;
+    border-radius: 8px;
+}
+
+/* CARGA */
+.pagina-pedidos #listaPedidos .estado-cargando {
+    grid-column: 1 / -1;
+    padding: 36px 20px;
+    color: var(--color-texto-secundario, #657168);
+    text-align: center;
+}
+
+.pagina-pedidos #listaPedidos .cargando-icono {
+    display: block;
+    margin-bottom: 8px;
+    font-size: 30px;
+}
+
+/* AYUDA */
+.pagina-pedidos .ayuda-pedidos {
+    display: flex;
+    align-items: flex-start;
+    gap: 14px;
+    margin-top: 22px;
+    padding: 20px 22px;
+    border: 1px solid #dcebdd;
+    border-radius: 12px;
+    background: #edf7ee;
+}
+
+.pagina-pedidos .ayuda-icono {
+    font-size: 24px;
+}
+
+.pagina-pedidos .ayuda-pedidos h3 {
+    margin: 0 0 5px;
+    color: #245c2b;
+    font-size: 15px;
+}
+
+.pagina-pedidos .ayuda-pedidos p {
+    margin: 0 0 8px;
+    color: #586b5b;
+    font-size: 13px;
+    line-height: 1.7;
+}
+
+.pagina-pedidos .ayuda-pedidos a {
+    color: var(--color-ecologico-hover, #1b5e20);
+    font-size: 13px;
+    font-weight: 700;
+    text-decoration: none;
+}
+
+/* PIE DE PÁGINA */
+.pagina-pedidos .pie-pedidos {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 20px;
+    padding: 22px max(20px, calc((100% - 1160px) / 2));
+    border-top: 1px solid var(--color-borde, #e0e7e0);
+    background: #fff;
+    text-align: left;
+}
+
+.pagina-pedidos .pie-pedidos strong {
+    color: var(--color-ecologico-hover, #1b5e20);
+    font-size: 14px;
+}
+
+.pagina-pedidos .pie-pedidos p {
+    margin: 4px 0 0;
+    color: var(--color-texto-secundario, #657168);
+    font-size: 12px;
+}
+
+/* RESPONSIVE */
+@media (max-width: 760px) {
+    .pagina-pedidos .navegacion-contenido {
+        justify-content: flex-start;
+        padding: 10px 12px;
+    }
+
+    .pagina-pedidos .navegacion-contenido>a {
+        padding: 9px 10px;
+        font-size: 12px;
+    }
+
+    .pagina-pedidos .navegacion-contenido .boton-cerrar-sesion {
+        margin-left: 0;
+    }
+
+    .pagina-pedidos .contenido-pedidos {
+        width: calc(100% - 24px);
+        margin: 24px auto 32px;
+    }
+
+    .pagina-pedidos .panel-pedidos-cabecera {
+        align-items: flex-start;
+        flex-direction: column;
+        padding: 18px;
+    }
+
+    .pagina-pedidos .boton-seguir-comprando {
+        width: 100%;
+        box-sizing: border-box;
+    }
+
+    .pagina-pedidos #listaPedidos {
+        padding: 14px;
+    }
+
+    .pagina-pedidos #listaPedidos table {
+        min-width: 560px;
+    }
+
+    .pagina-pedidos .pie-pedidos {
+        align-items: flex-start;
+        flex-direction: column;
+        padding: 20px;
+    }
+}
+
+@media (max-width: 420px) {
+    .pagina-pedidos .encabezado-pedidos {
+        padding: 22px 16px 28px;
+    }
+
+    .pagina-pedidos .marca-ecovida small {
+        max-width: 220px;
+    }
+
+    .pagina-pedidos .bienvenida-pedidos h2 {
+        font-size: 19px;
+    }
+
+    .pagina-pedidos .ayuda-pedidos {
+        padding: 16px;
+    }
+}
+
+/* ==========================================
+AJUSTE DEFINITIVO DEL ENCABEZADO PEDIDOS
+========================================== */
+
+body.pagina-pedidos>header.encabezado-pedidos {
+    display: block;
+    width: 100%;
+    box-sizing: border-box;
+    padding: 30px 20px 34px;
+    background: #2e7d32;
+    color: #ffffff;
+    text-align: center;
+}
+
+body.pagina-pedidos .encabezado-contenido {
+    width: 100%;
+    max-width: 1160px;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 24px;
+}
+
+body.pagina-pedidos .marca-ecovida {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    max-width: 100%;
+    color: #ffffff;
+    text-align: left;
+    text-decoration: none;
+}
+
+body.pagina-pedidos .marca-ecovida>span:last-child {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+}
+
+body.pagina-pedidos .marca-ecovida strong {
+    color: #ffffff;
+    font-size: 28px;
+    line-height: 1.25;
+}
+
+body.pagina-pedidos .marca-ecovida small {
+    display: block;
+    max-width: 100%;
+    color: #edf7ee;
+    font-size: 13px;
+    line-height: 1.5;
+}
+
+body.pagina-pedidos .encabezado-titulo {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+    margin: 0;
+    text-align: center;
+}
+
+body.pagina-pedidos .etiqueta-seccion {
+    display: inline-block;
+    margin-bottom: 10px;
+}
+
+body.pagina-pedidos .encabezado-titulo h1 {
+    width: 100%;
+    margin: 0;
+    color: #ffffff;
+    font-size: clamp(28px, 4vw, 38px);
+    line-height: 1.25;
+    text-align: center;
+}
+
+body.pagina-pedidos .encabezado-titulo p {
+    width: 100%;
+    max-width: 650px;
+    margin: 10px auto 0;
+    color: #edf7ee;
+    font-size: 15px;
+    line-height: 1.7;
+    text-align: center;
+}
+
+@media (max-width: 480px) {
+    body.pagina-pedidos>header.encabezado-pedidos {
+        padding: 24px 16px 28px;
+    }
+
+    body.pagina-pedidos .encabezado-contenido {
+        gap: 22px;
+    }
+
+    body.pagina-pedidos .marca-ecovida strong {
+        font-size: 25px;
+    }
+
+    body.pagina-pedidos .marca-ecovida small {
+        font-size: 12px;
+    }
+
+    body.pagina-pedidos .encabezado-titulo p {
+        font-size: 14px;
+    }
+}
+
+/* AJUSTE DEL ENCABEZADO ECOVIDA */
+
+body.pagina-pedidos .encabezado-contenido {
+    gap: 30px;
+}
+
+body.pagina-pedidos .marca-icono {
+    font-size: 42px;
+}
+
+body.pagina-pedidos .marca-ecovida strong {
+    font-size: 38px;
+}
+
+body.pagina-pedidos .marca-ecovida small {
+    font-size: 14px;
+}
+
+body.pagina-pedidos .encabezado-titulo {
+    width: 100%;
+    margin: 0;
+    text-align: center;
+}
+
+body.pagina-pedidos .encabezado-titulo h1 {
+    font-size: clamp(32px, 4vw, 42px);
+    text-align: center;
+}
+
+body.pagina-pedidos .encabezado-titulo p {
+    margin: 12px auto 0;
+    text-align: center;
+}
+
+/* ==========================================
+   PRESENTACIÓN MODERNA DE MIS PEDIDOS
+   ========================================== */
+
+body.pagina-pedidos>header.encabezado-pedidos {
+    padding: 24px 20px;
+    background: linear-gradient(135deg, #245c2b, #2e7d32, #388e3c);
+    position: relative;
+    overflow: hidden;
+}
+
+body.pagina-pedidos .encabezado-contenido {
+    gap: 0;
+}
+
+body.pagina-pedidos .marca-ecovida {
+    transition: transform 0.3s ease;
+}
+
+body.pagina-pedidos .marca-ecovida:hover {
+    transform: translateY(-2px);
+}
+
+body.pagina-pedidos .marca-icono {
+    font-size: 42px;
+}
+
+body.pagina-pedidos .marca-ecovida strong {
+    font-size: 36px;
+    letter-spacing: -0.8px;
+}
+
+body.pagina-pedidos .marca-ecovida small {
+    font-size: 13px;
+}
+
+/* Sección situada debajo de la navegación */
+
+body.pagina-pedidos .hero-pedidos {
+    position: relative;
+    isolation: isolate;
+    overflow: hidden;
+    padding: 58px 24px 54px;
+    background: linear-gradient(120deg, #f1f8f0 0%, #ffffff 52%, #e7f3e5 100%);
+    border-bottom: 1px solid #dce9d9;
+}
+
+body.pagina-pedidos .hero-pedidos-fondo {
+    position: absolute;
+    z-index: -1;
+    width: 360px;
+    height: 360px;
+    top: -210px;
+    right: 7%;
+    border-radius: 50%;
+    background: radial-gradient(circle,
+            rgba(76, 175, 80, 0.17),
+            rgba(76, 175, 80, 0));
+    animation: pedidos-resplandor 7s ease-in-out infinite alternate;
+}
+
+body.pagina-pedidos .hero-pedidos-contenido {
+    width: 100%;
+    max-width: 1120px;
+    margin: 0 auto;
+    animation: pedidos-aparecer 0.8s ease both;
+}
+
+body.pagina-pedidos .hero-pedidos-etiqueta {
+    display: inline-flex;
+    align-items: center;
+    gap: 9px;
+    margin-bottom: 17px;
+    padding: 8px 14px;
+    border: 1px solid #cfe4cc;
+    border-radius: 30px;
+    background: rgba(255, 255, 255, 0.8);
+    color: #286b32;
+    font-size: 11px;
+    font-weight: 800;
+    letter-spacing: 1.7px;
+}
+
+body.pagina-pedidos .hero-pedidos-punto {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: #43a047;
+    box-shadow: 0 0 0 4px rgba(67, 160, 71, 0.12);
+    animation: pedidos-latido 2s ease-in-out infinite;
+}
+
+body.pagina-pedidos .hero-pedidos h1 {
+    margin: 0;
+    color: #203b28;
+    font-size: clamp(36px, 5vw, 54px);
+    font-weight: 800;
+    line-height: 1.12;
+    letter-spacing: -1.8px;
+}
+
+body.pagina-pedidos .hero-pedidos-punto-titulo {
+    color: #43a047;
+}
+
+body.pagina-pedidos .hero-pedidos-contenido>p {
+    max-width: 660px;
+    margin: 18px 0 0;
+    color: #647267;
+    font-size: 16px;
+    line-height: 1.8;
+}
+
+body.pagina-pedidos .hero-pedidos-detalle {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-top: 25px;
+    color: #47644b;
+    font-size: 13px;
+    font-weight: 600;
+}
+
+body.pagina-pedidos .hero-pedidos-separador {
+    width: 1px;
+    height: 18px;
+    margin: 0 7px;
+    background: #c7d9c5;
+}
+
+body.pagina-pedidos .hero-pedidos-decoracion {
+    position: absolute;
+    z-index: -1;
+    color: rgba(46, 125, 50, 0.13);
+    pointer-events: none;
+    user-select: none;
+}
+
+body.pagina-pedidos .hero-pedidos-decoracion-uno {
+    top: 24px;
+    right: 13%;
+    font-size: 100px;
+    animation: pedidos-flotar 6s ease-in-out infinite;
+}
+
+body.pagina-pedidos .hero-pedidos-decoracion-dos {
+    right: 7%;
+    bottom: 15px;
+    font-size: 58px;
+    animation: pedidos-flotar 5s ease-in-out infinite reverse;
+}
+
+/* Animaciones suaves */
+
+@keyframes pedidos-aparecer {
+    from {
+        opacity: 0;
+        transform: translateY(18px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes pedidos-flotar {
+
+    0%,
+    100% {
+        transform: translateY(0) rotate(0deg);
+    }
+
+    50% {
+        transform: translateY(-12px) rotate(7deg);
+    }
+}
+
+@keyframes pedidos-latido {
+
+    0%,
+    100% {
+        box-shadow: 0 0 0 4px rgba(67, 160, 71, 0.12);
+    }
+
+    50% {
+        box-shadow: 0 0 0 7px rgba(67, 160, 71, 0.05);
+    }
+}
+
+@keyframes pedidos-resplandor {
+    from {
+        transform: translateX(-10px) scale(0.95);
+    }
+
+    to {
+        transform: translateX(15px) scale(1.08);
+    }
+}
+
+/* Adaptación a celulares */
+
+@media (max-width: 600px) {
+    body.pagina-pedidos>header.encabezado-pedidos {
+        padding: 22px 16px;
+    }
+
+    body.pagina-pedidos .marca-icono {
+        font-size: 34px;
+    }
+
+    body.pagina-pedidos .marca-ecovida strong {
+        font-size: 30px;
+    }
+
+    body.pagina-pedidos .marca-ecovida small {
+        font-size: 11px;
+    }
+
+    body.pagina-pedidos .hero-pedidos {
+        padding: 40px 22px 38px;
+    }
+
+    body.pagina-pedidos .hero-pedidos h1 {
+        letter-spacing: -1px;
+    }
+
+    body.pagina-pedidos .hero-pedidos-contenido>p {
+        font-size: 14px;
+    }
+
+    body.pagina-pedidos .hero-pedidos-detalle {
+        gap: 8px;
+        font-size: 12px;
+    }
+
+    body.pagina-pedidos .hero-pedidos-decoracion-uno {
+        top: 14px;
+        right: 6%;
+        font-size: 65px;
+    }
+
+    body.pagina-pedidos .hero-pedidos-decoracion-dos {
+        right: 4%;
+        font-size: 38px;
+    }
+}
+
+/* Respeta la preferencia de movimiento reducido */
+
+@media (prefers-reduced-motion: reduce) {
+
+    body.pagina-pedidos .hero-pedidos-contenido,
+    body.pagina-pedidos .hero-pedidos-fondo,
+    body.pagina-pedidos .hero-pedidos-decoracion,
+    body.pagina-pedidos .hero-pedidos-punto {
+        animation: none !important;
+    }
+
+    body.pagina-pedidos .marca-ecovida {
+        transition: none;
+    }
+}
