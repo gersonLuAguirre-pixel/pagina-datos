@@ -1,6 +1,8 @@
+
+import os
+
 from flask import Flask, jsonify
 from flask_cors import CORS
-
 from pymongo import MongoClient
 
 from config.config import (
@@ -8,25 +10,12 @@ from config.config import (
     FIREBASE_DB_URL
 )
 
-from repositories.usuario_repository import (
-    UsuarioRepository
-)
+from repositories.usuario_repository import UsuarioRepository
+from repositories.pedido_repository import PedidoRepository
 
-from repositories.pedido_repository import (
-    PedidoRepository
-)
-
-from routes.auth_routes import (
-    crear_auth_blueprint
-)
-
-from routes.pedidos_routes import (
-    crear_pedidos_blueprint
-)
-
-from routes.delivery_routes import (
-    crear_delivery_blueprint
-)
+from routes.auth_routes import crear_auth_blueprint
+from routes.pedidos_routes import crear_pedidos_blueprint
+from routes.delivery_routes import crear_delivery_blueprint
 
 
 # =========================================================
@@ -58,38 +47,52 @@ CORS(
 
 
 # =========================================================
+# RESPUESTA A SOLICITUDES PREVIAS CORS (OPTIONS)
+# =========================================================
+
+@app.route(
+    "/api/<path:ruta>",
+    methods=["OPTIONS"]
+)
+def responder_preflight(ruta):
+    return "", 204
+
+# =========================================================
+# VALIDAR CONFIGURACIÓN DE MONGODB
+# =========================================================
+
+if not MONGO_URI:
+    raise RuntimeError(
+        "Falta configurar la variable de entorno MONGO_URI"
+    )
+
+
+# =========================================================
 # CONEXIÓN CON MONGODB
 # =========================================================
 
 try:
-
     client = MongoClient(
         MONGO_URI,
         serverSelectionTimeoutMS=5000
     )
 
-    # Verificamos la conexión con MongoDB
     client.admin.command("ping")
 
     db = client["ecovida_db"]
-
     usuarios_col = db["usuarios"]
 
-    print(
-        "✅ Conexión exitosa con MongoDB Atlas."
-    )
+    print("Conexión exitosa con MongoDB Atlas.")
 
 except Exception as e:
-
-    print(
-        f"❌ Error de conexión con MongoDB: {e}"
-    )
-
-    usuarios_col = None
+    print(f"Error de conexión con MongoDB: {e}")
+    raise RuntimeError(
+        "No se puede iniciar EcoVida sin conexión con MongoDB"
+    ) from e
 
 
 # =========================================================
-# CREACIÓN DE REPOSITORIES
+# CREACIÓN DE REPOSITORIOS
 # =========================================================
 
 usuario_repository = UsuarioRepository(
@@ -102,13 +105,11 @@ pedido_repository = PedidoRepository(
 
 
 # =========================================================
-# REGISTRO DE BLUEPRINTS
+# REGISTRO DE RUTAS
 # =========================================================
 
 app.register_blueprint(
-    crear_auth_blueprint(
-        usuario_repository
-    )
+    crear_auth_blueprint(usuario_repository)
 )
 
 app.register_blueprint(
@@ -129,7 +130,6 @@ app.register_blueprint(
 
 @app.route("/", methods=["GET"])
 def inicio():
-
     return jsonify({
         "mensaje": "API EcoVida funcionando correctamente",
         "sistema": "MongoDB + Firebase",
@@ -138,12 +138,17 @@ def inicio():
 
 
 # =========================================================
-# EJECUTAR SERVIDOR
+# EJECUCIÓN LOCAL
 # =========================================================
 
 if __name__ == "__main__":
+    entorno = os.environ.get(
+        "FLASK_ENV",
+        "production"
+    ).lower()
 
     app.run(
-        debug=True,
-        port=5000
+        debug=(entorno == "development"),
+        host="0.0.0.0",
+        port=int(os.environ.get("PORT", 5000))
     )

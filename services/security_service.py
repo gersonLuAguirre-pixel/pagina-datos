@@ -1,7 +1,17 @@
+
+import logging
+
 import jwt
 
 from config.config import SECRET_KEY
 
+
+logger = logging.getLogger(__name__)
+
+
+# =====================================================
+# EXTRAER TOKEN JWT
+# =====================================================
 
 def extraer_token(authorization):
     """
@@ -11,48 +21,57 @@ def extraer_token(authorization):
     if not authorization:
         return None, "No se proporcionó el token de acceso"
 
-    if not authorization.startswith("Bearer "):
+    partes = authorization.strip().split()
+
+    if len(partes) != 2 or partes[0].lower() != "bearer":
         return None, "Formato de token inválido"
 
-    partes = authorization.split(" ")
+    token = partes[1].strip()
 
-    if len(partes) != 2 or not partes[1]:
+    if not token:
         return None, "Formato de token inválido"
 
-    return partes[1], None
+    return token, None
 
+
+# =====================================================
+# DECODIFICAR Y VALIDAR TOKEN
+# =====================================================
 
 def decodificar_token(token):
     """
     Decodifica y valida el token JWT.
     """
 
-    try:
+    if not isinstance(token, str) or not token.strip():
+        return None, "Token de acceso inválido"
 
+    try:
         datos_token = jwt.decode(
             token,
             SECRET_KEY,
-            algorithms=["HS256"]
+            algorithms=["HS256"],
+            options={
+                "require": ["exp"]
+            }
         )
 
         correo = datos_token.get("correo")
 
-        if not correo:
+        if not isinstance(correo, str) or not correo.strip():
             return None, "El token no contiene un correo válido"
 
         return datos_token, None
 
     except jwt.ExpiredSignatureError:
-
         return None, "El token de sesión ha expirado"
 
     except jwt.InvalidTokenError:
-
         return None, "Token de acceso inválido"
 
-    except Exception as e:
-
-        return None, (
-            "Error al validar credenciales criptográficas: "
-            f"{str(e)}"
+    except Exception:
+        logger.exception(
+            "Error interno al validar el token JWT"
         )
+
+        return None, "No se pudo validar el token de acceso"

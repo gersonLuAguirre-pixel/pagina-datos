@@ -1,9 +1,15 @@
+
+import logging
+
 from flask import Blueprint, request, jsonify
 
 from services.auth_service import (
     registrar_usuario,
     autenticar_usuario
 )
+
+
+logger = logging.getLogger(__name__)
 
 
 def crear_auth_blueprint(usuario_repository):
@@ -14,26 +20,30 @@ def crear_auth_blueprint(usuario_repository):
         url_prefix="/api"
     )
 
+    # =====================================================
+    # REGISTRO DE USUARIOS
+    # =====================================================
+
     @auth_bp.route("/register", methods=["POST"])
     def register():
 
+        datos = request.get_json(silent=True)
+
+        if not isinstance(datos, dict):
+            return jsonify({
+                "error": "No se recibieron datos válidos"
+            }), 400
+
+        nombre = datos.get("nombre")
+        email = datos.get("correo")
+        password = datos.get("contrasena")
+
+        if not all([nombre, email, password]):
+            return jsonify({
+                "error": "Todos los campos son obligatorios"
+            }), 400
+
         try:
-            datos = request.get_json(silent=True)
-
-            if not datos:
-                return jsonify({
-                    "error": "No se recibieron datos"
-                }), 400
-
-            nombre = datos.get("nombre")
-            email = datos.get("correo")
-            password = datos.get("contrasena")
-
-            if not nombre or not email or not password:
-                return jsonify({
-                    "error": "Todos los campos son obligatorios"
-                }), 400
-
             usuario, error = registrar_usuario(
                 usuario_repository,
                 nombre,
@@ -47,34 +57,42 @@ def crear_auth_blueprint(usuario_repository):
                 }), 400
 
             return jsonify({
-                "message": "Usuario registrado exitosamente en MongoDB Atlas",
+                "message": "Usuario registrado exitosamente",
                 "usuario": usuario
             }), 201
 
-        except Exception as e:
+        except Exception:
+            logger.exception(
+                "Error interno durante el registro de usuario"
+            )
+
             return jsonify({
-                "error": f"Error interno en el servidor: {str(e)}"
+                "error": "Ocurrió un error interno al registrar el usuario"
             }), 500
+
+    # =====================================================
+    # INICIO DE SESIÓN
+    # =====================================================
 
     @auth_bp.route("/login", methods=["POST"])
     def login():
 
+        datos = request.get_json(silent=True)
+
+        if not isinstance(datos, dict):
+            return jsonify({
+                "error": "No se recibieron datos válidos"
+            }), 400
+
+        email = datos.get("correo")
+        password = datos.get("contrasena")
+
+        if not email or not password:
+            return jsonify({
+                "error": "El correo y la contraseña son obligatorios"
+            }), 400
+
         try:
-            datos = request.get_json(silent=True)
-
-            if not datos:
-                return jsonify({
-                    "error": "No se recibieron datos"
-                }), 400
-
-            email = datos.get("correo")
-            password = datos.get("contrasena")
-
-            if not email or not password:
-                return jsonify({
-                    "error": "Faltan datos obligatorios"
-                }), 400
-
             resultado, error = autenticar_usuario(
                 usuario_repository,
                 email,
@@ -91,9 +109,13 @@ def crear_auth_blueprint(usuario_repository):
                 **resultado
             }), 200
 
-        except Exception as e:
+        except Exception:
+            logger.exception(
+                "Error interno durante la autenticación"
+            )
+
             return jsonify({
-                "error": f"Error en el servidor: {str(e)}"
+                "error": "Ocurrió un error interno al iniciar sesión"
             }), 500
 
     return auth_bp

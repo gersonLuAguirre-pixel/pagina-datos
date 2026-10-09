@@ -1,8 +1,12 @@
+
+import logging
+
 from flask import Blueprint, jsonify
 
-from services.delivery_service import (
-    obtener_costo_envio
-)
+from services.delivery_service import obtener_costo_envio
+
+
+logger = logging.getLogger(__name__)
 
 
 def crear_delivery_blueprint():
@@ -13,24 +17,23 @@ def crear_delivery_blueprint():
         url_prefix="/api"
     )
 
-    @delivery_bp.route(
-        "/delivery",
-        methods=["GET"]
-    )
+    @delivery_bp.route("/delivery", methods=["GET"])
     def obtener_delivery():
 
         try:
-
             costo = obtener_costo_envio()
 
             return jsonify({
                 "costoEnvio": costo
             }), 200
 
-        except Exception as e:
+        except Exception:
+            logger.exception(
+                "Error al obtener el costo de envío"
+            )
 
             return jsonify({
-                "error": f"Error al obtener costo de envío: {str(e)}"
+                "error": "No se pudo obtener el costo de envío"
             }), 500
 
     return delivery_bp
