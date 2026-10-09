@@ -2,763 +2,808 @@
 <html lang="es">
 
 <head>
-
     <meta charset="UTF-8">
-
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-    <title>EcoVida - Encuentra tu producto ideal</title>
-
-    <!-- CSS que ya utiliza tu proyecto -->
+    <meta name="theme-color" content="#2e7d32">
+    <title>Quiz EcoVida | Encuentra tu producto ideal</title>
     <link rel="stylesheet" href="CSS/estilos.css">
 
     <style>
-        /* ==========================
-            QUIZ ECOVIDA
-        ========================== */
+        /* =================================
+           QUIZ ECOVIDA
+        ================================= */
 
-        .quiz {
-            max-width: 850px;
-            margin: 50px auto;
-            padding: 40px;
-
-            background: white;
-
-            border-radius: 20px;
-
-            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.12);
+        .quiz-pagina {
+            width: calc(100% - 32px);
+            max-width: 1000px;
+            margin: 32px auto 45px;
         }
 
-
-        .quiz-titulo {
-            text-align: center;
-
-            color: #2e7d32;
-
-            font-size: 35px;
-
-            margin-bottom: 10px;
+        .quiz-portada {
+            position: relative;
+            overflow: hidden;
+            padding: clamp(28px, 5vw, 55px);
+            border: 1px solid #dcebdd;
+            border-radius: 24px;
+            background: linear-gradient(135deg, #ffffff, #e8f5e9);
+            box-shadow: 0 8px 28px rgba(28, 56, 32, .07);
+            animation: quizEntrada .5s ease both;
         }
 
+        .quiz-portada::after {
+            content: "🌿";
+            position: absolute;
+            right: 35px;
+            bottom: 0;
+            font-size: clamp(80px, 13vw, 150px);
+            opacity: .12;
+            pointer-events: none;
+        }
 
-        .quiz-descripcion {
-            text-align: center;
+        .quiz-etiqueta {
+            display: inline-block;
+            padding: 7px 13px;
+            border: 1px solid #d0e6d1;
+            border-radius: 30px;
+            background: #e8f5e9;
+            color: #286a30;
+            font-size: .84rem;
+            font-weight: 700;
+        }
 
-            color: #666;
+        .quiz-portada h2 {
+            max-width: 700px;
+            margin: 17px 0 12px;
+            color: #245c2b;
+            font-size: clamp(2rem, 5vw, 3.2rem);
+            line-height: 1.2;
+        }
 
-            margin-bottom: 35px;
+        .quiz-portada p {
+            max-width: 680px;
+            margin: 0;
+            color: #58665b;
+            font-size: 1.05rem;
+            line-height: 1.8;
+        }
 
-            font-size: 17px;
+        .quiz-beneficios {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-top: 22px;
+        }
 
+        .quiz-beneficios span {
+            padding: 8px 12px;
+            border: 1px solid #dcebdd;
+            border-radius: 9px;
+            background: rgba(255, 255, 255, .8);
+            color: #386740;
+            font-size: .87rem;
+            font-weight: 600;
+        }
+
+        /* Contenedor del cuestionario */
+
+        .quiz-panel {
+            margin-top: 24px;
+            padding: clamp(20px, 4vw, 38px);
+            border: 1px solid #e1e9e0;
+            border-radius: 22px;
+            background: #ffffff;
+            box-shadow: 0 8px 25px rgba(28, 56, 32, .06);
+            animation: quizEntrada .65s ease both;
+        }
+
+        .quiz-panel-cabecera {
+            margin-bottom: 28px;
+        }
+
+        .quiz-panel-cabecera h2 {
+            margin: 0 0 8px;
+            color: #245c2b;
+            font-size: clamp(1.45rem, 3vw, 1.9rem);
+        }
+
+        .quiz-panel-cabecera p {
+            margin: 0;
+            color: #68746a;
+            line-height: 1.7;
+        }
+
+        .quiz-pregunta {
+            min-width: 0;
+            margin: 0 0 24px;
+            padding: 22px;
+            border: 1px solid #e1e9e0;
+            border-radius: 16px;
+            background: #fbfdfb;
+        }
+
+        .quiz-pregunta legend {
+            width: 100%;
+            padding: 0;
+            color: #294d30;
+            font-size: 1.08rem;
+            font-weight: 750;
             line-height: 1.6;
         }
 
-
-        /* PREGUNTA */
-
-        .pregunta {
-            margin-bottom: 35px;
-        }
-
-
-        .pregunta h3 {
-            color: #333;
-
-            margin-bottom: 15px;
-
-            font-size: 20px;
-        }
-
-
-        /* OPCIONES */
-
-        .opcion {
-
-            display: block;
-
-            padding: 18px;
-
-            margin-bottom: 12px;
-
-            background: #f5f8f3;
-
-            border: 2px solid #e0e0e0;
-
-            border-radius: 12px;
-
-            cursor: pointer;
-
-            transition: 0.3s;
-        }
-
-
-        .opcion:hover {
-
-            background: #e8f5e9;
-
-            border-color: #4caf50;
-
-            transform: translateX(5px);
-        }
-
-
-        .opcion input {
-
-            margin-right: 10px;
-        }
-
-
-        .opcion:has(input:checked) {
-
-            background: #dff2df;
-
-            border-color: #2e7d32;
-
-            font-weight: bold;
-        }
-
-
-        /* BOTÓN */
-
-        .boton-quiz {
-
-            width: 100%;
-
-            padding: 17px;
-
+        .quiz-numero {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 31px;
+            height: 31px;
+            margin-right: 8px;
+            border-radius: 9px;
             background: #2e7d32;
+            color: #ffffff;
+            font-size: .9rem;
+            vertical-align: middle;
+        }
 
-            color: white;
+        .quiz-ayuda {
+            margin: 8px 0 16px;
+            color: #7a857b;
+            font-size: .88rem;
+        }
 
-            border: none;
+        /* Opciones seleccionables */
 
+        .quiz-opcion {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-top: 10px;
+            padding: 14px 15px;
+            border: 1.5px solid #e0e7e0;
             border-radius: 12px;
-
-            font-size: 18px;
-
-            font-weight: bold;
-
+            background: #ffffff;
+            color: #3d4c40;
             cursor: pointer;
-
-            transition: 0.3s;
+            line-height: 1.55;
+            transition: background .2s ease,
+                border-color .2s ease,
+                transform .2s ease,
+                box-shadow .2s ease;
         }
 
+        .quiz-opcion:hover {
+            transform: translateX(3px);
+            border-color: #9dcca1;
+            background: #f2faf2;
+        }
 
-        .boton-quiz:hover {
+        .quiz-opcion input {
+            flex-shrink: 0;
+            width: 18px;
+            height: 18px;
+            margin: 0;
+            accent-color: #2e7d32;
+            cursor: pointer;
+        }
 
-            background: #1b5e20;
+        .quiz-opcion:has(input:checked) {
+            border-color: #2e7d32;
+            background: #e8f5e9;
+            box-shadow: 0 0 0 2px rgba(46, 125, 50, .07);
+            color: #245c2b;
+            font-weight: 650;
+        }
 
+        .quiz-opcion:has(input:focus-visible) {
+            outline: 3px solid rgba(46, 125, 50, .25);
+            outline-offset: 3px;
+        }
+
+        /* Botones */
+
+        .quiz-boton {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            width: 100%;
+            min-height: 52px;
+            padding: 14px 20px;
+            border: 0;
+            border-radius: 11px;
+            background: #2e7d32;
+            color: #ffffff;
+            font-size: 1rem;
+            font-weight: 750;
+            cursor: pointer;
+            box-shadow: 0 5px 13px rgba(46, 125, 50, .16);
+            transition: background .2s ease,
+                transform .2s ease,
+                box-shadow .2s ease;
+        }
+
+        .quiz-boton:hover {
             transform: translateY(-2px);
+            background: #1b5e20;
+            box-shadow: 0 8px 18px rgba(46, 125, 50, .22);
         }
 
+        .quiz-boton:active {
+            transform: scale(.99);
+        }
 
-        /* RESULTADO */
+        .quiz-boton-secundario {
+            border: 1px solid #cfe2d0;
+            background: #ffffff;
+            color: #286a30;
+            box-shadow: none;
+        }
+
+        .quiz-boton-secundario:hover {
+            background: #e8f5e9;
+            color: #245c2b;
+            box-shadow: none;
+        }
+
+        .quiz-error {
+            margin: 14px 0 0;
+            color: #b42323;
+            font-size: .92rem;
+            font-weight: 600;
+            line-height: 1.6;
+        }
+
+        /* Resultado */
 
         #resultado {
-
             display: none;
-
-            margin-top: 35px;
-
-            padding: 30px;
-
-            background: #e8f5e9;
-
+            margin-top: 28px;
+            padding: clamp(20px, 4vw, 34px);
+            border: 1px solid #d5e8d6;
             border-radius: 20px;
+            background: linear-gradient(145deg, #edf8ee, #f8fcf8);
+            text-align: center;
+            animation: quizEntrada .4s ease both;
+        }
 
+        .resultado-etiqueta {
+            display: inline-block;
+            margin-bottom: 12px;
+            padding: 7px 12px;
+            border-radius: 30px;
+            background: #d8edd9;
+            color: #286a30;
+            font-size: .83rem;
+            font-weight: 750;
+        }
+
+        #resultado>h2 {
+            margin: 0 0 8px;
+            color: #245c2b;
+            font-size: clamp(1.6rem, 4vw, 2.2rem);
+        }
+
+        .resultado-descripcion {
+            margin: 0 auto 22px;
+            max-width: 600px;
+            color: #627064;
+            line-height: 1.7;
+        }
+
+        .producto-recomendado {
+            max-width: 550px;
+            margin: 0 auto 22px;
+            padding: 27px;
+            border: 1px solid #e0e9e0;
+            border-radius: 18px;
+            background: #ffffff;
+            box-shadow: 0 7px 22px rgba(28, 56, 32, .07);
+        }
+
+        .producto-recomendado .emoji {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 92px;
+            height: 92px;
+            margin: 0 auto 15px;
+            border-radius: 25px;
+            background: #e8f5e9;
+            font-size: 3.5rem;
+        }
+
+        .producto-recomendado h3 {
+            margin: 0 0 10px;
+            color: #286a30;
+            font-size: clamp(1.4rem, 3vw, 1.8rem);
+        }
+
+        .producto-recomendado p {
+            margin: 0;
+            color: #637064;
+            line-height: 1.8;
+        }
+
+        .producto-recomendado .precio {
+            margin: 18px 0;
+            color: #245c2b;
+            font-size: 1.8rem;
+            font-weight: 800;
+        }
+
+        .resultado-motivo {
+            margin: 16px 0 0;
+            padding: 12px;
+            border-radius: 10px;
+            background: #f2f8f2;
+            color: #426448;
+            font-size: .9rem;
+            line-height: 1.65;
+            text-align: left;
+        }
+
+        .quiz-resultado-acciones {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            max-width: 550px;
+            margin: 0 auto;
+        }
+
+        .quiz-resultado-acciones a {
+            text-decoration: none;
+        }
+
+        /* Pie */
+
+        .quiz-pie {
+            margin-top: 22px;
+            padding: 20px;
+            border: 1px solid #dcebdd;
+            border-radius: 15px;
+            background: #edf6ed;
+            color: #426448;
             text-align: center;
         }
 
-
-        .producto-recomendado {
-
-            background: white;
-
-            padding: 30px;
-
-            margin-top: 20px;
-
-            border-radius: 15px;
-
-            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.10);
+        .quiz-pie p {
+            margin: 0;
+            line-height: 1.7;
         }
 
-
-        .producto-recomendado .emoji {
-
-            font-size: 70px;
-
-            margin-bottom: 10px;
-        }
-
-
-        .producto-recomendado h3 {
-
-            color: #2e7d32;
-
-            font-size: 27px;
-
-            margin-bottom: 10px;
-        }
-
-
-        .precio {
-
-            color: #2e7d32;
-
-            font-size: 25px;
-
-            font-weight: bold;
-
-            margin: 15px;
-        }
-
-
-        .boton-producto {
-
-            display: inline-block;
-
-            padding: 12px 25px;
-
-            background: #2e7d32;
-
-            color: white;
-
-            text-decoration: none;
-
-            border-radius: 10px;
-
-            margin-top: 10px;
-        }
-
-
-        .boton-producto:hover {
-
-            background: #1b5e20;
-        }
-
-
-        /* CELULAR */
-
-        @media(max-width: 600px) {
-
-            .quiz {
-
-                width: 94%;
-
-                padding: 25px;
-
-                margin: 25px auto;
+        @keyframes quizEntrada {
+            from {
+                opacity: 0;
+                transform: translateY(12px);
             }
 
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
 
-            .quiz-titulo {
-
-                font-size: 27px;
+        @media (max-width: 600px) {
+            .quiz-pagina {
+                width: calc(100% - 22px);
+                margin: 18px auto 28px;
             }
 
-
-            .pregunta h3 {
-
-                font-size: 18px;
+            .quiz-portada {
+                padding: 25px 20px;
             }
 
+            .quiz-portada::after {
+                right: 8px;
+                font-size: 75px;
+            }
+
+            .quiz-beneficios {
+                gap: 7px;
+            }
+
+            .quiz-beneficios span {
+                font-size: .79rem;
+            }
+
+            .quiz-panel {
+                padding: 17px 12px;
+            }
+
+            .quiz-pregunta {
+                padding: 16px 12px;
+                margin-bottom: 17px;
+            }
+
+            .quiz-pregunta legend {
+                font-size: 1rem;
+            }
+
+            .quiz-opcion {
+                padding: 12px 10px;
+                font-size: .92rem;
+            }
+
+            .producto-recomendado {
+                padding: 22px 15px;
+            }
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+
+            .quiz-portada,
+            .quiz-panel,
+            #resultado {
+                animation: none;
+            }
+
+            .quiz-opcion,
+            .quiz-boton {
+                transition: none;
+            }
         }
     </style>
-
 </head>
-
 
 <body>
 
-
-    <!-- ==========================
-        ENCABEZADO
-========================== -->
-
-    <header>
-
+    <!-- ENCABEZADO -->
+    <header class="ecovida-header">
         <h1>🌱 EcoVida</h1>
-
         <p>Productos ecológicos y reutilizables</p>
-
     </header>
 
-
-    <!-- ==========================
-        MENÚ
-========================== -->
-
-    <nav>
-
+    <!-- NAVEGACIÓN -->
+    <nav class="ecovida-nav">
         <a href="index.html">Inicio</a>
-
-        <a href="index.html#productos">Productos</a>
-
+        <a href="productos.html">Productos</a>
         <a href="nosotros.html">Nosotros</a>
-
-        <a href="index.html#contacto">Contacto</a>
-
-        <a href="pedidos.html">📦 Pedidos</a>
-
+        <a href="contacto.html">Contacto</a>
         <a href="carrito.html">🛒 Carrito</a>
+        <a href="pedidos.html">📦 Pedidos</a>
+        <a href="quiz.html" aria-current="page">✨ Quiz</a>
 
-        <a href="quiz.html">✨ Quiz</a>
-
+        <button type="button" onclick="cerrarSesionCorporativa()" id="btn-logout-nav" class="btn-logout-nav"
+            style="display: none;">
+            🚪 Cerrar Sesión
+        </button>
     </nav>
 
+    <!-- CONTENIDO -->
+    <main class="quiz-pagina">
 
-    <!-- ==========================
-        QUIZ
-========================== -->
+        <section class="quiz-portada">
+            <span class="quiz-etiqueta">✨ Descubre tu mejor opción</span>
 
-    <section class="quiz">
+            <h2>Encuentra tu producto ideal 🌿</h2>
 
-        <h2 class="quiz-titulo">
-            Encuentra tu producto ideal 🌿
-        </h2>
+            <p>
+                Responde tres preguntas sobre tus necesidades, tus preferencias
+                y tu presupuesto. Te recomendaremos una alternativa de EcoVida
+                que se ajuste mejor a tus respuestas.
+            </p>
 
+            <div class="quiz-beneficios">
+                <span>♻️ Consumo responsable</span>
+                <span>🌱 Opciones sostenibles</span>
+                <span>💚 Recomendación personalizada</span>
+            </div>
+        </section>
 
-        <p class="quiz-descripcion">
+        <section class="quiz-panel">
 
-            Responde estas preguntas y descubre qué producto
-            de EcoVida se adapta mejor a tus necesidades.
-
-        </p>
-
-
-        <form id="quizForm">
-
-
-            <!-- PREGUNTA 1 -->
-
-            <div class="pregunta">
-
-                <h3>
-                    1. ¿Qué buscas principalmente?
-                </h3>
-
-
-                <label class="opcion">
-
-                    <input type="radio" name="objetivo" value="compras" required>
-
-                    🛍️ Reducir el uso de bolsas plásticas
-
-                </label>
-
-
-                <label class="opcion">
-
-                    <input type="radio" name="objetivo" value="agua">
-
-                    💧 Reducir el uso de botellas descartables
-
-                </label>
-
-
-                <label class="opcion">
-
-                    <input type="radio" name="objetivo" value="bambu">
-
-                    🎋 Utilizar materiales sostenibles
-
-                </label>
-
-
-                <label class="opcion">
-
-                    <input type="radio" name="objetivo" value="limpieza">
-
-                    🧼 Utilizar productos de limpieza ecológicos
-
-                </label>
-
+            <div class="quiz-panel-cabecera">
+                <h2>Personaliza tu recomendación</h2>
+                <p>Selecciona una respuesta en cada pregunta para continuar.</p>
             </div>
 
+            <form id="quizForm">
 
+                <!-- PREGUNTA 1 -->
+                <fieldset class="quiz-pregunta">
+                    <legend>
+                        <span class="quiz-numero">1</span>
+                        ¿Qué buscas principalmente?
+                    </legend>
 
-            <!-- PREGUNTA 2 -->
+                    <p class="quiz-ayuda">Piensa en el cambio que quieres hacer en tu día a día.</p>
 
-            <div class="pregunta">
+                    <label class="quiz-opcion">
+                        <input type="radio" name="objetivo" value="compras" required>
+                        <span>🛍️ Reducir el uso de bolsas plásticas</span>
+                    </label>
 
-                <h3>
-                    2. ¿Qué característica valoras más?
-                </h3>
+                    <label class="quiz-opcion">
+                        <input type="radio" name="objetivo" value="agua">
+                        <span>🍶 Reducir el uso de botellas descartables</span>
+                    </label>
 
+                    <label class="quiz-opcion">
+                        <input type="radio" name="objetivo" value="bambu">
+                        <span>🎋 Incorporar materiales sostenibles</span>
+                    </label>
 
-                <label class="opcion">
+                    <label class="quiz-opcion">
+                        <input type="radio" name="objetivo" value="limpieza">
+                        <span>🧼 Elegir productos de limpieza ecológicos</span>
+                    </label>
+                </fieldset>
 
-                    <input type="radio" name="caracteristica" value="reutilizable" required>
+                <!-- PREGUNTA 2 -->
+                <fieldset class="quiz-pregunta">
+                    <legend>
+                        <span class="quiz-numero">2</span>
+                        ¿Qué característica valoras más?
+                    </legend>
 
-                    ♻️ Que sea reutilizable
+                    <p class="quiz-ayuda">Elige lo que más importancia tiene para ti.</p>
 
-                </label>
+                    <label class="quiz-opcion">
+                        <input type="radio" name="caracteristica" value="reutilizable" required>
+                        <span>♻️ Que pueda reutilizarse</span>
+                    </label>
 
+                    <label class="quiz-opcion">
+                        <input type="radio" name="caracteristica" value="sostenible">
+                        <span>🌱 Que utilice materiales sostenibles</span>
+                    </label>
 
-                <label class="opcion">
+                    <label class="quiz-opcion">
+                        <input type="radio" name="caracteristica" value="practico">
+                        <span>⭐ Que sea práctico para el día a día</span>
+                    </label>
 
-                    <input type="radio" name="caracteristica" value="sostenible">
+                    <label class="quiz-opcion">
+                        <input type="radio" name="caracteristica" value="economico">
+                        <span>💰 Que se ajuste a mi presupuesto</span>
+                    </label>
+                </fieldset>
 
-                    🌱 Que sea sostenible
+                <!-- PREGUNTA 3 -->
+                <fieldset class="quiz-pregunta">
+                    <legend>
+                        <span class="quiz-numero">3</span>
+                        ¿Cuánto quieres gastar?
+                    </legend>
 
-                </label>
+                    <p class="quiz-ayuda">Tu presupuesto también influirá en la recomendación.</p>
 
+                    <label class="quiz-opcion">
+                        <input type="radio" name="presupuesto" value="bajo" required>
+                        <span>💵 Menos de S/ 15</span>
+                    </label>
 
-                <label class="opcion">
+                    <label class="quiz-opcion">
+                        <input type="radio" name="presupuesto" value="medio">
+                        <span>💵 Entre S/ 15 y S/ 20</span>
+                    </label>
 
-                    <input type="radio" name="caracteristica" value="practico">
+                    <label class="quiz-opcion">
+                        <input type="radio" name="presupuesto" value="alto">
+                        <span>💵 Más de S/ 20</span>
+                    </label>
+                </fieldset>
 
-                    ⭐ Que sea práctico
+                <button type="submit" class="quiz-boton">
+                    🔍 Descubrir mi producto ideal
+                    <span aria-hidden="true">→</span>
+                </button>
 
-                </label>
+                <p id="quizError" class="quiz-error" role="alert" hidden></p>
+            </form>
 
+            <!-- RESULTADO -->
+            <div id="resultado" aria-live="polite">
+                <span class="resultado-etiqueta">🌿 Tu recomendación EcoVida</span>
 
-                <label class="opcion">
+                <h2>¡Encontramos una opción para ti!</h2>
 
-                    <input type="radio" name="caracteristica" value="economico">
+                <p class="resultado-descripcion">
+                    Según tus respuestas, este producto puede ser una buena alternativa.
+                </p>
 
-                    💰 Que sea económico
+                <div id="producto"></div>
 
-                </label>
+                <div class="quiz-resultado-acciones">
+                    <a href="productos.html" class="quiz-boton">
+                        Ver catálogo completo →
+                    </a>
 
+                    <button type="button" class="quiz-boton quiz-boton-secundario" onclick="reiniciarQuiz()">
+                        🔄 Volver a realizar el quiz
+                    </button>
+                </div>
             </div>
 
+        </section>
 
+        <section class="quiz-pie">
+            <p>
+                💚 <strong>EcoVida:</strong> pequeñas decisiones, un planeta más sostenible.
+            </p>
+        </section>
 
-            <!-- PREGUNTA 3 -->
+    </main>
 
-            <div class="pregunta">
-
-                <h3>
-                    3. ¿Cuánto quieres gastar?
-                </h3>
-
-
-                <label class="opcion">
-
-                    <input type="radio" name="presupuesto" value="bajo" required>
-
-                    💵 Menos de S/ 15
-
-                </label>
-
-
-                <label class="opcion">
-
-                    <input type="radio" name="presupuesto" value="medio">
-
-                    💵 Entre S/ 15 y S/ 20
-
-                </label>
-
-
-                <label class="opcion">
-
-                    <input type="radio" name="presupuesto" value="alto">
-
-                    💵 Más de S/ 20
-
-                </label>
-
-            </div>
-
-
-
-            <!-- BOTÓN -->
-
-            <button type="submit" class="boton-quiz">
-
-                🔍 Descubrir mi producto ideal
-
-            </button>
-
-        </form>
-
-
-
-        <!-- ==========================
-            RESULTADO
-    ========================== -->
-
-        <div id="resultado">
-
-            <h2>
-                Tu producto recomendado 🌿
-            </h2>
-
-
-            <div id="producto"></div>
-
-
-            <button class="boton-quiz" onclick="reiniciarQuiz()">
-
-                🔄 Realizar el quiz nuevamente
-
-            </button>
-
-        </div>
-
-    </section>
-
-
-    <!-- ==========================
-        PIE DE PÁGINA
-========================== -->
-
-    <footer>
-
-        <p>
-            © 2026 EcoVida - Productos sostenibles
-        </p>
-
+    <!-- PIE DE PÁGINA -->
+    <footer class="ecovida-footer">
+        <p>© 2026 EcoVida - Productos sostenibles</p>
     </footer>
 
-
-
-    <!-- ==========================
-    JAVASCRIPT
-========================== -->
-
+    <!-- JAVASCRIPT DEL QUIZ -->
     <script>
-
-        document
-            .getElementById("quizForm")
-            .addEventListener("submit", function (event) {
-
-                event.preventDefault();
-
-
-                /* Obtener respuestas */
-
-                const objetivo =
-                    document.querySelector(
-                        'input[name="objetivo"]:checked'
-                    ).value;
-
-
-                const presupuesto =
-                    document.querySelector(
-                        'input[name="presupuesto"]:checked'
-                    ).value;
-
-
-
-                let producto = "";
-
-
-
-                /* ==========================
-                    RECOMENDACIONES
-                ========================== */
-
-
-                if (objetivo === "compras") {
-
-                    producto =
-
-                        <div class="producto-recomendado">
-
-                            <div class="emoji">
-                                🛍️
-                            </div>
-
-                            <h3>
-                                Bolsas de tela
-                            </h3>
-
-                            <p>
-                                Una alternativa reutilizable para
-                                tus compras diarias y una forma de
-                                reducir el uso de bolsas plásticas.
-                            </p>
-
-                            <div class="precio">
-                                S/ 15.00
-                            </div>
-
-                            <a
-                                href="index.html#productos"
-                                class="boton-producto"
-                            >
-                                Ver producto
-                            </a>
-
-                        </div>
-
-                }
-
-
-                else if (objetivo === "agua") {
-
-                    producto =
-
-                        < div class="producto-recomendado" >
-
-                            <div class="emoji">
-                                🍶
-                            </div>
-
-                            <h3>
-                                Botella reutilizable
-                            </h3>
-
-                            <p>
-                                Una opción práctica para reducir
-                                el uso de botellas descartables
-                                durante el día.
-                            </p>
-
-                            <div class="precio">
-                                S/ 25.00
-                            </div>
-
-                            <a
-                                href="index.html#productos"
-                                class="boton-producto"
-                            >
-                                Ver producto
-                            </a>
-
-                        </div >
-
-                }
-
-
-                else if (objetivo === "bambu") {
-
-                    producto =
-
-                        <div class="producto-recomendado">
-
-                            <div class="emoji">
-                                🎋
-                            </div>
-
-                            <h3>
-                                Artículos de bambú
-                            </h3>
-
-                            <p>
-                                Productos elaborados con materiales
-                                sostenibles para tu vida cotidiana.
-                            </p>
-
-                            <div class="precio">
-                                S/ 12.00
-                            </div>
-
-                            <a
-                                href="index.html#productos"
-                                class="boton-producto"
-                            >
-                                Ver producto
-                            </a>
-
-                        </div>
-
-                }
-
-
-                else {
-
-                    producto =
-
-                        < div class="producto-recomendado" >
-
-                            <div class="emoji">
-                                🧼
-                            </div>
-
-                            <h3>
-                                Jabón biodegradable
-                            </h3>
-
-                            <p>
-                                Una alternativa de limpieza más
-                                amigable con el medio ambiente.
-                            </p>
-
-                            <div class="precio">
-                                S/ 18.00
-                            </div>
-
-                            <a
-                                href="index.html#productos"
-                                class="boton-producto"
-                            >
-                                Ver producto
-                            </a>
-
-                        </div >
-
-                }
-
-
-
-                /* Mostrar resultado */
-
-                document
-                    .getElementById("producto")
-                    .innerHTML = producto;
-
-
-                document
-                    .getElementById("quizForm")
-                    .style.display = "none";
-
-
-                document
-                    .getElementById("resultado")
-                    .style.display = "block";
-
-
-                document
-                    .getElementById("resultado")
-                    .scrollIntoView({
-                        behavior: "smooth"
-                    });
-
+        const quizForm = document.getElementById("quizForm");
+        const resultado = document.getElementById("resultado");
+        const productoContenedor = document.getElementById("producto");
+        const quizError = document.getElementById("quizError");
+
+        /*
+         * Precios y nombres coinciden con el catálogo actual.
+         * Se mantienen los nombres originales para evitar
+         * diferencias con el carrito.
+         */
+        const productosEcoVida = [
+            {
+                nombre: "Bolsa de tela tocuyo organico",
+                titulo: "Bolsas de tela",
+                precio: 15,
+                emoji: "🛍️",
+                descripcion: "Una alternativa reutilizable para tus compras diarias y una forma de reducir el uso de bolsas plásticas.",
+                objetivos: ["compras"],
+                caracteristicas: ["reutilizable", "practico"]
+            },
+            {
+                nombre: "Botella reutilizable",
+                titulo: "Botella reutilizable",
+                precio: 25,
+                emoji: "🍶",
+                descripcion: "Una opción práctica para llevar tus bebidas y reducir el uso de botellas descartables.",
+                objetivos: ["agua"],
+                caracteristicas: ["reutilizable", "practico"]
+            },
+            {
+                nombre: "Artículos de bambú",
+                titulo: "Artículos de bambú",
+                precio: 12,
+                emoji: "🎋",
+                descripcion: "Artículos elaborados con bambú, una alternativa para incorporar materiales sostenibles a tu rutina.",
+                objetivos: ["bambu"],
+                caracteristicas: ["sostenible", "economico"]
+            },
+            {
+                nombre: "Jabon biodegrabable",
+                titulo: "Jabón biodegradable",
+                precio: 15,
+                emoji: "🧼",
+                descripcion: "Una alternativa para acompañar tus hábitos de limpieza con una elección más consciente.",
+                objetivos: ["limpieza"],
+                caracteristicas: ["sostenible", "economico"]
+            }
+        ];
+
+        const rangosPresupuesto = {
+            bajo: { minimo: 0, maximo: 15 },
+            medio: { minimo: 15, maximo: 20 },
+            alto: { minimo: 20, maximo: Infinity }
+        };
+
+        quizForm.addEventListener("submit", function (event) {
+            event.preventDefault();
+
+            const respuestas = new FormData(quizForm);
+
+            const objetivo = respuestas.get("objetivo");
+            const caracteristica = respuestas.get("caracteristica");
+            const presupuesto = respuestas.get("presupuesto");
+
+            if (!objetivo || !caracteristica || !presupuesto) {
+                quizError.textContent = "Responde las tres preguntas para descubrir tu recomendación.";
+                quizError.hidden = false;
+                return;
+            }
+
+            const rango = rangosPresupuesto[presupuesto];
+
+            /*
+             * Primero se filtra por presupuesto.
+             * Después se puntúan el objetivo y la característica elegida.
+             */
+            const candidatos = productosEcoVida.filter(function (item) {
+                return item.precio >= rango.minimo && item.precio < rango.maximo;
             });
 
+            if (candidatos.length === 0) {
+                quizError.textContent = "No encontramos un producto dentro de ese rango. Prueba otro presupuesto.";
+                quizError.hidden = false;
+                return;
+            }
 
+            candidatos.sort(function (a, b) {
+                const puntuacionA =
+                    (a.objetivos.includes(objetivo) ? 3 : 0) +
+                    (a.caracteristicas.includes(caracteristica) ? 1 : 0);
 
-        /* ==========================
-            REINICIAR QUIZ
-        ========================== */
+                const puntuacionB =
+                    (b.objetivos.includes(objetivo) ? 3 : 0) +
+                    (b.caracteristicas.includes(caracteristica) ? 1 : 0);
+
+                return puntuacionB - puntuacionA;
+            });
+
+            const recomendado = candidatos[0];
+            const coincideObjetivo = recomendado.objetivos.includes(objetivo);
+            const coincideCaracteristica = recomendado.caracteristicas.includes(caracteristica);
+
+            let motivo = "";
+
+            if (coincideObjetivo) {
+                motivo = "Este producto coincide con tu objetivo principal.";
+            } else {
+                motivo = "Tu presupuesto nos ayudó a encontrar esta alternativa disponible en el catálogo.";
+            }
+
+            if (coincideCaracteristica) {
+                motivo += " También encaja con la característica que más valoras.";
+            }
+
+            /*
+             * Los datos del producto proceden del catálogo estático.
+             * Se construye la tarjeta con nodos DOM para evitar
+             * insertar las respuestas del usuario como HTML.
+             */
+            productoContenedor.replaceChildren();
+
+            const tarjeta = document.createElement("article");
+            tarjeta.className = "producto-recomendado";
+
+            const emoji = document.createElement("div");
+            emoji.className = "emoji";
+            emoji.textContent = recomendado.emoji;
+            emoji.setAttribute("aria-hidden", "true");
+
+            const titulo = document.createElement("h3");
+            titulo.textContent = recomendado.titulo;
+
+            const descripcion = document.createElement("p");
+            descripcion.textContent = recomendado.descripcion;
+
+            const precio = document.createElement("div");
+            precio.className = "precio";
+            precio.textContent = "S/ " + recomendado.precio.toFixed(2);
+
+            const razon = document.createElement("p");
+            razon.className = "resultado-motivo";
+            razon.textContent = "💡 " + motivo;
+
+            tarjeta.append(emoji, titulo, descripcion, precio, razon);
+            productoContenedor.appendChild(tarjeta);
+
+            quizError.hidden = true;
+            quizForm.style.display = "none";
+            resultado.style.display = "block";
+
+            resultado.scrollIntoView({
+                behavior: "smooth",
+                block: "start"
+            });
+        });
 
         function reiniciarQuiz() {
+            quizForm.reset();
+            quizForm.style.display = "block";
+            resultado.style.display = "none";
+            quizError.hidden = true;
+            quizError.textContent = "";
+            productoContenedor.replaceChildren();
 
-            document
-                .getElementById("quizForm")
-                .reset();
-
-
-            document
-                .getElementById("quizForm")
-                .style.display = "block";
-
-
-            document
-                .getElementById("resultado")
-                .style.display = "none";
-
-
-            window.scrollTo({
-
-                top: 0,
-
-                behavior: "smooth"
-
+            quizForm.scrollIntoView({
+                behavior: "smooth",
+                block: "start"
             });
-
         }
-
     </script>
 
-    <!-- El guardián de ecovida debe estar presente para proteger esta pestaña -->
+    <!-- JAVASCRIPT GENERAL DE ECOVIDA -->
     <script src="JS/ecovida.js"></script>
-</body>
 
 </body>
 

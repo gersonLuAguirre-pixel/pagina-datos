@@ -4,92 +4,83 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ECO VIDA</title>
-
+    <meta name="theme-color" content="#2e7d32">
+    <title>EcoVida | Productos ecológicos</title>
     <link rel="stylesheet" href="CSS/estilos.css">
 </head>
 
 <body>
 
-    <!--Encabezado -->
-    <header>
+    <!-- ENCABEZADO -->
+    <header class="ecovida-header">
         <h1>🌱 EcoVida</h1>
         <p>Productos ecológicos y reutilizables</p>
     </header>
 
-    <!-- Menú -->
-    <nav>
-        <!-- Botón Profesional de Acceso al Sistema -->
-        <a href="login.html" id="btn-login-nav" class="btn-login-nav" style="
-        background-color: #10b981; 
-        color: white; 
-        padding: 8px 16px; 
-        text-decoration: none; 
-        border-radius: 6px; 
-        font-weight: 600; 
-        font-family: sans-serif;
-        transition: background 0.2s;
-        display: block;
-    " onmouseover="this.style.backgroundColor='#059669'" onmouseout="this.style.backgroundColor='#10b981'">
+    <!-- NAVEGACIÓN -->
+    <nav class="ecovida-nav">
+
+        <a href="login.html" id="btn-login-nav" class="btn-login-nav">
             👤 Iniciar Sesión
         </a>
 
-        <a href="#">Inicio</a>
+        <a href="index.html" aria-current="page">Inicio</a>
         <a href="productos.html">Productos</a>
         <a href="nosotros.html">Nosotros</a>
         <a href="contacto.html">Contacto</a>
         <a href="carrito.html">🛒 Carrito</a>
         <a href="pedidos.html">📦 Pedidos</a>
         <a href="quiz.html">✨ Quiz</a>
-        <a href="dashboard.html" id="btn-dashboard-nav" style="
-                                display: none;
-                                background-color: #111827;
-                                color: white;
-                                padding: 8px 16px;
-                                text-decoration: none;
-                                border-radius: 6px;
-                                font-weight: 600;
-                                font-family: sans-serif;
-                            ">
+
+        <a href="dashboard.html" id="btn-dashboard-nav" class="btn-dashboard-nav" style="display: none;">
             👑 Dashboard Master
         </a>
 
-        <!-- Componente de Cierre de Sesión Corporativo -->
-        <button onclick="cerrarSesionCorporativa()" id="btn-logout-nav" style="
-        background-color: #ef4444; 
-        color: white; 
-        border: none; 
-        padding: 8px 16px; 
-        border-radius: 6px; 
-        cursor: pointer; 
-        font-weight: 600;
-        font-family: sans-serif;
-        transition: background 0.2s;
-        display: none; /* Se oculta por defecto hasta que el JS verifique la sesión */
-    " onmouseover="this.style.backgroundColor='#dc2626'" onmouseout="this.style.backgroundColor='#ef4444'">
+        <button type="button" onclick="cerrarSesionCorporativa()" id="btn-logout-nav" class="btn-logout-nav"
+            style="display: none;">
             🚪 Cerrar Sesión
         </button>
+
     </nav>
 
+    <!-- CONTENIDO PRINCIPAL CENTRADO -->
+    <main class="inicio-contenedor">
+        <section class="inicio-presentacion">
+            <span class="inicio-etiqueta">🌿 Vive de forma sostenible</span>
 
-    <!-- Presentación -->
-    <section>
-        <h2>Bienvenido a EcoVida</h2>
+            <h2>Bienvenido a EcoVida</h2>
 
-        <p>
-            En EcoVida ofrecemos productos ecológicos y reutilizables
-            para ayudarte a cuidar el medio ambiente en tu vida diaria.
-        </p>
+            <p>
+                En EcoVida ofrecemos productos ecológicos y reutilizables
+                para ayudarte a cuidar el medio ambiente en tu vida diaria.
+            </p>
 
-    </section>
+            <div class="inicio-acciones">
+                <a href="productos.html" class="btn-inicio-productos">
+                    Explorar productos
+                    <span aria-hidden="true">→</span>
+                </a>
 
-    <!-- Pie de página -->
-    <footer>
+                <a href="nosotros.html" class="btn-inicio-nosotros">
+                    Conoce EcoVida
+                </a>
+            </div>
+
+            <div class="inicio-compromiso">
+                <span aria-hidden="true">♻️</span>
+                <span>Pequeñas decisiones, un planeta más sostenible.</span>
+            </div>
+        </section>
+    </main>
+
+    <!-- PIE DE PÁGINA -->
+    <footer class="ecovida-footer">
         <p>© 2026 EcoVida - Productos sostenibles</p>
     </footer>
 
-    <!-- JavaScript-->
+    <!-- JAVASCRIPT EXISTENTE -->
     <script src="JS/ecovida.js"></script>
+
 </body>
 
 </html>

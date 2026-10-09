@@ -4,64 +4,173 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ECO VIDA</title>
-
+    <meta name="theme-color" content="#2e7d32">
+    <title>Contacto | EcoVida</title>
     <link rel="stylesheet" href="CSS/estilos.css">
 </head>
 
 <body>
 
-    <!--Encabezado -->
-    <header>
+    <!-- ENCABEZADO -->
+    <header class="ecovida-header">
         <h1>🌱 EcoVida</h1>
-        <p>Productos ecológicos y reutilizables</p>
+        <p>Estamos aquí para ayudarte</p>
     </header>
 
-    <!-- Menú -->
-    <nav>
+    <!-- NAVEGACIÓN -->
+    <nav class="ecovida-nav">
         <a href="index.html">Inicio</a>
         <a href="productos.html">Productos</a>
         <a href="nosotros.html">Nosotros</a>
-        <a href="#">Contacto</a>
-        <a href="pedidos.html">📦 Pedidos</a>
+        <a href="contacto.html" aria-current="page">Contacto</a>
         <a href="carrito.html">🛒 Carrito</a>
+        <a href="pedidos.html">📦 Pedidos</a>
         <a href="quiz.html">✨ Quiz</a>
-        <!-- Componente de Cierre de Sesión Corporativo -->
-        <button onclick="cerrarSesionCorporativa()" id="btn-logout-nav" style="
-        background-color: #ef4444; 
-        color: white; 
-        border: none; 
-        padding: 8px 16px; 
-        border-radius: 6px; 
-        cursor: pointer; 
-        font-weight: 600;
-        font-family: sans-serif;
-        transition: background 0.2s;
-        display: none; /* Se oculta por defecto hasta que el JS verifique la sesión */
-    " onmouseover="this.style.backgroundColor='#dc2626'" onmouseout="this.style.backgroundColor='#ef4444'">
+
+        <button type="button" onclick="cerrarSesionCorporativa()" id="btn-logout-nav" class="btn-logout-nav"
+            style="display: none;">
             🚪 Cerrar Sesión
         </button>
     </nav>
 
+    <!-- CONTENIDO PRINCIPAL -->
+    <main class="contacto-contenedor">
 
+        <!-- PRESENTACIÓN -->
+        <section class="contacto-presentacion">
+            <span class="contacto-etiqueta">💚 Queremos escucharte</span>
+            <h2>Hablemos de un futuro más sostenible</h2>
+            <p>
+                ¿Tienes alguna consulta sobre nuestros productos o necesitas ayuda?
+                Escríbenos. Nos interesa conocer tus dudas y ayudarte en lo que necesites.
+            </p>
+        </section>
 
-    <!-- Contacto -->
-    <section id="contacto">
-        <h2>Contacto</h2>
-        <p>¿Tienes alguna consulta? Escríbenos.</p>
-        <input type="text" placeholder="Nombre">
-        <input type="email" placeholder="Correo">
-        <textarea placeholder="Mensaje"></textarea>
-        <button>Enviar mensaje</button>
-    </section>
+        <!-- FORMULARIO Y PANEL INFORMATIVO -->
+        <section class="contacto-panel">
 
-    <!-- Pie de página -->
-    <footer>
+            <div class="contacto-informacion">
+                <span class="contacto-icono-principal">🌿</span>
+                <h2>Tu opinión importa</h2>
+                <p>
+                    Cada mensaje nos ayuda a mejorar y a ofrecerte una mejor experiencia
+                    en EcoVida.
+                </p>
+
+                <div class="contacto-beneficio">
+                    <span>♻️</span>
+                    <div>
+                        <h3>Consumo consciente</h3>
+                        <p>Alternativas para cuidar nuestro planeta.</p>
+                    </div>
+                </div>
+
+                <div class="contacto-beneficio">
+                    <span>🤝</span>
+                    <div>
+                        <h3>Atención cercana</h3>
+                        <p>Queremos ayudarte a encontrar lo que buscas.</p>
+                    </div>
+                </div>
+
+                <div class="contacto-beneficio">
+                    <span>🌎</span>
+                    <div>
+                        <h3>Un objetivo compartido</h3>
+                        <p>Construir juntos hábitos más sostenibles.</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="contacto-formulario">
+                <h2>Envíanos un mensaje</h2>
+                <p class="contacto-descripcion">
+                    Completa los campos para preparar tu consulta.
+                </p>
+
+                <form id="formularioContacto">
+
+                    <div class="campo-contacto">
+                        <label for="nombreContacto">Nombre</label>
+                        <input type="text" id="nombreContacto" name="nombre" placeholder="Escribe tu nombre"
+                            autocomplete="name" required>
+                    </div>
+
+                    <div class="campo-contacto">
+                        <label for="correoContacto">Correo electrónico</label>
+                        <input type="email" id="correoContacto" name="correo" placeholder="ejemplo@correo.com"
+                            autocomplete="email" required>
+                    </div>
+
+                    <div class="campo-contacto">
+                        <label for="mensajeContacto">Mensaje</label>
+                        <textarea id="mensajeContacto" name="mensaje" rows="5" placeholder="¿En qué podemos ayudarte?"
+                            required></textarea>
+                    </div>
+
+                    <button type="submit" class="btn-contacto-enviar">
+                        Preparar mensaje <span aria-hidden="true">→</span>
+                    </button>
+
+                    <p class="contacto-aviso">
+                        Completa tus datos para validar el mensaje.
+                    </p>
+
+                    <p id="estadoFormularioContacto" class="contacto-estado" role="status" aria-live="polite">
+                    </p>
+
+                </form>
+            </div>
+
+        </section>
+
+        <!-- MENSAJE FINAL -->
+        <section class="contacto-cierre">
+            <span>🌱</span>
+            <p><strong>EcoVida</strong> — Pequeñas decisiones, un planeta más sostenible.</p>
+        </section>
+
+    </main>
+
+    <!-- PIE DE PÁGINA -->
+    <footer class="ecovida-footer">
         <p>© 2026 EcoVida - Productos sostenibles</p>
     </footer>
 
-    <!-- JavaScript-->
+    <!-- JAVASCRIPT EXISTENTE -->
     <script src="JS/ecovida.js"></script>
+
+    <!-- VALIDACIÓN DEL FORMULARIO -->
+    <script>
+        const formularioContacto = document.getElementById("formularioContacto");
+        const estadoContacto = document.getElementById("estadoFormularioContacto");
+
+        formularioContacto.addEventListener("submit", function (evento) {
+            evento.preventDefault();
+
+            const nombre = document.getElementById("nombreContacto").value.trim();
+            const correo = document.getElementById("correoContacto").value.trim();
+            const mensaje = document.getElementById("mensajeContacto").value.trim();
+
+            if (!nombre || !correo || !mensaje) {
+                estadoContacto.textContent = "Completa todos los campos antes de continuar.";
+                return;
+            }
+
+            const asunto = encodeURIComponent("Consulta desde EcoVida");
+            const cuerpo = encodeURIComponent(
+                "Nombre: " + nombre + "\n" +
+                "Correo: " + correo + "\n\n" +
+                "Mensaje:\n" + mensaje
+            );
+
+            estadoContacto.textContent =
+                "Tus datos están listos. Se abrirá tu aplicación de correo para que puedas enviar el mensaje.";
+
+            window.location.href =
+                "mailto:?subject=" + asunto + "&body=" + cuerpo;
+        });
+    </script>
 
 </body>
 

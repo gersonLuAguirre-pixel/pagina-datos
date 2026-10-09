@@ -4,152 +4,199 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Nosotros - EcoVida</title>
+    <meta name="theme-color" content="#2e7d32">
+    <title>Nosotros | EcoVida</title>
     <link rel="stylesheet" href="CSS/estilos.css">
 </head>
 
 <body>
 
-    <!-- Encabezado -->
-    <header>
+    <!-- ENCABEZADO -->
+    <header class="ecovida-header">
         <h1>🌱 EcoVida</h1>
-        <p>Nuestra Historia y Compromiso</p>
+        <p>Nuestra historia y compromiso</p>
     </header>
 
-    <!-- Menú de Navegación -->
-    <nav>
+    <!-- NAVEGACIÓN -->
+    <nav class="ecovida-nav">
         <a href="index.html">Inicio</a>
-        <a href="index.html#productos">Productos</a>
-        <a href="nosotros.html">Nosotros</a>
-        <a href="index.html#contacto">Contacto</a>
+        <a href="productos.html">Productos</a>
+        <a href="nosotros.html" aria-current="page">Nosotros</a>
+        <a href="contacto.html">Contacto</a>
         <a href="carrito.html">🛒 Carrito</a>
         <a href="pedidos.html">📦 Pedidos</a>
         <a href="quiz.html">✨ Quiz</a>
-        <!-- Componente de Cierre de Sesión Corporativo -->
-        <button onclick="cerrarSesionCorporativa()" id="btn-logout-nav" style="
-        background-color: #ef4444; 
-        color: white; 
-        border: none; 
-        padding: 8px 16px; 
-        border-radius: 6px; 
-        cursor: pointer; 
-        font-weight: 600;
-        font-family: sans-serif;
-        transition: background 0.2s;
-        display: none; /* Se oculta por defecto hasta que el JS verifique la sesión */
-    " onmouseover="this.style.backgroundColor='#dc2626'" onmouseout="this.style.backgroundColor='#ef4444'">
+
+        <button type="button" onclick="cerrarSesionCorporativa()" id="btn-logout-nav" class="btn-logout-nav"
+            style="display: none;">
             🚪 Cerrar Sesión
         </button>
     </nav>
 
-    <!-- Contenido Principal -->
-    <main class="contenedor-nosotros">
+    <!-- CONTENIDO PRINCIPAL -->
+    <main class="nosotros-contenedor">
 
-        <!-- Sección Quiénes Somos -->
-        <section class="bloque-nosotros">
-            <h2>Sobre EcoVida</h2>
+        <!-- PRESENTACIÓN -->
+        <section class="nosotros-presentacion">
+            <span class="nosotros-etiqueta">🌎 Un compromiso con el planeta</span>
+
+            <h2>Conoce EcoVida</h2>
+
             <p>
-                EcoVida es una tienda especializada en alternativas sostenibles.
-                Buscamos reducir el impacto ambiental ofreciendo productos cotidianos de alta calidad,
-                reutilizables y biodegradables, promoviendo un estilo de vida más verde y consciente.
+                Creemos que un futuro más sostenible comienza con las decisiones
+                que tomamos cada día. Por eso, reunimos alternativas reutilizables
+                y biodegradables que ayudan a reducir nuestro impacto ambiental.
             </p>
+
+            <div class="nosotros-frase">
+                <span>♻️</span>
+                <p>Pequeños cambios. Grandes posibilidades para nuestro planeta.</p>
+            </div>
         </section>
 
-        <!-- Carrusel Visual Animado en CSS -->
-        <section class="carrusel-contenedor">
+        <!-- SOBRE NOSOTROS -->
+        <section class="nosotros-historia">
+            <div class="historia-icono" aria-hidden="true">🌱</div>
 
-            <h2>Nuestra Inspiración</h2>
+            <div class="historia-contenido">
+                <span class="nosotros-subtitulo">QUIÉNES SOMOS</span>
+                <h2>Una forma más consciente de vivir</h2>
 
-            <p>
-                <strong>Pequeños cambios. Un planeta mejor. 🌱</strong>
-            </p>
+                <p>
+                    EcoVida es una tienda especializada en alternativas sostenibles.
+                    Buscamos reducir el impacto ambiental ofreciendo productos
+                    cotidianos de calidad, reutilizables y biodegradables.
+                </p>
 
-            <p>
-                En EcoVida creemos que cuidar el planeta puede empezar con algo tan simple como elegir mejor.
-                Por eso, creamos un espacio donde encuentras productos reutilizables y biodegradables que hacen
-                más sostenible tu día a día, sin renunciar a la calidad, el diseño ni la practicidad.
-            </p>
-
-            <p>
-                Nos inspira la idea de transformar los hábitos cotidianos en acciones positivas.
-                <strong>Porque cada elección cuenta y juntos podemos construir una forma de vivir más consciente,
-                    responsable y en armonía con nuestro planeta.</strong>
-            </p>
-
-            <div class="carrusel-pantalla">
-
-                <div class="carrusel-cinta">
-
-                    <!-- IMAGEN 1 -->
-                    <div class="carrusel-item">
-                        <img src="img/Sostenibilidad.png" alt="Naturaleza">
-                        <div class="carrusel-texto">Naturaleza</div>
-                    </div>
-
-                    <!-- IMAGEN 2 -->
-                    <div class="carrusel-item">
-                        <img src="img/Limpieza.png" alt="Productos sostenibles">
-                        <div class="carrusel-texto">Productos Sostenibles</div>
-                    </div>
-
-                    <!-- IMAGEN 3 -->
-                    <div class="carrusel-item">
-                        <img src="img/familia.png" alt="Estilo de vida eco">
-                        <div class="carrusel-texto">Estilo de Vida Eco</div>
-                    </div>
-
-                    <!-- IMAGEN 4 -->
-                    <div class="carrusel-item">
-                        <img src="img/cremas.png" alt="Bienestar">
-                        <div class="carrusel-texto">Cuidado</div>
-                    </div>
-
-                    <!-- IMAGEN 5 -->
-                    <div class="carrusel-item">
-                        <img src="img/shampoo.png" alt="Cuidado personal">
-                        <div class="carrusel-texto">Cuidado Personal</div>
-                    </div>
-
-                    <!-- IMAGEN 6 -->
-                    <div class="carrusel-item">
-                        <img src="img/bandas.png" alt="Belleza">
-                        <div class="carrusel-texto">Belleza</div>
-                    </div>
-
-                    <!-- IMAGEN 7 -->
-                    <div class="carrusel-item">
-                        <img src="img/cepillo.png" alt="Cuidado bucal">
-                        <div class="carrusel-texto">Bucal</div>
-                    </div>
-
-                </div>
-
-            </div>
-
-        </section>
-        <!-- Sección de Misión y Visión -->
-        <div class="cuadros-compromiso">
-            <div class="cuadro">
-                <h3>🌿 Nuestra Misión</h3>
-                <p>Facilitar el acceso a artículos reutilizables que reemplacen los plásticos de un solo uso en el día a
-                    día.</p>
-            </div>
-            <div class="cuadro">
-                <h3>🌎 Nuestra Visión</h3>
-                <p>Ser el canal web líder en consumo consciente, inspirando a comunidades enteras a proteger el planeta.
+                <p>
+                    Queremos demostrar que cuidar el medio ambiente puede ser
+                    parte de nuestra rutina, mediante elecciones prácticas,
+                    responsables y accesibles.
                 </p>
             </div>
-        </div>
+        </section>
+
+        <!-- INSPIRACIÓN Y CARRUSEL -->
+        <section class="nosotros-inspiracion">
+
+            <div class="inspiracion-encabezado">
+                <span class="nosotros-etiqueta">✨ Lo que nos inspira</span>
+                <h2>Un estilo de vida más sostenible</h2>
+
+                <p>
+                    Nos inspira transformar los hábitos cotidianos en acciones
+                    positivas. Cada elección cuenta y juntos podemos construir
+                    una forma de vivir más consciente, responsable y en armonía
+                    con nuestro planeta.
+                </p>
+            </div>
+
+            <div class="carrusel-contenedor nosotros-carrusel">
+
+                <div class="carrusel-pantalla">
+                    <div class="carrusel-cinta">
+
+                        <div class="carrusel-item">
+                            <img src="img/Sostenibilidad.png" alt="Naturaleza y sostenibilidad">
+                            <div class="carrusel-texto">Naturaleza</div>
+                        </div>
+
+                        <div class="carrusel-item">
+                            <img src="img/Limpieza.png" alt="Productos sostenibles">
+                            <div class="carrusel-texto">Productos sostenibles</div>
+                        </div>
+
+                        <div class="carrusel-item">
+                            <img src="img/familia.png" alt="Familia y estilo de vida ecológico">
+                            <div class="carrusel-texto">Estilo de vida eco</div>
+                        </div>
+
+                        <div class="carrusel-item">
+                            <img src="img/cremas.png" alt="Productos de cuidado y bienestar">
+                            <div class="carrusel-texto">Bienestar</div>
+                        </div>
+
+                        <div class="carrusel-item">
+                            <img src="img/shampoo.png" alt="Productos de cuidado personal">
+                            <div class="carrusel-texto">Cuidado personal</div>
+                        </div>
+
+                        <div class="carrusel-item">
+                            <img src="img/bandas.png" alt="Productos de belleza">
+                            <div class="carrusel-texto">Belleza</div>
+                        </div>
+
+                        <div class="carrusel-item">
+                            <img src="img/cepillo.png" alt="Productos para el cuidado bucal">
+                            <div class="carrusel-texto">Cuidado bucal</div>
+                        </div>
+
+                    </div>
+                </div>
+
+                <p class="carrusel-nota">
+                    Descubre distintas formas de incorporar hábitos más sostenibles a tu vida.
+                </p>
+
+            </div>
+        </section>
+
+        <!-- MISIÓN Y VISIÓN -->
+        <section class="nosotros-proposito">
+
+            <div class="proposito-encabezado">
+                <span class="nosotros-etiqueta">🌿 Nuestro propósito</span>
+                <h2>Lo que nos mueve</h2>
+                <p>Trabajamos por un consumo más responsable, un producto a la vez.</p>
+            </div>
+
+            <div class="cuadros-compromiso nosotros-cuadros">
+
+                <article class="cuadro nosotros-cuadro">
+                    <div class="proposito-icono" aria-hidden="true">🌿</div>
+                    <h3>Nuestra misión</h3>
+                    <p>
+                        Facilitar el acceso a artículos reutilizables que
+                        reemplacen los plásticos de un solo uso en el día a día,
+                        promoviendo hábitos de consumo más responsables.
+                    </p>
+                </article>
+
+                <article class="cuadro nosotros-cuadro">
+                    <div class="proposito-icono" aria-hidden="true">🌎</div>
+                    <h3>Nuestra visión</h3>
+                    <p>
+                        Ser un canal web referente en consumo consciente,
+                        inspirando a las personas y comunidades a adoptar
+                        prácticas que contribuyan a proteger el planeta.
+                    </p>
+                </article>
+
+            </div>
+        </section>
+
+        <!-- MENSAJE FINAL -->
+        <section class="nosotros-cierre">
+            <span aria-hidden="true">💚</span>
+            <h2>El cambio empieza contigo</h2>
+            <p>
+                Elige alternativas sostenibles y sé parte de una forma de vivir
+                que cuida nuestro presente y nuestro futuro.
+            </p>
+            <a href="productos.html" class="btn-nosotros-explorar">
+                Explorar productos <span aria-hidden="true">→</span>
+            </a>
+        </section>
 
     </main>
 
-    <!-- Pie de página -->
-    <footer>
+    <!-- PIE DE PÁGINA -->
+    <footer class="ecovida-footer">
         <p>© 2026 EcoVida - Productos sostenibles</p>
     </footer>
-    <!-- El guardián de ecovida debe estar presente para proteger esta pestaña -->
+
+    <!-- JAVASCRIPT EXISTENTE -->
     <script src="JS/ecovida.js"></script>
-</body>
 
 </body>
 

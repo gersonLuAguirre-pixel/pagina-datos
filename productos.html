@@ -4,111 +4,160 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ECO VIDA</title>
-
+    <meta name="theme-color" content="#2e7d32">
+    <title>EcoVida | Productos ecológicos</title>
     <link rel="stylesheet" href="CSS/estilos.css">
 </head>
 
 <body>
 
-    <!--Encabezado -->
-    <header>
+    <!-- ENCABEZADO -->
+    <header class="ecovida-header">
         <h1>🌱 EcoVida</h1>
         <p>Productos ecológicos y reutilizables</p>
     </header>
 
-    <!-- Menú -->
-    <nav>
+    <!-- MENÚ -->
+    <nav class="ecovida-nav">
         <a href="index.html">Inicio</a>
-        <a href="#·">Productos</a>
+        <a href="productos.html" aria-current="page">Productos</a>
         <a href="nosotros.html">Nosotros</a>
-        <a href="#contacto">Contacto</a>
+        <a href="contacto.html">Contacto</a>
         <a href="carrito.html">🛒 Carrito</a>
         <a href="pedidos.html">📦 Pedidos</a>
         <a href="quiz.html">✨ Quiz</a>
-        <!-- Componente de Cierre de Sesión Corporativo -->
-        <button onclick="cerrarSesionCorporativa()" id="btn-logout-nav" style="
-        background-color: #ef4444; 
-        color: white; 
-        border: none; 
-        padding: 8px 16px; 
-        border-radius: 6px; 
-        cursor: pointer; 
-        font-weight: 600;
-        font-family: sans-serif;
-        transition: background 0.2s;
-        display: none; /* Se oculta por defecto hasta que el JS verifique la sesión */
-    " onmouseover="this.style.backgroundColor='#dc2626'" onmouseout="this.style.backgroundColor='#ef4444'">
+
+        <button type="button" onclick="cerrarSesionCorporativa()" id="btn-logout-nav" class="btn-logout-nav"
+            style="display: none;">
             🚪 Cerrar Sesión
         </button>
     </nav>
 
+    <!-- CONTENIDO PRINCIPAL -->
+    <main class="catalogo-contenedor">
 
-    <!-- Productos -->
-    <section id="productos">
+        <section id="productos" class="catalogo-seccion">
 
-        <h2>Productos Ecovida</h2>
+            <div class="catalogo-encabezado">
+                <span class="catalogo-etiqueta">🌿 Consumo responsable</span>
+                <h2>Nuestros productos</h2>
+                <p>
+                    Descubre alternativas reutilizables y sostenibles
+                    para cuidar el planeta todos los días.
+                </p>
+            </div>
 
-        <div class="productos">
-            <h3>🛍️ Bolsas de tela</h3>
-            <p>Una alternativa reutilizable para tus compras.</p>
-            <p>Precio: S/ 15.00</p>
-            <button onclick="agregarProducto('Bolsa de tela tocuyo organico', 15)">Agregar al carrito</button>
-        </div>
+            <div class="catalogo-productos">
 
-        <div>
-            <h3>🍶 Botellas reutilizables</h3>
-            <p>Botellas diseñadas para reducir el uso de plástico.</p>
-            <p>Precio: S/ 25.00</p>
-            <button onclick="agregarProducto('Botella reutilizable', 25)">Agregar al carrito</button>
-        </div>
+                <!-- PRODUCTO 1 -->
+                <article class="tarjeta-producto">
+                    <div class="producto-icono">🛍️</div>
+                    <span class="producto-etiqueta">Reutilizable</span>
+                    <h3>Bolsa de tela</h3>
+                    <p>Una alternativa reutilizable para tus compras diarias.</p>
+                    <div class="producto-pie">
+                        <span class="producto-precio">S/ 15.00</span>
+                        <button type="button" onclick="agregarProducto('Bolsa de tela tocuyo organico', 15)">
+                            Agregar al carrito <span>→</span>
+                        </button>
+                    </div>
+                </article>
 
-        <div>
-            <h3>🎋 Artículos de bambú</h3>
-            <p>Productos elaborados con materiales sostenibles.</p>
-            <p>Precio: S/ 12.00</p>
-            <button onclick="agregarProducto('Artículos de bambú', 12)">Agregar al carrito</button>
-        </div>
+                <!-- PRODUCTO 2 -->
+                <article class="tarjeta-producto">
+                    <div class="producto-icono">🍶</div>
+                    <span class="producto-etiqueta">Uso diario</span>
+                    <h3>Botella reutilizable</h3>
+                    <p>Una opción práctica para reducir el uso de botellas descartables.</p>
+                    <div class="producto-pie">
+                        <span class="producto-precio">S/ 25.00</span>
+                        <button type="button" onclick="agregarProducto('Botella reutilizable', 25)">
+                            Agregar al carrito <span>→</span>
+                        </button>
+                    </div>
+                </article>
 
-        <div>
-            <h3>🧼 Jabon biodegradable</h3>
-            <p>Productos de limpieza más amigables con el ambiente.</p>
-            <p>Precio: S/ 15.00</p>
-            <button onclick="agregarProducto('Jabon biodegrabable', 15)">Agregar al carrito</button>
-        </div>
+                <!-- PRODUCTO 3 -->
+                <article class="tarjeta-producto">
+                    <div class="producto-icono">🎋</div>
+                    <span class="producto-etiqueta">Material natural</span>
+                    <h3>Artículos de bambú</h3>
+                    <p>Productos elaborados con materiales de origen natural.</p>
+                    <div class="producto-pie">
+                        <span class="producto-precio">S/ 12.00</span>
+                        <button type="button" onclick="agregarProducto('Artículos de bambú', 12)">
+                            Agregar al carrito <span>→</span>
+                        </button>
+                    </div>
+                </article>
 
+                <!-- PRODUCTO 4 -->
+                <article class="tarjeta-producto">
+                    <div class="producto-icono">🧼</div>
+                    <span class="producto-etiqueta">Cuidado diario</span>
+                    <h3>Jabón biodegradable</h3>
+                    <p>Una alternativa para tu rutina de limpieza cotidiana.</p>
+                    <div class="producto-pie">
+                        <span class="producto-precio">S/ 15.00</span>
+                        <button type="button" onclick="agregarProducto('Jabon biodegrabable', 15)">
+                            Agregar al carrito <span>→</span>
+                        </button>
+                    </div>
+                </article>
 
-        <div>
-            <h3>🧼 Jabon de coco</h3>
-            <p>Productos de limpieza más amigables con el ambiente.</p>
-            <p>Precio: S/ 7.00</p>
-            <button onclick="agregarProducto('Jabon de coco', 7)">Agregar al carrito</button>
-        </div>
+                <!-- PRODUCTO 5 -->
+                <article class="tarjeta-producto">
+                    <div class="producto-icono">🥥</div>
+                    <span class="producto-etiqueta">Cuidado diario</span>
+                    <h3>Jabón de coco</h3>
+                    <p>Una opción sencilla para complementar tu cuidado personal.</p>
+                    <div class="producto-pie">
+                        <span class="producto-precio">S/ 7.00</span>
+                        <button type="button" onclick="agregarProducto('Jabon de coco', 7)">
+                            Agregar al carrito <span>→</span>
+                        </button>
+                    </div>
+                </article>
 
+                <!-- PRODUCTO 6 -->
+                <article class="tarjeta-producto">
+                    <div class="producto-icono">🎋</div>
+                    <span class="producto-etiqueta">Alternativa sostenible</span>
+                    <h3>Mondadientes de bambú</h3>
+                    <p>Una alternativa de bambú para tus necesidades cotidianas.</p>
+                    <div class="producto-pie">
+                        <span class="producto-precio">S/ 18.00</span>
+                        <button type="button" onclick="agregarProducto('Mondadiente de bambu', 18)">
+                            Agregar al carrito <span>→</span>
+                        </button>
+                    </div>
+                </article>
 
-        <div>
-            <h3>🧼 Mondadiente de bambu</h3>
-            <p>Productos de limpieza más amigables con el ambiente.</p>
-            <p>Precio: S/ 18.00</p>
-            <button onclick="agregarProducto('Mondadiente de bambu', 18)">Agregar al carrito</button>
-        </div>
+                <!-- PRODUCTO 7 -->
+                <article class="tarjeta-producto">
+                    <div class="producto-icono">🍯</div>
+                    <span class="producto-etiqueta">Producto natural</span>
+                    <h3>Miel de abeja</h3>
+                    <p>Una opción natural para disfrutar en tus comidas favoritas.</p>
+                    <div class="producto-pie">
+                        <span class="producto-precio">S/ 38.00</span>
+                        <button type="button" onclick="agregarProducto('Miel de abeja', 38)">
+                            Agregar al carrito <span>→</span>
+                        </button>
+                    </div>
+                </article>
 
+            </div>
+        </section>
 
-        <div>
-            <h3>🧼 MIel de abeja</h3>
-            <p>Productos de limpieza más amigables con el ambiente.</p>
-            <p>Precio: S/ 38.00</p>
-            <button onclick="agregarProducto('Miel de abeja', 38)">Agregar al carrito</button>
-        </div>
+    </main>
 
-    </section>
-
-    <!-- Pie de página -->
-    <footer>
+    <!-- PIE DE PÁGINA -->
+    <footer class="ecovida-footer">
         <p>© 2026 EcoVida - Productos sostenibles</p>
     </footer>
 
-    <!-- JavaScript-->
+    <!-- JAVASCRIPT EXISTENTE -->
     <script src="JS/ecovida.js"></script>
 
 </body>

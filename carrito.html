@@ -2,80 +2,126 @@
 <html lang="es">
 
 <head>
-
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-    <title>Carrito - EcoVida</title>
-
+    <meta name="theme-color" content="#2e7d32">
+    <title>Mi carrito | EcoVida</title>
     <link rel="stylesheet" href="CSS/estilos.css">
-
 </head>
 
 <body>
 
-    <header>
+    <!-- ENCABEZADO -->
+    <header class="ecovida-header">
         <h1>🌱 EcoVida</h1>
-        <p>Mi carrito</p>
+        <p>Tu selección sostenible</p>
     </header>
 
-    <nav>
+    <!-- NAVEGACIÓN -->
+    <nav class="ecovida-nav">
         <a href="index.html">Inicio</a>
-        <a href="index.html#productos">Productos</a>
-        <a href="index.html#nosotros">Nosotros</a>
-        <a href="index.html#contacto">Contacto</a>
-        <a href="#">🛒 Carrito</a>
+        <a href="productos.html">Productos</a>
+        <a href="nosotros.html">Nosotros</a>
+        <a href="contacto.html">Contacto</a>
+        <a href="carrito.html" aria-current="page">🛒 Carrito</a>
         <a href="pedidos.html">📦 Pedidos</a>
         <a href="quiz.html">✨ Quiz</a>
-        <!-- Componente de Cierre de Sesión Corporativo -->
-        <button onclick="cerrarSesionCorporativa()" id="btn-logout-nav" style="
-        background-color: #ef4444; 
-        color: white; 
-        border: none; 
-        padding: 8px 16px; 
-        border-radius: 6px; 
-        cursor: pointer; 
-        font-weight: 600;
-        font-family: sans-serif;
-        transition: background 0.2s;
-        display: none; /* Se oculta por defecto hasta que el JS verifique la sesión */
-    " onmouseover="this.style.backgroundColor='#dc2626'" onmouseout="this.style.backgroundColor='#ef4444'">
+
+        <button type="button" onclick="cerrarSesionCorporativa()" id="btn-logout-nav" class="btn-logout-nav"
+            style="display: none;">
             🚪 Cerrar Sesión
         </button>
     </nav>
 
-    <main>
+    <!-- CONTENIDO PRINCIPAL -->
+    <main class="carrito-contenedor">
 
-        <h2>🛒 Productos en mi carrito</h2>
+        <!-- PRESENTACIÓN -->
+        <section class="carrito-presentacion">
+            <div>
+                <span class="carrito-etiqueta">♻️ Compra consciente</span>
+                <h2>Mi carrito de compras</h2>
+                <p>
+                    Revisa tus productos antes de confirmar tu pedido.
+                    Cada elección cuenta para un futuro más sostenible.
+                </p>
+            </div>
 
-        <div id="listaCarrito">
-            <p>El carrito esta vacio.</p>
-        </div>
+            <div class="carrito-icono-grande" aria-hidden="true">🛒</div>
+        </section>
 
-        <h3>
-            Total: S/ <span id="total">0.00</span>
-        </h3>
+        <!-- ZONA DEL CARRITO -->
+        <section class="carrito-panel">
 
-        <button onclick="vaciarCarrito()">
-            Vaciar carrito
-        </button>
+            <div class="carrito-panel-titulo">
+                <div>
+                    <h2>Productos seleccionados</h2>
+                    <p>Comprueba las cantidades y el importe de tu compra.</p>
+                </div>
 
-        <button onclick="guardarPedido()">
-            Confirmar pedido 📦
-        </button>
+                <a href="productos.html" class="carrito-seguir-comprando">
+                    ← Seguir comprando
+                </a>
+            </div>
+
+            <div id="listaCarrito" class="carrito-lista">
+                <div class="carrito-vacio">
+                    <span aria-hidden="true">🛍️</span>
+                    <h3>Tu carrito está esperando</h3>
+                    <p>Aún no has agregado productos a tu carrito.</p>
+                    <a href="productos.html" class="btn-carrito-explorar">
+                        Explorar productos →
+                    </a>
+                </div>
+            </div>
+
+            <!-- RESUMEN -->
+            <div class="carrito-resumen">
+                <div class="carrito-resumen-texto">
+                    <span class="carrito-resumen-icono" aria-hidden="true">🌿</span>
+                    <div>
+                        <h3>Resumen de tu compra</h3>
+                        <p>Revisa el total antes de confirmar.</p>
+                    </div>
+                </div>
+
+                <div class="carrito-total-fila">
+                    <span>Total de productos</span>
+                    <strong>S/ <span id="total">0.00</span></strong>
+                </div>
+
+                <p class="carrito-nota">
+                    El costo de envío, si corresponde, se calculará al confirmar el pedido.
+                </p>
+
+                <div class="carrito-acciones">
+                    <button type="button" class="btn-carrito-vaciar" onclick="vaciarCarrito()">
+                        🗑️ Vaciar carrito
+                    </button>
+
+                    <button type="button" class="btn-carrito-confirmar" onclick="guardarPedido()">
+                        Confirmar pedido <span aria-hidden="true">📦</span>
+                    </button>
+                </div>
+            </div>
+
+        </section>
+
+        <!-- MENSAJE FINAL -->
+        <section class="carrito-mensaje-final">
+            <span aria-hidden="true">💚</span>
+            <p>Gracias por elegir alternativas más sostenibles con EcoVida.</p>
+        </section>
 
     </main>
 
-    <!-- Firebase -->
-
+    <!-- FIREBASE -->
     <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
-
     <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-database-compat.js"></script>
 
-
-    <!-- JavaScript de EcoVida -->
-
+    <!-- JAVASCRIPT EXISTENTE -->
     <script src="./JS/ecovida.js"></script>
+
     <script>
         mostrarCarrito();
     </script>
